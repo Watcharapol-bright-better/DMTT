@@ -8,9 +8,9 @@ SELECT
     --[MC].[I_NAME]      AS [CUSTOMER_NAME],      -- Customer Name
     [QT].[I_REM1]      AS [APPROVAL_STATUS],    -- Approval Status
     IIF(
-    [QT].[I_REM1] = '1', -- 1: Approved
-    [QT].[UPDATED_BY],
-    NULL
+            [QT].[I_REM1] = '1', -- 1: Approved
+            [QT].[UPDATED_BY],
+            NULL
     )                  AS [APPROVED_BY],        -- Approved By
     [QT].[I_ITEMCODE]  AS [PART_NO],            -- Part NO
     [MP].[I_DESC]      AS [PART_NAME],          -- Part Name
@@ -33,8 +33,8 @@ SELECT
     NULL               AS [SCRAP_COST]          -- Scrap cost
 
 FROM [T_PR_QT] AS [QT]
-    LEFT JOIN [MS_CS] AS [MC] ON [MC].[I_CSCODE] = [QT].[I_CSCODE]
-    LEFT JOIN [MS_PRFG] AS [MP] ON [MP].[I_ITEMCODE] = [QT].[I_ITEMCODE]
+         LEFT JOIN [MS_CS] AS [MC] ON [MC].[I_CSCODE] = [QT].[I_CSCODE]
+         LEFT JOIN [MS_PRFG] AS [MP] ON [MP].[I_ITEMCODE] = [QT].[I_ITEMCODE]
 
 
 WHERE [QT].[I_QT_NO] = 'Q251101'
