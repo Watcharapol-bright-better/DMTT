@@ -80,6 +80,30 @@ Sub copyContent(fromRow As Long, targetRow As Long)
 
 
     ' Material weight
+    wsMain.Cells(targetRow, "J").Value = wsData.Cells(fromRow, "O").Value
     ' Scrap weight
+    wsMain.Cells(targetRow, "K").Value = wsData.Cells(fromRow, "P").Value
+
+    ' Press Processing
+    wsMain.Cells(targetRow, "Q").Value = wsData.Cells(fromRow, "Q").Value
+    ' Customer Clearance
+    wsMain.Cells(targetRow, "R").Value = wsData.Cells(fromRow, "R").Value
+    ' Package Material
+    wsMain.Cells(targetRow, "S").Value = wsData.Cells(fromRow, "S").Value
+    ' Maintenance Expenses
+    wsMain.Cells(targetRow, "T").Value = wsData.Cells(fromRow, "T").Value
+    ' Delivery fee
+    wsMain.Cells(targetRow, "U").Value = wsData.Cells(fromRow, "U").Value
+    ' Management Expenses
+    wsMain.Cells(targetRow, "V").Value = wsData.Cells(fromRow, "V").Value
+
+    ' Material cost
+    wsMain.Cells(targetRow, "M").Value = wsData.Cells(fromRow, "W").Value
+
+    ' Scrap cost
+    wsMain.Cells(targetRow, "N").Value = wsData.Cells(fromRow, "X").Value
+
 
 End Sub
+
+
