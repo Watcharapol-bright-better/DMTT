@@ -25,3 +25,10 @@ Sub InsertRowsCols()
     ws.Columns("A").Insert Shift:=xlToRight
 End Sub
 
+Sub addEmptyRow(RowNumber As Long)
+
+    Dim ws As Worksheet
+    Set ws = ThisWorkbook.Sheets("Quotation")
+
+    ws.Rows(RowNumber).Insert Shift:=xlDown
+End Sub
