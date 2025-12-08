@@ -3,27 +3,22 @@ Sub HelloWorld()
 End Sub
 
 
+Sub SetBottomBorderSolid(ws As Worksheet, targetRow As Long)
+    With ws.Range("B" & targetRow & ":W" & targetRow).Borders(xlEdgeBottom)
+        .LineStyle = xlContinuous
+        .Weight = xlThin
+    End With
+End Sub
 
-' This function copies a row format from one row to another
-'
-' Parameters:
-'   fromRow   -> the row number to copy from
-'   targetRow -> the row number to insert and paste the format
-'   lineFlg   -> if 1, change the bottom border to solid
-'               if 0, change the bottom border to dot
-'
-' Example usage:
-'   copyRow 5, 10, 1   ' copy format from row 5 to row 10, make bottom border solid
-'   copyRow 3, 8, 0    ' copy format from row 3 to row 8, make bottom border dot
+
 Sub copyRow(fromRow As Long, targetRow As Long, lineFlg As Long)
     Dim ws As Worksheet
-
     Set ws = ActiveSheet
 
     ' Insert a new row at targetRow
     ws.Rows(targetRow).Insert Shift:=xlDown
 
-    ' Copy only the format from fromRow
+    ' Copy only the format and column widths from fromRow
     ws.Rows(fromRow).Copy
     ws.Rows(targetRow).PasteSpecial Paste:=xlPasteFormats
     ws.Rows(targetRow).PasteSpecial Paste:=xlPasteColumnWidths
@@ -31,18 +26,19 @@ Sub copyRow(fromRow As Long, targetRow As Long, lineFlg As Long)
     ' Clear values in the new row (keep only the format)
     ws.Rows(targetRow).ClearContents
 
-    ' Change the bottom border based on lineFlg
-    With ws.Range("B" & targetRow & ":W" & targetRow).Borders(xlEdgeBottom)
+    ' Apply top border for separation (or bottom, if you prefer)
+    With ws.Range("B" & targetRow & ":W" & targetRow).Borders(xlEdgeTop)
         If lineFlg = 1 Then
             .LineStyle = xlContinuous   ' solid line
-        ElseIf lineFlg = 0 Then
-            .LineStyle = xlDot
+        Else
+            .LineStyle = xlDot          ' dotted line
         End If
         .Weight = xlThin
     End With
 
     Application.CutCopyMode = False
 End Sub
+
 
 Sub copyContent(fromRow As Long, targetRow As Long)
 

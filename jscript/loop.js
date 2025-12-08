@@ -1,6 +1,7 @@
+// jrunscript -f file.js
 
-let count = 1;
-for (let i = 1; i < 4; i++) {
-  console.log(i);
+var count = 1;
+for (var i = 1; i < 4; i++) {
+  print(i);
   count++
 }   
