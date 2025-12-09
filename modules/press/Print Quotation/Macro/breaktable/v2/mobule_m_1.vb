@@ -29,8 +29,8 @@ End Sub
     
 Sub copyRowDetail(fromRow As Long, targetRow As Long, lineFlg As Long)
     Dim ws As Worksheet
-    Set ws = ActiveSheet
-
+    Set ws = ThisWorkbook.Sheets("Quotation")
+    
     ' Insert a new row at targetRow
     ws.Rows(targetRow).Insert Shift:=xlDown
 

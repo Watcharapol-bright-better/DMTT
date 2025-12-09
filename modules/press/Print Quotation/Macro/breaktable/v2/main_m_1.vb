@@ -73,7 +73,7 @@ Private Sub Workbook_Open()
         If isFirstLoop Then
 
             With Worksheets(mainWS).Cells(11, "B")
-                .Value = currTBLType
+                .Value = "Part " & currTBLType
                 .Font.Name = "BrowalliaUPC"
                 .Font.Bold = True
                 .Font.Size = 16
@@ -133,6 +133,7 @@ Private Sub Workbook_Open()
         ' ===========================================================
         If index = lastRow Then
             BottomBorderComponent Worksheets(mainWS), rowStart
+            Worksheets(mainWS).Rows(14).Delete Shift:=xlUp ' Delete row config
             Exit For    ' stop the loop
         End If
 
