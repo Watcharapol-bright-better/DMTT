@@ -3,15 +3,31 @@ Sub HelloWorld()
 End Sub
 
 
-Sub SetBottomBorderSolid(ws As Worksheet, targetRow As Long)
-    With ws.Range("B" & targetRow & ":W" & targetRow).Borders(xlEdgeBottom)
-        .LineStyle = xlContinuous
-        .Weight = xlThin
-    End With
+Sub AddTableHeader(targetRow As Long)
+    Dim ws As Worksheet
+    Set ws = ThisWorkbook.Sheets("Quotation")
+    
+    Dim fromRange As Range
+    Dim toRange As Range
+
+    ' Template rows
+    Set fromRange = ws.Range("B12:W13")
+    
+    ' Target rows
+    Set toRange = ws.Range("B" & targetRow & ":W" & targetRow + 1)
+        
+    fromRange.Copy
+    toRange.PasteSpecial Paste:=xlPasteAll
+    toRange.PasteSpecial Paste:=xlPasteColumnWidths
+    
+    ws.Rows(targetRow).RowHeight = ws.Rows(12).RowHeight
+    ws.Rows(targetRow + 1).RowHeight = ws.Rows(13).RowHeight
+    
+    Application.CutCopyMode = False
 End Sub
 
-
-Sub copyRow(fromRow As Long, targetRow As Long, lineFlg As Long)
+    
+Sub copyRowDetail(fromRow As Long, targetRow As Long, lineFlg As Long)
     Dim ws As Worksheet
     Set ws = ActiveSheet
 
@@ -40,7 +56,24 @@ Sub copyRow(fromRow As Long, targetRow As Long, lineFlg As Long)
 End Sub
 
 
-Sub copyContent(fromRow As Long, targetRow As Long)
+Sub BottomBorderComponent(ws As Worksheet, targetRow As Long)
+    With ws.Range("B" & targetRow & ":W" & targetRow).Borders(xlEdgeBottom)
+        .LineStyle = xlContinuous
+        .Weight = xlThin
+    End With
+End Sub
+
+Sub addEmptyRowBlock(ws As Worksheet, targetRow As Long)
+    ws.Rows(targetRow).Insert Shift:=xlDown
+    ws.Rows(targetRow).Insert Shift:=xlDown
+    
+    ws.Rows(targetRow).Clear
+    ws.Rows(targetRow + 1).Clear
+End Sub
+
+
+
+Sub tranferData(fromRow As Long, targetRow As Long)
 
     Dim wsData As Worksheet
     Dim wsMain As Worksheet
@@ -49,7 +82,7 @@ Sub copyContent(fromRow As Long, targetRow As Long)
     Set wsMain = ThisWorkbook.Sheets("Quotation")
 
     ' Copy values only (no format)
-    ' No.
+    ' Row No.
     wsMain.Cells(targetRow, "B").Value = wsData.Cells(fromRow, "A").Value
     ' Part No.
     wsMain.Cells(targetRow, "C").Value = wsData.Cells(fromRow, "B").Value
@@ -101,5 +134,6 @@ Sub copyContent(fromRow As Long, targetRow As Long)
 
 
 End Sub
+
 
 
