@@ -1,5 +1,9 @@
 SELECT
-    ROW_NUMBER() OVER (PARTITION BY [QT].[I_QT_NO] ORDER BY (SELECT NULL)) AS [ROW_NO],
+    ROW_NUMBER() OVER (PARTITION BY [MP].[I_TRADE_TYPE] ORDER BY (SELECT NULL)) AS [ROW_NO],
+
+    [].[I_UNTPRI],
+    [MP].[I_TRADE_TYPE] AS [TABLE_KIND],
+    [MP].[I_ITEM_GROUP]             AS [FG_PRESS_ITEM_GROUP], -- FG Press Master Item Group
 
     [QT].[I_QT_NO]                  AS [QUOTATION_NO],        -- Quotation No.
     [QT].[I_QT_MTH]                 AS [QUOTATION_MONTH],     -- Quotation Month
@@ -7,7 +11,7 @@ SELECT
     [QT].[I_EXG_MONTH]              AS [DELIVERY_MONTH],      -- Delivery Month
     -- [QT].[I_CSCODE]  AS [CUSTOMER_CODE],            -- Customer Code
     -- [MC].[I_NAME]    AS [CUSTOMER_NAME],            -- Customer Name
-    [MP].[I_TRADE_TYPE] AS [TABLE_KIND],
+
 
     [QT].[I_REM1]                   AS [APPROVAL_STATUS],     -- Approval Status
 
@@ -20,7 +24,6 @@ SELECT
     [QT].[I_ITEMCODE]               AS [PART_NO],             -- Part NO
     [MP].[I_DESC]                   AS [PART_NAME],           -- Part Name
     [QT].[I_TYPE]                   AS [TYPE],                -- Type
-    [MP].[I_ITEM_GROUP]             AS [FG_PRESS_ITEM_GROUP], -- FG Press Master Item Group
 
     CONCAT(
         [QT].[I_COMMODITY], 
