@@ -1,7 +1,6 @@
 SELECT
     ROW_NUMBER() OVER (PARTITION BY [MP].[I_TRADE_TYPE] ORDER BY (SELECT NULL)) AS [ROW_NO],
 
-    [].[I_UNTPRI],
     [MP].[I_TRADE_TYPE] AS [TABLE_KIND],
     [MP].[I_ITEM_GROUP]             AS [FG_PRESS_ITEM_GROUP], -- FG Press Master Item Group
 
