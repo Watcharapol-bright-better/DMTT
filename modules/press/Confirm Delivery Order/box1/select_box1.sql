@@ -15,8 +15,6 @@ FROM (
           ,NULL AS [I_NAME]          -- Customer Name
           ,NULL AS [I_SODATE]        -- SO Date 
 
-          ,NULL AS [I_AMOUNT]        -- Amount
-          ,NULL AS [I_UNTPRI]        -- Unit Price
           ,NULL AS [I_QTY]           -- SO Qty
           ,NULL AS [I_DLY_PLACE]     -- Delivery Place
           ,NULL AS [I_ENDUSER]       -- P.I.C
@@ -53,15 +51,12 @@ FROM (
           ,[SD].[I_CSCODE]           -- Customer Code
           ,[MC].[I_NAME]             -- Customer Name
           ,[SD].[I_SODATE]            -- SO Date
-          
 
-          ,[SD].[I_AMOUNT]           -- Amount
-          ,[SD].[I_UNTPRI]           -- Unit Price
           ,[SD].[I_QTY]              -- SO Qty 
           ,[SD].[I_DLY_PLACE]        -- Delivery Place
           ,[SD].[I_ENDUSER]          -- P.I.C
 
-          ,ISNULL([SI].[I_SHIP_CFM],0) AS [I_SHIP_CFM] -- Delivered Qty
+          ,ISNULL([SI].[I_SHIP_CFM],0) AS [I_SHIP_CFM] -- Delivery Qty
           ,ISNULL([SI].[I_SHP_PCK],0)  AS [I_SHP_PCK]  -- Picked Qty
 
           -- BALANCE = SO Qty - Delivered - Picked
@@ -75,6 +70,7 @@ FROM (
                    - ISNULL([SI].[I_SHP_PCK],0)
            END AS [BALANCE]
           ,[SD].[I_CONFIRM_STATUS]
+
           ,[SD].[CREATED_DATE]
           ,[SD].[CREATED_BY]
           ,[SD].[CREATED_PRG_NM]

@@ -27,6 +27,7 @@ if (isReadySO === isSO.noexists) {
     var _I_COMPCLS = TALON.getBindValue('I_COMPCLS');           // SO Status
     var _I_CUSTOMER_PO = TALON.getBindValue('I_CUSTOMER_PO');   // Customer PO No
     var _I_CSCODE = TALON.getBindValue('I_CSCODE');             // Customer Code
+    var _I_ENDUSER = TALON.getBindValue('I_ENDUSER');           // P.I.C
 
     // =========================
     var TABLE_NAME = 'T_PR_SORD';
@@ -40,6 +41,7 @@ if (isReadySO === isSO.noexists) {
         'I_COMPCLS',
         'I_CUSTOMER_PO',
         'I_CSCODE',
+        'I_ENDUSER',
 
         'I_ITEMCODE',
         'I_UNTPRI',
@@ -64,6 +66,8 @@ if (isReadySO === isSO.noexists) {
         Box2['I_COMPCLS']      = _I_COMPCLS;
         Box2['I_CUSTOMER_PO']  = _I_CUSTOMER_PO;
         Box2['I_CSCODE']       = _I_CSCODE;
+        Box2['I_ENDUSER']      = _I_ENDUSER;
+        Box2['I_CONFIRM_STATUS'] = '0'; // Not Confirmed
 
         Box2['CREATED_DATE']   = now;
         Box2['CREATED_BY']     = UserId;

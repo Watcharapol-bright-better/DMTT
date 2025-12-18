@@ -48,7 +48,7 @@ function onCancelSOChk(item) {
     var checkData = TalonDbUtil.select(TALON.getDbConfig(), sqlChk);
 
     if (!checkData || checkData.length === 0) {
-        TALON.addErrorMsg("SO Detail not found");
+        TALON.addErrorMsg("❌ SO Detail not found");
         return;
     }
 
@@ -65,7 +65,7 @@ function onCancelSOChk(item) {
 
         TalonDbUtil.update(TALON.getDbConfig(), sqlUpdate);
 
-        TALON.addMsg("Cancelled SO Detail Successfully");
+        TALON.addMsg("✅ Cancelled SO Detail Successfully");
         TALON.setIsSuccess(true);
         return;
     }
@@ -73,20 +73,20 @@ function onCancelSOChk(item) {
     // Case 2: Open & Delivered Qty > 0
     if (status === OSStatus.Open && deliveredQty > 0) {
         TALON.addErrorMsg(
-            "SO Detail have been partially delivered. Please use Close SO funtion instead."
+            "⚠️ SO Detail have been partially delivered. Please use Close SO funtion instead."
         );
         return;
     }
 
     // Case 3: Closed
     if (status === OSStatus.Closed) {
-        TALON.addErrorMsg("SO Detail is already closed");
+        TALON.addErrorMsg("⚠️ SO Detail is already closed");
         return;
     }
 
     // Case 4: Cancelled
     if (status === OSStatus.Cancelled) {
-        TALON.addErrorMsg("SO Detail is already cancelled");
+        TALON.addErrorMsg("⚠️ SO Detail is already cancelled");
         return;
     }
 }

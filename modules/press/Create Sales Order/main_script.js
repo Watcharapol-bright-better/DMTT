@@ -60,6 +60,9 @@ if (isReadySO === isSO.exists) {
     var _I_CSCODE = HeaderData['I_CSCODE'];             // Customer Code
     TALON.putBindValue('I_CSCODE', _I_CSCODE);
 
+    var _I_ENDUSER = HeaderData['I_ENDUSER'];
+    TALON.putBindValue('I_ENDUSER', _I_ENDUSER);
+
     HeaderData['CREATED_DATE']   = now;
     HeaderData['CREATED_BY']     = UserId;
     HeaderData['CREATED_PRG_NM'] = ProgramNM;

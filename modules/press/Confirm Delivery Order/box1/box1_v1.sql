@@ -4,7 +4,7 @@ FROM (
     -- Level 1 : Header
     SELECT  
            1 AS [Lvl]                -- Level = Header
-          ,'' AS [CHK]
+          ,[SD].[I_CONFIRM_STATUS]
           ,[SD].[I_SONO]             -- SO No.
           ,[SD].[I_LNNO]
           ,NULL AS [I_COMPCLS]       -- SO Status
@@ -15,8 +15,6 @@ FROM (
           ,NULL AS [I_NAME]          -- Customer Name
           ,NULL AS [I_SODATE]        -- SO Date 
 
-          ,NULL AS [I_AMOUNT]        -- Amount
-          ,NULL AS [I_UNTPRI]        -- Unit Price
           ,NULL AS [I_QTY]           -- SO Qty
           ,NULL AS [I_DLY_PLACE]     -- Delivery Place
           ,NULL AS [I_ENDUSER]       -- P.I.C
@@ -24,7 +22,7 @@ FROM (
           ,NULL AS [I_SHIP_CFM]      -- Delivered
           ,NULL AS [I_SHP_PCK]       -- Picked
           ,NULL AS [BALANCE]         -- Balance
-          ,NULL AS [I_CONFIRM_STATUS]
+          ,ISNULL([SD].[I_CONFIRM_STATUS] , 0) AS [OS_COMFIRM] -- DMTT_G_OS_COMFIRM
 
           ,[SD].[CREATED_DATE]
           ,[SD].[CREATED_BY]
@@ -43,7 +41,7 @@ FROM (
     -- Level 2 : Detail
     SELECT  
            2 AS [Lvl]                -- Level = Detail
-          ,'' AS [CHK]
+          ,[SD].[I_CONFIRM_STATUS]  -- DMTT_T_CHK_BOX
           ,[SD].[I_SONO]             -- SO No.
           ,[SD].[I_LNNO]
           ,[SD].[I_COMPCLS]          -- SO Status
@@ -53,15 +51,12 @@ FROM (
           ,[SD].[I_CSCODE]           -- Customer Code
           ,[MC].[I_NAME]             -- Customer Name
           ,[SD].[I_SODATE]            -- SO Date
-          
 
-          ,[SD].[I_AMOUNT]           -- Amount
-          ,[SD].[I_UNTPRI]           -- Unit Price
           ,[SD].[I_QTY]              -- SO Qty 
           ,[SD].[I_DLY_PLACE]        -- Delivery Place
           ,[SD].[I_ENDUSER]          -- P.I.C
 
-          ,ISNULL([SI].[I_SHIP_CFM],0) AS [I_SHIP_CFM] -- Delivered Qty
+          ,ISNULL([SI].[I_SHIP_CFM],0) AS [I_SHIP_CFM] -- Delivery Qty
           ,ISNULL([SI].[I_SHP_PCK],0)  AS [I_SHP_PCK]  -- Picked Qty
 
           -- BALANCE = SO Qty - Delivered - Picked
@@ -74,7 +69,7 @@ FROM (
                    - ISNULL([SI].[I_SHIP_CFM],0)
                    - ISNULL([SI].[I_SHP_PCK],0)
            END AS [BALANCE]
-          ,[SD].[I_CONFIRM_STATUS]
+          ,ISNULL([SD].[I_CONFIRM_STATUS] , 0) AS [OS_COMFIRM] -- DMTT_G_OS_COMFIRM
           ,[SD].[CREATED_DATE]
           ,[SD].[CREATED_BY]
           ,[SD].[CREATED_PRG_NM]

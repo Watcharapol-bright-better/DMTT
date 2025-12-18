@@ -50,7 +50,7 @@ function onCloseSOChk(item) {
     var checkData = TalonDbUtil.select(TALON.getDbConfig(), sqlChk);
 
     if (!checkData || checkData.length === 0) {
-        TALON.addErrorMsg("SO Detail not found");
+        TALON.addErrorMsg("❌ SO Detail not found");
     }
 
     var deliveredQty = Number(checkData[0].I_SHIP_CFM || 0);
@@ -65,27 +65,26 @@ function onCloseSOChk(item) {
         "AND I_LNNO = '" + item.I_LNNO + "'";
 
         TalonDbUtil.update(TALON.getDbConfig(), sqlupdate );
-        TALON.addMsg("Closed SO Detail Successfully");
+        TALON.addMsg("✅ Closed SO Detail Successfully");
         TALON.setIsSuccess(true);
     }
 
     // Case 2: Open & Delivered Qty = 0
     if (status === OSStatus.Open && deliveredQty === 0) {
         TALON.addErrorMsg(
-            "SO Detail have not been delivered yet. Please use Cancel function instead."
+            "⚠️ SO Detail have not been delivered yet. Please use Cancel function instead."
         );
 
     }
 
     // Case 3: Closed
     if (status === OSStatus.Closed) {
-        TALON.addErrorMsg("SO Detail is already closed");
-
+        TALON.addErrorMsg("⚠️ SO Detail is already closed");
     }
 
     // Case 4: Cancelled
     if (status === OSStatus.Cancelled) {
-        TALON.addErrorMsg("SO Detail is already cancelled");
+        TALON.addErrorMsg("⚠️ SO Detail is already cancelled");
     }
 
     //TALON.addErrorMsg("Invalid SO Detail status");
