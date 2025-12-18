@@ -82,7 +82,7 @@ FROM (
     FROM [T_PR_SORD] [SD]
         LEFT JOIN [MS_CS] AS [MC] 
             ON [MC].[I_CSCODE] = [SD].[I_CSCODE]
-        LEFT JOIN [T_MT_SHIP_INST] AS [SI]
+        LEFT JOIN [T_PR_SHIP_INST] AS [SI]
             ON [SI].[I_SONO] = [SD].[I_SONO]
 
     WHERE [SD].[I_LNNO] <> 1  
