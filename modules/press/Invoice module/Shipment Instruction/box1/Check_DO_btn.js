@@ -1,6 +1,10 @@
+
+var searchData = TALON.getConditionData();
+TALON.addMsg(searchData.I_SHIP_DLY_DATE);
+
 var sql =
     "SELECT " +
-    " ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) AS [I_SHIP_LNNO], " + // Shipment Instruction Line
+    " ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) + 1 AS [I_SHIP_LNNO], " + // Shipment Instruction Line
     " [SD].[I_SONO], " +                // SO No.
     " [SD].[I_ITEMCODE], " +             // Part No.
     " [MP].[I_DESC], " +                 // Part Name
@@ -20,7 +24,8 @@ var sql =
     "INNER JOIN [MS_PRFG] AS [MP] " +
     " ON [MP].[I_ITEMCODE] = [SD].[I_ITEMCODE] " +
     "LEFT JOIN [T_PR_SHIP_INST] AS [SI] " +
-    " ON [SI].[I_SONO] = [SD].[I_SONO]";
+    " ON [SI].[I_SONO] = [SD].[I_SONO]" +
+    "WHERE [SD].[I_DLYDATE] = '" + searchData.I_SHIP_DLY_DATE + "'"
 
 var data = TalonDbUtil.select(TALON.getDbConfig(), sql);
 TALON.addMsg(sql);
