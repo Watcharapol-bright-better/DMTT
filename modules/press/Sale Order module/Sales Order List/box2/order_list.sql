@@ -36,7 +36,7 @@ FROM (
     FROM [T_PR_SORD] [SD]
         INNER JOIN [MS_CS] AS [MC] 
             ON [MC].[I_CSCODE] = [SD].[I_CSCODE]
-    WHERE [SD].[I_LNNO] = 1 
+    WHERE [SD].[DETAIL_TYPE] = '0' 
 
     UNION ALL
 
@@ -89,5 +89,5 @@ FROM (
         LEFT JOIN [T_PR_SHIP_INST] AS [SI]
             ON [SI].[I_SONO] = [SD].[I_SONO]
 
-    WHERE [SD].[I_LNNO] <> 1  
+    WHERE [SD].[DETAIL_TYPE] = '1'
 ) AS A

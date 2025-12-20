@@ -16,10 +16,11 @@ if (!searchData.I_SONO) {
     "SELECT @Id AS [NUMBERING] ";
 
     SONo = TalonDbUtil.select(TALON.getDbConfig(), getNumbering )[0]['NUMBERING'];
-    //TalonDbUtil.commit(TALON.getDbConfig());
+    TalonDbUtil.commit(TALON.getDbConfig());
     var headerSql =
         "SELECT " +
         "   '" + SONo + "' AS [I_SONO], " +
+        "   '0' AS [DETAIL_TYPE], " +
         "   1 AS [I_LNNO], " +
         "   '00' AS [I_COMPCLS], " +
         "   0 AS [I_CURRENCY], " +
@@ -55,8 +56,7 @@ if (!searchData.I_SONO) {
 
     TALON.setSearchedDisplayList(2, qtList);
 
-}
-
+} else {
 
 var detailSql =
     "SELECT " +
@@ -78,3 +78,6 @@ var qtList = TalonDbUtil
     .select(TALON.getDbConfig(), detailSql);
 
 TALON.setSearchedDisplayList(2, qtList);
+
+
+}

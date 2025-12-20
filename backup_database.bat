@@ -9,10 +9,10 @@ set SERVER=localhost
 set PORT=14330
 set USERNAME=sa
 set PASSWORD=sql@min123
-set DATABASE=PPLI_TALON
+set DATABASE=DMTT_DEMO_PRESS
 
 :: Output directory
-set OUTPUT=C:\Sqlserver-Backup\export\PPLI_IMS
+set OUTPUT=C:\Sqlserver-Backup\export\DMTT\demo
 
 for /f "tokens=1-4 delims=/ " %%a in ("%date%") do (
     set yyyy=%%d

@@ -2,6 +2,7 @@
 SELECT 
      ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) + 1 AS [I_SHIP_LNNO] -- Shipment Instruction Line
     ,[SI].[I_SHIP_INST] -- Shipment Instruction No
+    ,[SI].[INTERNAL_NO] -- Internal No.
     ,[SD].[I_SONO] -- SO No.
     ,[SD].[I_ITEMCODE] -- Part NO
     ,[MP].[I_DESC]  -- Part Name

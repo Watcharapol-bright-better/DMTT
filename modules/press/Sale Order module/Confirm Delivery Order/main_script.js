@@ -1,4 +1,3 @@
-
 function extractValues(input) {
     var result = [];
     var newIndex = 1; // เริ่มนับจาก 1

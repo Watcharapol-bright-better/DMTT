@@ -14,15 +14,18 @@ var isSO = {
 }
 
 // TALON.addMsg('1 I_SONO: '+searchData.I_SONO);
-var sql = "SELECT IIF(EXISTS (SELECT 1 FROM [T_PR_SORD] WHERE [I_SONO] = '"+ searchData.I_SONO +"'), 1, 0) AS Result";
+var sql = "SELECT IIF(EXISTS (SELECT 1 FROM [T_PR_SORD] WHERE [DETAIL_TYPE] = '0' AND [I_SONO] = '"+ searchData.I_SONO +"'), 1, 0) AS Result";
 var isReadySO = TalonDbUtil.select(TALON.getDbConfig(), sql )[0]['Result'];
 
 if (isReadySO === isSO.exists) {
     TALON.addErrorMsg('⚠️ Sales Order already exists ');
 } else {
+
     var TABLE_NAME = 'T_PR_SORD';
     var headerCol = [
         'I_SONO',
+        'INTERNAL_NO',
+        'DETAIL_TYPE',
         'I_QT_NO',
         'I_LNNO',
         'I_SODATE',
@@ -63,6 +66,17 @@ if (isReadySO === isSO.exists) {
     var _I_ENDUSER = HeaderData['I_ENDUSER'];
     TALON.putBindValue('I_ENDUSER', _I_ENDUSER);
 
+
+    var runtNumbering = 
+            "DECLARE @Id NVARCHAR(MAX) " + 
+            "EXEC SP_RUN_NUMBERING_V1 " + 
+            " @CodeType = 'DMTT_N_SOI', " + 
+            " @Format = N'yyyymmddxxxxxx', " + 
+            " @GeneratedNo = @Id OUTPUT " + 
+            "SELECT @Id AS [NUMBERING] ";
+
+    var internalNo = TalonDbUtil.select(TALON.getDbConfig(), runtNumbering )[0]['NUMBERING'];
+    HeaderData['INTERNAL_NO']    = internalNo;
     HeaderData['CREATED_DATE']   = now;
     HeaderData['CREATED_BY']     = UserId;
     HeaderData['CREATED_PRG_NM'] = ProgramNM;
@@ -77,5 +91,6 @@ if (isReadySO === isSO.exists) {
         HeaderData,
         headerCol
     );
+    TalonDbUtil.commit(TALON.getDbConfig());
     TALON.addMsg('✅ Sales Order created successfully ');
 }

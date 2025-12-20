@@ -6,8 +6,9 @@ SELECT
     ,[SD].[I_UNTPRI]      -- Unit Price
     ,1 AS [I_QTY]             -- Order QTY (pcs)
     ,[SD].[I_AMOUNT]          -- Amount
-
     ,[SD].[I_DLY_PLACE]           -- Delivery Place
+    ,[SD].[DETAIL_TYPE] -- Content Type
+    ,[SD].[INTERNAL_NO]
 
     ,[SD].[CREATED_DATE]
     ,[SD].[CREATED_BY]
@@ -17,7 +18,7 @@ SELECT
     ,[SD].[UPDATED_PRG_NM]
     ,[SD].[MODIFY_COUNT]
 FROM [T_PR_SORD] AS [SD] 
-    LEFT JOIN [MS_PRFG] [MP] 
+    INNER JOIN [MS_PRFG] [MP] 
         ON [MP].[I_ITEMCODE] = [SD].[I_ITEMCODE] 
 
-WHERE [SD].[I_SONO] = /**%I_SONO%**/'' AND [SD].[I_LNNO] <> 1
+WHERE [SD].[I_SONO] = /**%I_SONO%**/'' AND [SD].[DETAIL_TYPE] = '1'

@@ -8,7 +8,7 @@ var now       = new java.util.Date();
 var _I_SONO = TALON.getBindValue('I_SONO'); 
 // TALON.addMsg('2 I_SONO: '+_I_SONO);
 //var _I_SONO = TALON.getBindValue('I_SONO');
-var sql = "SELECT IIF(EXISTS (SELECT 1 FROM [T_PR_SORD] WHERE [I_LNNO] <> 1 AND [I_SONO] = '"+ searchData.I_SONO +"'), 1, 0) AS [Result]";
+var sql = "SELECT IIF(EXISTS (SELECT 1 FROM [T_PR_SORD] WHERE [DETAIL_TYPE] = '1' AND [I_SONO] = '"+ searchData.I_SONO +"'), 1, 0) AS [Result]";
 var isReadySO = TalonDbUtil.select(TALON.getDbConfig(), sql )[0]['Result'];
 
 // TALON.addErrorMsg("TEST : " + searchData.I_SONO);
@@ -34,15 +34,15 @@ if (isReadySO === isSO.noexists) {
 
     var detailCol = [
         'I_SONO',
+        'INTERNAL_NO',
         'I_LNNO',
-
+        'DETAIL_TYPE',
         'I_SODATE',
         'I_DLYDATE',
         'I_COMPCLS',
         'I_CUSTOMER_PO',
         'I_CSCODE',
         'I_ENDUSER',
-
         'I_ITEMCODE',
         'I_UNTPRI',
         'I_QTY',
@@ -57,10 +57,22 @@ if (isReadySO === isSO.noexists) {
         'MODIFY_COUNT'
     ];
 
+    var internalNo = "";
     for (var i = 0; i < DetailData.length; i++) {
+        var getNumbering = 
+            "DECLARE @Id NVARCHAR(MAX) " + 
+            "EXEC SP_RUN_NUMBERING_V1 " + 
+            " @CodeType = 'DMTT_N_SOI', " + 
+            " @Format = N'yyyymmddxxxxxx', " + 
+            " @GeneratedNo = @Id OUTPUT " + 
+            "SELECT @Id AS [NUMBERING] ";
+
+        internalNo = TalonDbUtil.select(TALON.getDbConfig(), getNumbering )[0]['NUMBERING'];
 
         var Box2 = DetailData[i];
         Box2['I_SONO']         = _I_SONO;
+        Box2['INTERNAL_NO']    = internalNo;
+        Box2['DETAIL_TYPE']    = '1'; // Box Details
         Box2['I_SODATE']       = _I_SODATE;
         Box2['I_DLYDATE']      = _I_DLYDATE;
         Box2['I_COMPCLS']      = _I_COMPCLS;
