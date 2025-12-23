@@ -11,13 +11,21 @@ SELECT
 	,[MS].[I_PCS_BOX] -- Box QTY
 	,[SI].[I_LOTNO_FR] -- Lot From
     ,[SI].[I_LOTNO_TO] -- Lot To
-	, '' [LOCATION]
-    , '' [PALLET_NO]
+	,[SK].[I_LOCCD]
+    ,[SK].[I_PLTNO]
     ,[SI].[I_SHIP_LNNO]
+    , /**%SELECTED%**/'' AS [SELECTED]
 FROM [T_PR_SHIP_INST] [SI]
         LEFT JOIN [MS_CS] [CS]
                 ON [CS].[I_CSCODE] = [SI].[I_CSCODE]
         LEFT JOIN [MS_PRFG] [MS]
                 ON  [SI].[I_ITEMCODE] = [MS].[I_ITEMCODE]
+        LEFT JOIN [T_PR_STOCK] [SK]
+            ON [SK].[I_ITEMCODE] = [SI].[I_CSCODE]
                 
-WHERE [SI].[DETAIL_TYPE] = '1'
+WHERE [SI].[DETAIL_TYPE] = '1' 
+    AND [SI].[I_SHIP_INST] IN (
+     SELECT TRIM(value)
+     FROM STRING_SPLIT( /**%SELECTED%**/'' , ',')
+    )
+

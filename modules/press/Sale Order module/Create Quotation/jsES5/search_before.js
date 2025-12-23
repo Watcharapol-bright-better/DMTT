@@ -14,6 +14,7 @@ TALON.putBindValue('I_QT_NO', id);
 var sql = "SELECT '"+id+"' AS [I_QT_NO]," +
 "GETDATE() AS [I_QT_MTH], " +
 "GETDATE() AS [I_PO_MONTH]," +
+"GETDATE() AS [I_EXG_MONTH], " +
 "33.52 AS [I_EXG_RATE], " +
 "'THB' AS [I_CURRENCY]," +
 "'"+ userData["USER_ID"] +"' AS [I_REM1]";

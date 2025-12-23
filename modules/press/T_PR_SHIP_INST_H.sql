@@ -1,0 +1,30 @@
+CREATE TABLE [dbo].[T_PR_SHIP_INST_H](
+    [I_SHIP_INST]        NVARCHAR(20) NOT NULL,   -- Shipment Instruction No
+    [I_SHIP_INST_DATE]  DATETIME NULL,            -- Shipment Instruction Date
+    [I_SHIP_CFM]        NVARCHAR(1) NULL,         -- Shipment Status
+    [I_CSCODE]          NVARCHAR(10) NULL,        -- Customer Code
+    [I_SHIP_DLY_DATE]   DATETIME NULL,            -- Shipment Delivery Date
+    [I_SHIPTO]          NVARCHAR(10) NULL,        -- Ship To
+    [I_ENDUSER]         NVARCHAR(20) NULL,        -- P.I.C
+
+    [CREATED_DATE]      DATETIME NULL,
+    [CREATED_BY]        NVARCHAR(10) NULL,
+    [CREATED_PRG_NM]    NVARCHAR(50) NULL,
+    [UPDATED_DATE]      DATETIME NULL,
+    [UPDATED_BY]        NVARCHAR(10) NULL,
+    [UPDATED_PRG_NM]    NVARCHAR(50) NULL,
+    [MODIFY_COUNT]      NUMERIC(10,0) NULL,
+
+ CONSTRAINT [PK_T_PR_SHIP_INST_H] PRIMARY KEY CLUSTERED
+(
+    [I_SHIP_INST] ASC
+)WITH (
+    PAD_INDEX = OFF,
+    STATISTICS_NORECOMPUTE = OFF,
+    IGNORE_DUP_KEY = OFF,
+    ALLOW_ROW_LOCKS = ON,
+    ALLOW_PAGE_LOCKS = ON,
+    OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF
+) ON [PRIMARY]
+) ON [PRIMARY]
+GO

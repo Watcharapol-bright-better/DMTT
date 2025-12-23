@@ -1,0 +1,57 @@
+--DROP TABLE T_PR_QT_D
+
+CREATE TABLE [dbo].[T_PR_QT_D](
+    [I_QT_NO]           NVARCHAR(20) NOT NULL,   -- Quotation No
+    [INTERNAL_NO]       NVARCHAR(20) NOT NULL,   -- Internal No (PK)
+    [I_QT_LN]           NUMERIC(3,0) NULL,       -- Quotation Line (เก็บไว้ แต่ไม่เป็น PK)
+
+    [I_ITEMCODE]        NVARCHAR(25) NOT NULL,
+    [I_COMMODITY]       NVARCHAR(25) NULL,
+    [I_PLATING]         NVARCHAR(10) NULL,
+    [I_TEMPER]          NVARCHAR(10) NULL,
+    [I_THICK]           NUMERIC(14,6) NULL,
+    [I_WIDTH]           NUMERIC(14,6) NULL,
+    [I_LENGTH]          NUMERIC(9,3) NULL,
+    [I_SALE_UNIT]       NVARCHAR(10) NULL,
+
+    [I_RM_WGT]          NUMERIC(14,6) NULL,
+    [I_LOSS_WGT]        NUMERIC(14,6) NULL,
+    [I_PROD_WGT]        NUMERIC(14,6) NULL,
+    [I_PITCH]           NUMERIC(9,3) NULL,
+
+    [I_RM_AMT]          NUMERIC(14,6) NULL,
+    [I_LOSS_AMT]        NUMERIC(14,6) NULL,
+
+    [I_FEE_PROCESS]     NUMERIC(10,3) NULL,
+    [I_FEE_CUSTOM]      NUMERIC(10,3) NULL,
+    [I_FEE_PACK]        NUMERIC(10,3) NULL,
+    [I_FEE_EXPENSE]     NUMERIC(10,3) NULL,
+    [I_FEE_DLY]         NUMERIC(10,3) NULL,
+    [I_FEE_MGM]         NUMERIC(10,3) NULL,
+
+    [I_SELLING_PRICE]   NUMERIC(14,6) NULL,
+    [I_REM1]            NVARCHAR(50) NULL,
+    [I_REM2]            NVARCHAR(50) NULL,
+
+    [CREATED_DATE]      DATETIME NULL,
+    [CREATED_BY]        NVARCHAR(10) NULL,
+    [CREATED_PRG_NM]    NVARCHAR(50) NULL,
+    [UPDATED_DATE]      DATETIME NULL,
+    [UPDATED_BY]        NVARCHAR(10) NULL,
+    [UPDATED_PRG_NM]    NVARCHAR(50) NULL,
+    [MODIFY_COUNT]      NUMERIC(10,0) NULL,
+
+ CONSTRAINT [PK_T_PR_QT_D] PRIMARY KEY CLUSTERED
+(
+    [I_QT_NO] ASC,
+    [INTERNAL_NO] ASC
+)WITH (
+    PAD_INDEX = OFF,
+    STATISTICS_NORECOMPUTE = OFF,
+    IGNORE_DUP_KEY = OFF,
+    ALLOW_ROW_LOCKS = ON,
+    ALLOW_PAGE_LOCKS = ON,
+    OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF
+) ON [PRIMARY]
+) ON [PRIMARY]
+GO

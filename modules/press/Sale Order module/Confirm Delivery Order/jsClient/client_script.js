@@ -51,6 +51,94 @@ function resizeContents_end() {
   for (i = 0; i < chkList.length; i++) {
     chkList[i].addEventListener("change", onCheckboxClick);
   }
+
+  initAutoSelectByItem('2','CHK','I_SONO','SELECTED');
 }
 
 
+
+
+const dataIndex = new Map();
+
+//chkBoxElementName = Element's Name for checkbox ( BlockNo_COLUMNNAME_)
+//mainItem = item to use for further process such as PR No., PO No., Invoice No., Etc.
+//searchConditionName = name of search conditions box such as "CNDTN_SELECTED" or "CNDTN_[COLUMNNAME]"
+// singleSelect : TRUE  = select only 1 item (no auto select)
+//                FALSE = auto select by same item
+
+function initAutoSelectByItem(blockNo, chkBoxElementName, mainItem, searchConditionName) {
+  var i = 0;
+  var chkBox = `${blockNo}_${chkBoxElementName}_`; 
+  var itemName = `${blockNo}_${mainItem}_`;        // Column to check for duplicate
+  var dataSet = new Set();
+
+  dataIndex.clear(); // rebuild cache every refresh
+
+  while (true) {
+    var sel = getElementByName(chkBox + i);
+    var itemNameInput = getElementByName(itemName + i);
+    if (!sel || !itemNameInput) break;
+
+    const item = itemNameInput.title;
+    if (!dataIndex.has(item)) {
+      dataIndex.set(item, []);
+    }
+    dataIndex.get(item).push(sel);
+
+
+    // Only attach listener once
+    if (!sel.dataset.listenerAttached) {
+      sel.addEventListener("change", (function(item) {
+        return function(e) {
+          if (e?.isProgrammatic) return;
+          if (this.checked) {
+            autoSelectSameItem(item);
+          } else {
+            autoUnselectSameItem(item, searchConditionName);
+          }
+        };
+      })(item));
+      sel.dataset.listenerAttached = "true";
+    }
+
+    if (sel.checked) dataSet.add(item);
+    i++;
+  }
+
+  var col = Array.from(dataSet).join(",");
+  var searchCondtions = document.getElementsByName(`CNDTN_${searchConditionName}`)[0]; // Change search condition name
+  //if (searchCondtions) searchCondtions.value = col;
+
+  return col;
+}
+
+function autoSelectSameItem(item) {
+  const group = dataIndex.get(item);
+  if (!group) return;
+
+  for (const sel of group) {
+    if (!sel.checked) {
+      const ev = new Event("change");
+      ev.isProgrammatic = true;
+      sel.checked = true;
+      sel.dispatchEvent(ev);
+    }
+  }
+}
+
+function autoUnselectSameItem(item, searchConditionName) {
+  const group = dataIndex.get(item);
+  if (!group) return;
+
+  for (const sel of group) {
+    if (sel.checked) {
+      const ev = new Event("change");
+      ev.isProgrammatic = true;
+      sel.checked = false;
+      sel.dispatchEvent(ev);
+    }
+  }
+
+  const searchCondtions = document.getElementsByName(`CNDTN_${searchConditionName}`)[0]; 
+  if (searchCondtions) searchCondtions.value = "";
+}

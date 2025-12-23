@@ -1,6 +1,4 @@
-// ============================
-// 0) ฟังก์ชันแปลงเดือน
-// ============================
+
 
 function normalizeMonthDate(raw) {
     if (!raw) return null;
@@ -70,114 +68,7 @@ function normalizeMonthStr(raw) {
     return "" + y + m;   // 'YYYYMM'
 }
 
-// ============================
-// 1) Prefix QYYMM จาก I_QT_MTH หรือวันที่ปัจจุบัน
-// ============================
-function getQuotationPrefix(header) {
-    var qtM = header["I_QT_MTH"];
-    var dt = null;
 
-    if (qtM) {
-        var parsed = normalizeMonthDate(qtM);
-        if (parsed) {
-            dt = new Date(parsed);
-        }
-    }
-    if (!dt || isNaN(dt.getTime())) {
-        dt = new Date();
-    }
-
-    var yy = String(dt.getFullYear()).slice(-2);
-    var mm = ("0" + (dt.getMonth() + 1)).slice(-2);
-    return "Q" + yy + mm;
-}
-
-// ============================
-// 2) ดึง MAX(I_QT_NO) จาก DB (ใช้ TalonDbUtil.select เป็นหลัก)
-// ============================
-function getMaxQuotationFromDb(prefix) {
-    var sql = ""
-      + "SELECT MAX(I_QT_NO) AS MAX_NO "
-      + "FROM T_PR_QT "
-      + "WHERE I_QT_NO LIKE '" + prefix + "%'";
-
-    var maxNo = null;
-
-    try {
-        // กรณีส่วนใหญ่ในระบบคุณ: ใช้ select() แล้วได้เป็น array ของ map
-        if (TalonDbUtil && typeof TalonDbUtil.select === "function") {
-            var list = TalonDbUtil.select(TALON.getDbConfig(), sql);
-            if (list && list.length > 0 && list[0]) {
-                var row = list[0];
-                // เผื่อเรื่องตัวพิมพ์ใหญ่/เล็ก
-                maxNo = row["MAX_NO"] || row["max_no"] || row["MaxNo"] || null;
-            }
-        }
-        // เผื่ออนาคตมี executeSelectSQL/executeQuerySQL
-        else if (TalonDbUtil &&
-                 (typeof TalonDbUtil.executeSelectSQL === "function" ||
-                  typeof TalonDbUtil.executeQuerySQL  === "function")) {
-
-            var rs;
-            if (typeof TalonDbUtil.executeSelectSQL === "function") {
-                rs = TalonDbUtil.executeSelectSQL(TALON.getDbConfig(), sql);
-            } else {
-                rs = TalonDbUtil.executeQuerySQL(TALON.getDbConfig(), sql);
-            }
-
-            try {
-                if (rs && rs.next()) {
-                    try {
-                        maxNo = rs.getString("MAX_NO");
-                    } catch (e2) {
-                        maxNo = rs.getString(1);
-                    }
-                }
-            } finally {
-                if (rs) rs.close();
-            }
-        } else {
-            TALON.addMsg("INFO: No usable DB select method; skip MAX(I_QT_NO).");
-        }
-    } catch (e) {
-        TALON.addMsg("WARN: DB select failed in getMaxQuotationFromDb: " + e);
-        maxNo = null;
-    }
-
-    TALON.addMsg("MAX I_QT_NO for prefix " + prefix + " = " + maxNo);
-    return maxNo;
-}
-
-
-// ============================
-// 3) Generate Quotation No → QYYMM**
-// ============================
-function generateQuotationNo(header) {
-    var prefix  = getQuotationPrefix(header);   // QYYMM
-    var running = null;
-
-    var maxNo = getMaxQuotationFromDb(prefix);  // เช่น Q251101
-    if (maxNo) {
-        var suffix = maxNo.substring(prefix.length);   // "01"
-        var num    = parseInt(suffix, 10);
-        if (!isNaN(num) && num >= 0) {
-            running = num + 1;
-        }
-    }
-
-    if (running === null || isNaN(running) || running <= 0) {
-        running = 1;
-    }
-
-    if (running > 99) {
-        TALON.addMsg("WARN: running no. > 99 for prefix " + prefix + ": " + running);
-    }
-
-    var suffixStr = ("0" + running).slice(-2);
-    var newNo = prefix + suffixStr;
-    TALON.addMsg("New Quotation No = " + newNo);
-    return newNo;
-}
 
 // ============================
 // 4) Header / Detail / User
@@ -188,19 +79,18 @@ var DETAIL   = TALON.getBlockData_List(2);
 
 var CSCODE   = HEADER["I_CSCODE"];
 
-// เก็บค่าเดิมก่อน
-var originalQtNo = HEADER["I_QT_NO"];
-var isNew        = !originalQtNo || String(originalQtNo).trim() === "";
 
-var QUOTATIONNO;
 
-// ถ้าใบใหม่ → generate Q; ถ้าใบเก่า → ใช้เลขเดิม
-if (isNew) {
-    QUOTATIONNO = generateQuotationNo(HEADER);
-    HEADER["I_QT_NO"] = QUOTATIONNO;
-} else {
-    QUOTATIONNO = originalQtNo;
-}
+var getNumbering = 
+    "DECLARE @Id NVARCHAR(MAX) " + 
+    "EXEC SP_RUN_NUMBERING_V1 " + 
+    " @CodeType = 'DMTT_N_QT', " + 
+    " @Format = N'QUTyyyymmxxx', " + 
+    " @GeneratedNo = @Id OUTPUT " + 
+    "SELECT @Id AS [NUMBERING] ";
+
+var QUOTATIONNO = TalonDbUtil.select(TALON.getDbConfig(), getNumbering )[0]['NUMBERING'];
+
 
 // แปลงค่าตาม datatype ของ column
 var QT_MONTH   = normalizeMonthDate(HEADER["I_QT_MTH"]);       // date
@@ -208,16 +98,16 @@ var METALPRICE = normalizeMonthStr(HEADER["I_METAL_PRICE"]);   // nvarchar(7) YY
 var EXG_MONTH  = normalizeMonthDate(HEADER["I_EXG_MONTH"]);    // date
 var PO_MONTH   = normalizeMonthDate(HEADER["I_PO_MONTH"]);     // date
 
-TALON.addMsg("RAW I_QT_MTH      = " + HEADER["I_QT_MTH"]);
-TALON.addMsg("RAW I_EXG_MONTH   = " + HEADER["I_EXG_MONTH"]);
-TALON.addMsg("RAW I_PO_MONTH    = " + HEADER["I_PO_MONTH"]);
-TALON.addMsg("RAW I_METAL_PRICE = " + HEADER["I_METAL_PRICE"]);
-TALON.addMsg(
-  "AFTER normalize → QT_MONTH=" + QT_MONTH +
-  ", EXG_MONTH=" + EXG_MONTH +
-  ", PO_MONTH=" + PO_MONTH +
-  ", METALPRICE=" + METALPRICE
-);
+// TALON.addMsg("RAW I_QT_MTH      = " + HEADER["I_QT_MTH"]);
+// TALON.addMsg("RAW I_EXG_MONTH   = " + HEADER["I_EXG_MONTH"]);
+// TALON.addMsg("RAW I_PO_MONTH    = " + HEADER["I_PO_MONTH"]);
+// TALON.addMsg("RAW I_METAL_PRICE = " + HEADER["I_METAL_PRICE"]);
+// TALON.addMsg(
+//   "AFTER normalize → QT_MONTH=" + QT_MONTH +
+//   ", EXG_MONTH=" + EXG_MONTH +
+//   ", PO_MONTH=" + PO_MONTH +
+//   ", METALPRICE=" + METALPRICE
+// );
 
 var EXG_RATE = HEADER["I_EXG_RATE"] || 0;
 var CURRENCY = HEADER["I_CURRENCY"] || null;
@@ -235,12 +125,10 @@ if (!CSCODE || CSCODE === "") {
     TALON.setIsSuccess(false);
 } else {
 
-    // 5.1 ถ้าเป็น "แก้ไขใบเดิม" เท่านั้นถึงจะลบ detail เดิม
-    if (!isNew) {
-        var deleteSql = "DELETE FROM T_PR_QT WHERE I_QT_NO = '" + QUOTATIONNO + "';";
-        TalonDbUtil.executeUpdateSQL(TALON.getDbConfig(), deleteSql);
-        TALON.addMsg("Deleted old rows for quotation: " + QUOTATIONNO);
-    }
+    var sql = "SELECT '"+QUOTATIONNO+"' AS [I_QT_NO]";
+    var qtList = TalonDbUtil.select(TALON.getDbConfig(), );
+    TALON.setSearchedDisplayList(1, qtList);
+
 
     // ============================
     // 6) INSERT DETAIL → T_PR_QT (เฉพาะแถวที่ I_SELECTED = 1 และมี I_ITEMCODE)
@@ -250,33 +138,7 @@ if (!CSCODE || CSCODE === "") {
     
     for (var i = 0; i < DETAIL.length; i++) {
         var row = DETAIL[i];
-        if (!row) continue;
     
-        // ถ้ามี I_SELECTED และค่า != '1' ให้ข้าม
-        if (typeof row["I_SELECTED"] !== "undefined") {
-            var sel = String(row["I_SELECTED"] || "").trim();
-            if (sel !== "1") {
-                TALON.addMsg(
-                  "Skipped row " + (i + 1) +
-                  " because I_SELECTED = '" + sel + "' (not selected)"
-                );
-                continue;
-            }
-        }
-    
-        var ITEMCODE = (row["I_ITEMCODE"] || "").trim();
-        if (ITEMCODE === "") {
-            TALON.addMsg("Skipped row " + (i + 1) + " because I_ITEMCODE is empty.");
-            continue;
-        }
-    
-        if (seenItem[ITEMCODE]) {
-            TALON.addMsg(
-              "Skipped row " + (i + 1) +
-              " because I_ITEMCODE '" + ITEMCODE + "' is duplicated in DETAIL."
-            );
-            continue;
-        }
         seenItem[ITEMCODE] = true;
     
         var COMMODITY  = row["I_COMMODITY"]   || "";
@@ -331,14 +193,14 @@ if (!CSCODE || CSCODE === "") {
           + " '0',"                    // I_TYPE default
           + " GETDATE(),"              
           + " '" + USERID + "',"       
-          + " 'DMTT_PRESS',"
+          + " 'DMTT_T_QT01',"
           + " GETDATE(),"
           + " '" + USERID + "',"
-          + " 'DMTT_PRESS',"
+          + " 'DMTT_T_QT01',"
           + " 0"
           + " )";
 
-        TALON.addMsg("DEBUG SQL = " + insertSql);
+        //TALON.addMsg("DEBUG SQL = " + insertSql);
         TalonDbUtil.insert(TALON.getDbConfig(), insertSql);
 
         lineNo++;
@@ -360,6 +222,7 @@ if (!CSCODE || CSCODE === "") {
       + "  ON mp.I_ITEMCODE = tq.I_ITEMCODE "
       + "WHERE tq.I_QT_NO = '" + QUOTATIONNO + "';";
 
-    var updatedRows = TalonDbUtil.update(TALON.getDbConfig(), sqlUpdateType);
-    TALON.addMsg("Updated I_TYPE rows: " + updatedRows);
+    TalonDbUtil.update(TALON.getDbConfig(), sqlUpdateType); 
+    // var updatedRows = TalonDbUtil.update(TALON.getDbConfig(), sqlUpdateType);
+    //TALON.addMsg("Updated I_TYPE rows: " + updatedRows);
 }

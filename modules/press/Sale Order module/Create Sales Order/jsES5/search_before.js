@@ -42,7 +42,7 @@ if (!searchData.I_SONO) {
     "   QT.I_ITEMCODE, " +                  // Part No
     "   MP.I_DESC, " +                      // Part Name
     "   QT.I_SELLING_PRICE AS [I_UNTPRI], " +
-    "   1 AS [I_QTY], " +
+    "   NULL AS [I_QTY], " +
     "   (1 * QT.I_SELLING_PRICE) AS [I_AMOUNT], " +
     "   MP.I_DLY_PLACE " +
     "FROM T_PR_QT QT " +
@@ -58,26 +58,26 @@ if (!searchData.I_SONO) {
 
 } else {
 
-var detailSql =
-    "SELECT " +
-    "   '" + SONo + "' AS [I_SONO], " +
-    "   ROW_NUMBER() OVER (PARTITION BY QT.I_QT_NO ORDER BY (SELECT NULL)) + 1 AS [I_LNNO], " +
-    "   QT.I_ITEMCODE, " +                  // Part No
-    "   MP.I_DESC, " +                      // Part Name
-    "   QT.I_SELLING_PRICE AS [I_UNTPRI], " +
-    "   1 AS [I_QTY], " +
-    "   (1 * QT.I_SELLING_PRICE) AS [I_AMOUNT], " +
-    "   MP.I_DLY_PLACE " +
-    "FROM T_PR_QT QT " +
-    "LEFT JOIN MS_PRFG MP ON MP.I_ITEMCODE = QT.I_ITEMCODE " +
-    "LEFT JOIN MS_CS MC ON MC.I_CSCODE = QT.I_CSCODE " +
-    "LEFT JOIN T_PR_SORD SD ON SD.I_QT_NO = QT.I_QT_NO " +
-    "WHERE QT.I_QT_NO = '" + searchData.I_QT_NO + "'";
-
-var qtList = TalonDbUtil
-    .select(TALON.getDbConfig(), detailSql);
-
-TALON.setSearchedDisplayList(2, qtList);
+    var detailSql =
+        "SELECT " +
+        "   '" + SONo + "' AS [I_SONO], " +
+        "   ROW_NUMBER() OVER (PARTITION BY QT.I_QT_NO ORDER BY (SELECT NULL)) + 1 AS [I_LNNO], " +
+        "   QT.I_ITEMCODE, " +                  // Part No
+        "   MP.I_DESC, " +                      // Part Name
+        "   QT.I_SELLING_PRICE AS [I_UNTPRI], " +
+        "   NULL AS [I_QTY], " +
+        "   (1 * QT.I_SELLING_PRICE) AS [I_AMOUNT], " +
+        "   MP.I_DLY_PLACE " +
+        "FROM T_PR_QT QT " +
+        "LEFT JOIN MS_PRFG MP ON MP.I_ITEMCODE = QT.I_ITEMCODE " +
+        "LEFT JOIN MS_CS MC ON MC.I_CSCODE = QT.I_CSCODE " +
+        "LEFT JOIN T_PR_SORD SD ON SD.I_QT_NO = QT.I_QT_NO " +
+        "WHERE QT.I_QT_NO = '" + searchData.I_QT_NO + "'";
+    
+    var qtList = TalonDbUtil
+        .select(TALON.getDbConfig(), detailSql);
+    
+    TALON.setSearchedDisplayList(2, qtList);
 
 
 }
