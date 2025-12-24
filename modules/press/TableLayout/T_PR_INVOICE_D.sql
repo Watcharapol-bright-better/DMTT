@@ -17,6 +17,8 @@ CREATE TABLE [dbo].[T_PR_INVOICE_D]
     [I_NET_WGT]       NUMERIC(14, 3) NULL,      -- Net Weight
     [I_UNIT_PRICE]    NUMERIC(14, 3) NULL,      -- Unit Price
     [I_AMOUNT]        NUMERIC(14, 3) NULL,      -- Amount
+    [I_PALLET_QTY]    NUMERIC(10)    NULL,      -- Pallet
+    [I_PKGCD]         NVARCHAR(10)   NULL,      -- Packaging Type
     [I_CURRENCY]      NVARCHAR(5)    NULL,      -- Currency
 
     [CREATED_DATE]    DATETIME       NULL,

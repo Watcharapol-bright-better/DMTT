@@ -17,6 +17,8 @@ CREATE TABLE [dbo].[T_PR_INVOICE_H]
     [I_DEST_COUNTRY]   NVARCHAR(15)  NULL,       -- Country Destination
     [I_SHUTTER_NO]     NVARCHAR(15)  NULL,       -- Shutter No
     [I_DLY_DATE]       DATETIME      NULL,       -- Delivery Date
+    [I_ATTN]           NVARCHAR(50)  NULL,
+    [I_CORRESP_CODE]   NVARCHAR(50)  NULL,
 
     [I_CONT_SIZE20]    NVARCHAR(1)   NULL,       -- Container Size 20
     [I_CONT_SIZE40]    NVARCHAR(1)   NULL,       -- Container Size 40
