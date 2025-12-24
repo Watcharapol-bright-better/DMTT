@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
- function updateBoxHeight() {
+function updateBoxHeight() {
     function removeHeight(id) {
        const el = document.getElementById(id);
        if (el) {
@@ -18,7 +18,6 @@ document.addEventListener("DOMContentLoaded", function () {
        }
     }
 
-    // Box Card 0
     removeHeight("BASE:0:block");
 
     const baseCard = document.getElementById("BASE:0:CARD");
@@ -34,10 +33,26 @@ document.addEventListener("DOMContentLoaded", function () {
  }
 
 
+ function setRowNumbers(selectorPrefix) {
+    const rowNoBoxes = document.querySelectorAll(`input[id^="${selectorPrefix}"]`);
+    if (rowNoBoxes.length > 0) {
+        let rowIndex = 1;
+        rowNoBoxes.forEach((input) => {
+            if (!input.value.trim()) {
+                    input.value = rowIndex.toString();
+            }
+            rowIndex++;
+        });
+    }
+}
+
+
+
 function resizeContents_end() {
 
     let obj = document.getElementById('JKN_AREA');
     if (obj) obj.style.display = 'none';
-
     updateBoxHeight();
+    setRowNumbers("TLN_2_I_INVOICE_LNNO_");
+
 }

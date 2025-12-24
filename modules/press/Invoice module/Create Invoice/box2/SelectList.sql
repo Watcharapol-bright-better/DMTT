@@ -2,6 +2,7 @@
 SELECT 
   [D].[I_SHIP_INST]
  ,[D].[INTERNAL_NO]
+ ,[].[I_INVOICE_LNNO]
  ,[D].[I_ITEMCODE]
  ,[CS].[I_DESC]
  ,[CS].[I_PKGCD] -- Packaging Type
