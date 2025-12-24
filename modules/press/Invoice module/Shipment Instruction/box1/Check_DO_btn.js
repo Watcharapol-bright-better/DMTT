@@ -47,55 +47,48 @@ if (searchData.I_SHIP_INST === '') {
     var setHeader = TalonDbUtil.select(TALON.getDbConfig(), sqlHeader );
     TALON.setSearchedDisplayList(1, setHeader);
 
-    var sql = 
-        "SELECT " +
-        "    NULL AS [I_SHIP_INST], " +
-        "    NULL AS [INTERNAL_NO], " +
-        "    [SD].[I_SONO], " +
-        "    [SD].[I_ITEMCODE], " +
-        "    [MP].[I_DESC], " +
-        "    [SD].[I_QTY], " +
-
-        "    ISNULL([ST].[BAL_QTY], [SD].[I_QTY]) AS [I_SHIP_QTY], " +
-        "    [MP].[I_PCS_BOX], " +
-
-        "    [ST].[MIN_LOTNO] AS [I_LOTNO_FR], " +
-        "    [ST].[MAX_LOTNO] AS [I_LOTNO_TO], " +
-
-        "    [WO].[I_WODATE], " +
-        "    NULL AS [CREATED_DATE], " +
-        "    NULL AS [CREATED_BY], " +
-        "    NULL AS [CREATED_PRG_NM], " +
-        "    NULL AS [UPDATED_DATE], " +
-        "    NULL AS [UPDATED_BY], " +
-        "    NULL AS [UPDATED_PRG_NM], " +
-        "    NULL AS [MODIFY_COUNT] " +
-
-        "FROM [T_PR_SORD_D] AS [SD] " +
-
-        "INNER JOIN [MS_PRFG] AS [MP] " +
-        "    ON [MP].[I_ITEMCODE] = [SD].[I_ITEMCODE] " +
-
-        "LEFT JOIN [T_PR_WOH] AS [WO] " +
-        "    ON [WO].[I_SONO] = [SD].[I_SONO] " +
-
-        "LEFT JOIN ( " +
-        "    SELECT " +
-        "        [I_ITEMCODE], " +
-        "        MIN([I_LOTNO]) AS [MIN_LOTNO], " +
-        "        MAX([I_LOTNO]) AS [MAX_LOTNO], " +
-        "        SUM([I_INQTY]) - SUM([I_OUTQTY]) AS [BAL_QTY] " +
-        "    FROM [T_PR_STOCK] " +
-        "    GROUP BY [I_ITEMCODE] " +
-        ") AS [ST] " +
-        "    ON [ST].[I_ITEMCODE] = [SD].[I_ITEMCODE] " +
+    var sql = ""
+        + "SELECT "
+        + "    NULL AS [I_SHIP_LNNO], "
+        + "    NULL AS [I_SHIP_INST], "
+        + "    NULL AS [INTERNAL_NO], "
+        + "    [SD].[I_SONO], "
+        + "    [SD].[I_ITEMCODE], "
+        + "    [MP].[I_DESC], "
+        + "    ISNULL([SD].[I_QTY], [ST].[BAL_QTY]) AS [I_BALANCE_QTY], "
+        + "    ISNULL([ST].[BAL_QTY], [SD].[I_QTY]) AS [I_SHIP_QTY], "
+        + "    [MP].[I_PCS_BOX] AS [I_BOX_QTY], "
+        + "    [ST].[MIN_LOTNO] AS [I_LOTNO_FR], "
+        + "    [ST].[MAX_LOTNO] AS [I_LOTNO_TO], "
+        + "    [WO].[I_WODATE], "
+        + "    NULL AS [CREATED_DATE], "
+        + "    NULL AS [CREATED_BY], "
+        + "    NULL AS [CREATED_PRG_NM], "
+        + "    NULL AS [UPDATED_DATE], "
+        + "    NULL AS [UPDATED_BY], "
+        + "    NULL AS [UPDATED_PRG_NM], "
+        + "    NULL AS [MODIFY_COUNT] "
+        + "FROM [T_PR_SORD_D] AS [SD] "
+        + "INNER JOIN [MS_PRFG] AS [MP] "
+        + "    ON [MP].[I_ITEMCODE] = [SD].[I_ITEMCODE] "
+        + "LEFT JOIN [T_PR_WOH] AS [WO] "
+        + "    ON [WO].[I_SONO] = [SD].[I_SONO] "
+        + "LEFT JOIN ( "
+        + "    SELECT "
+        + "        [I_ITEMCODE], "
+        + "        MIN([I_LOTNO]) AS [MIN_LOTNO], "
+        + "        MAX([I_LOTNO]) AS [MAX_LOTNO], "
+        + "        SUM([I_INQTY]) - SUM([I_OUTQTY]) AS [BAL_QTY] "
+        + "    FROM [T_PR_STOCK] "
+        + "    GROUP BY [I_ITEMCODE] "
+        + ") AS [ST] "
+        + "    ON [ST].[I_ITEMCODE] = [SD].[I_ITEMCODE]" +
         "WHERE [SD].[I_DLYDATE] = '" + sdfDisplay.format(dlyData)+ "'";
 
     //TALON.addMsg(sql);
 
     var data = TalonDbUtil.select(TALON.getDbConfig(), sql);
     var rows = [];
-
     
     data.forEach(function(item) {
         
@@ -106,9 +99,9 @@ if (searchData.I_SHIP_INST === '') {
             'I_SONO'         : item['I_SONO'],
             'I_ITEMCODE'     : item['I_ITEMCODE'],
             'I_DESC'         : item['I_DESC'],
-            'I_QTY'          : item['I_QTY'],
+            'I_BALANCE_QTY'          : item['I_BALANCE_QTY'],
             'I_SHIP_QTY'     : item['I_SHIP_QTY'],
-            'I_PCS_BOX'      : item['I_PCS_BOX'],
+            'I_BOX_QTY'      : item['I_BOX_QTY'],
             'I_LOTNO_FR'     : item['I_LOTNO_FR'],
             'I_LOTNO_TO'     : item['I_LOTNO_TO'],
             'I_WODATE'       : item['I_WODATE'],

@@ -35,6 +35,7 @@
 
 ##  Necessary Tools
 
+
 ### [ID Numbering]
 - `DMTT_N_SO`
 - `DEMO_QT`
@@ -43,6 +44,8 @@
 - `DMTT_N_QT_IN`
 - `DMTT_N_SO`
 - `DMTT_N_SO_IN`
+- `DMTT_N_IV`
+- `DMTT_N_IV_IN`
 
 
 ### [Hunyo Code]
@@ -53,8 +56,10 @@
 - `DMTT_G_PR_PATTERN`
 - `DMTT_G_OS_COMFIRM`
 - `DMTT_G_SHP_PKG` (Shipment Picking Status)
-- `DMTT_G_SHIP_INT_STATUS`
+
+- `DMTT_G_SHIP_INT_STATUS` I_SHIP_CFM : Shipment Status 
  
+
 
 ### [Search Subform]
 - `DMTT_T_SHP010_CS` : Ship To, I_SHIPTO | Bill To, I_BILLTO

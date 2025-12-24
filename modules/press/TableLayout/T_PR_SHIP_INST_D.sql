@@ -5,15 +5,17 @@ CREATE TABLE [dbo].[T_PR_SHIP_INST_D](
     [I_SONO]             NVARCHAR(20) NULL,       -- SO No
     [I_ITEMCODE]         NVARCHAR(25) NULL,       -- Part No
     [I_SHIP_QTY]         NUMERIC(10,0) NULL,      -- Shipment QTY
+    [I_BALANCE_QTY]      NUMERIC(10,0) NULL,      -- SO Balance QTY
+    [I_BOX_QTY]          NUMERIC(10,0) NULL,      -- Box QTY
+    [I_PALLET_QTY]       NUMERIC(10,0) NULL,      -- Pallet QTY
     [I_LOTNO_FR]         NVARCHAR(25) NULL,       -- Lot From
     [I_LOTNO_TO]         NVARCHAR(25) NULL,       -- Lot To
     [I_INVOICE_NO]       NVARCHAR(20) NULL,
     [I_INVOICE_DATE]     DATETIME NULL,
     [I_SHP_PCK]          NUMERIC(10,0) NULL,
-    [I_SHP_PKG_STATUS]   NVARCHAR(1) NULL,
+    [I_SHP_PKG_STATUS]   NVARCHAR(1) NULL,        -- Shipment Status
     [I_SHIPMENT_STATUS]  NVARCHAR(10) NULL,
     [I_ASSIGNTO]         NVARCHAR(20) NULL,
-    [I_PICKING_STATUS]   NVARCHAR(20) NULL,
 
     [CREATED_DATE]       DATETIME NULL,
     [CREATED_BY]         NVARCHAR(10) NULL,

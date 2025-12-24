@@ -1,5 +1,5 @@
 CREATE TABLE [dbo].[T_PR_SHIP_INST_H](
-    [I_SHIP_INST]        NVARCHAR(20) NOT NULL,   -- Shipment Instruction No
+    [I_SHIP_INST]       NVARCHAR(20) NOT NULL,    -- Shipment Instruction No
     [I_SHIP_INST_DATE]  DATETIME NULL,            -- Shipment Instruction Date
     [I_SHIP_CFM]        NVARCHAR(1) NULL,         -- Shipment Status
     [I_CSCODE]          NVARCHAR(10) NULL,        -- Customer Code
