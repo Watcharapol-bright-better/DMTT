@@ -1,0 +1,26 @@
+-- 'I_PROD_WGT * (Qty from invoice)
+SELECT 
+  [D].[I_SHIP_INST]
+ ,[D].[INTERNAL_NO]
+ ,[D].[I_ITEMCODE]
+ ,[CS].[I_DESC]
+ ,[CS].[I_PKGCD] -- Packaging Type
+ ,[SK].[I_PLTNO] -- Pallet No.
+ ,[D].[I_SHIP_QTY]
+ 
+ ,NULL AS [I_NET_WGT]
+ ,NULL AS [I_UNTPRI]
+ ,NULL AS [I_AMOUNT]
+-- ,[SOD].[I_UNTPRI] -- Unit Price
+-- ,[SOD].[I_AMOUNT] -- Total Price
+FROM [T_PR_SHIP_INST_D] [D]
+INNER JOIN [MS_PRFG] [CS]
+	ON [CS].[I_ITEMCODE] = [D].[I_ITEMCODE]
+
+INNER JOIN [T_PR_STOCK] [SK]
+	ON [SK].[I_ITEMCODE] = [D].[I_ITEMCODE]
+
+--INNER JOIN [T_PR_SORD_D] [SOD]
+--    ON [SOD].[I_ITEMCODE] = [D].[I_ITEMCODE] AND [D].[I_SONO] = [SOD].[I_SONO]
+
+WHERE [D].[I_SHIP_INST] = /**%I_SHIP_INST%**/'SI202512230019'
