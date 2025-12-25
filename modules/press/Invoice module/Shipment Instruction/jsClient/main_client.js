@@ -82,6 +82,19 @@ function setRowNumbers(selectorPrefix) {
         }
     }
 
+function setValAllRow(selectorPrefix) {
+        const rowNoBoxes = document.querySelectorAll(`input[id^="${selectorPrefix}"]`);
+        if (rowNoBoxes.length > 0) {
+            let InitVal = '0';
+            rowNoBoxes.forEach((input) => {
+                if (!input.value.trim()) {
+                    input.value = InitVal.toString();
+                }
+            });
+        }
+    }
+
+
 
 function hiddenField() {
     const input = document.getElementById('TLN_1_I_SHIP_INST');
@@ -116,6 +129,7 @@ function resizeContents_end() {
     updateBoxHeight();
     hiddenField();
     setRowNumbers("TLN_2_I_SHIP_LNNO_");
+    setValAllRow('TLN_2_I_SHIP_CFM_');
 
     // set id to box header
     let valFrom = document.getElementById('TLN_2_I_SHIP_INST_0').value;

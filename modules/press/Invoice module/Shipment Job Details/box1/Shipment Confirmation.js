@@ -4,6 +4,14 @@ var UserInfo  = TALON.getUserInfoMap();
 var UserId    = UserInfo['USER_ID'];
 var ProgramNM = UserInfo['FUNC_ID'];
 
+
+data.forEach(function(item) {
+    if (item['CHK'] === "1" && !selectedItem) {
+        selectedItem = item;
+    }
+});
+
+
 try {
 
     for (var i = 0; i < DetailData.length; i++) {
@@ -13,7 +21,7 @@ try {
 
         var sqlUpdate = ""
             + "UPDATE D "
-            + "SET D.I_PICKING_STATUS = '1', "
+            + "SET D.[I_SHP_PKG_STATUS] = '3', "
             + "    D.UPDATED_BY = '" + UserId + "', "
             + "    D.UPDATED_PRG_NM = '" + ProgramNM + "', "
             + "    D.UPDATED_DATE = GETDATE(), "

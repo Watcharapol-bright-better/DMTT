@@ -13,8 +13,7 @@ CREATE TABLE [dbo].[T_PR_SHIP_INST_D](
     [I_INVOICE_NO]       NVARCHAR(20) NULL,
     [I_INVOICE_DATE]     DATETIME NULL,
     [I_SHP_PCK]          NUMERIC(10,0) NULL,      -- Picked
-    [I_SHP_PKG_STATUS]   NVARCHAR(1) NULL,        -- Shipment Status
-    [I_SHIPMENT_STATUS]  NVARCHAR(10) NULL,
+    [I_SHIP_CFM]        NVARCHAR(1) NULL,         -- Shipment Status    
     [I_ASSIGNTO]         NVARCHAR(20) NULL,
 
     [CREATED_DATE]       DATETIME NULL,
