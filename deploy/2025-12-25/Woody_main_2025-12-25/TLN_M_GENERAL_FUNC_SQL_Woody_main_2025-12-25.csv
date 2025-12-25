@@ -1,0 +1,680 @@
+"REPOSITORY_NM","REPOSITORY_NO","FUNC_ID","FUNC_SEQ","SORT","TYPE","TITLE","BODY_SQL","TITLE_SQL","CREATED_DATE","CREATED_BY","CREATED_PRG_NM","UPDATED_DATE","UPDATED_BY","UPDATED_PRG_NM"
+"Woody_main_2025-12-25","0","DMTT_S_SO_LIST","0","0","LIST","","SELECT I_SONO 
+FROM T_PR_SORD 
+WHERE I_LNNO = 1
+","","","","","","",""
+"Woody_main_2025-12-25","0","DMTT_T_PRESS_ASSIGN_SHIP_JOB","1","1","LIST","Assignment Details","SELECT 
+     /**%I_ASSIGNTO%**/'' AS [I_ASSIGNTO]
+    \,[SI].[I_SHIP_INST]      -- Shipping No
+    \,[SI].[INTERNAL_NO]      -- Internal No
+    \,[SI].[I_ITEMCODE]       -- Part No
+    \,[MS].[I_DESC]           -- Part Name
+    \,[SI].[I_SHIP_QTY]       -- Qty
+    \,[MS].[I_PCS_BOX]        -- Box QTY
+    \,[SI].[I_LOTNO_FR]       -- Lot From
+    \,[SI].[I_LOTNO_TO]       -- Lot To
+
+    \,'' AS [I_LOCCD]
+    \,'' AS [I_PLTNO]
+
+    --\,[SK].[I_LOCCD]          -- Location
+    --\,[SK].[I_PLTNO]          -- Pallet Tag No.
+    \,[SI].[I_SHIP_LNNO]
+    \, /**%SHIP_LIST%**/'' AS [SHIP_LIST]
+
+    \,[SI].[CREATED_DATE]
+    \,[SI].[CREATED_BY]
+    \,[SI].[CREATED_PRG_NM]
+    \,[SI].[UPDATED_DATE]
+    \,[SI].[UPDATED_BY]
+    \,[SI].[UPDATED_PRG_NM]
+    \,[SI].[MODIFY_COUNT]
+FROM [T_PR_SHIP_INST_D] [SI]
+    LEFT JOIN [T_PR_SHIP_INST_H] [SH]
+        ON [SH].[I_SHIP_INST] = [SI].[I_SHIP_INST]
+    LEFT JOIN [MS_CS] [CS]
+        ON [CS].[I_CSCODE] = [SH].[I_CSCODE]
+    LEFT JOIN [MS_PRFG] [MS]
+        ON [SI].[I_ITEMCODE] = [MS].[I_ITEMCODE]
+--    INNER JOIN [T_PR_STOCK] [SK]
+--       ON [SK].[I_ITEMCODE] = [SI].[I_ITEMCODE]
+
+WHERE [SI].[I_SHIP_INST] IN (
+   SELECT 
+    TRIM(
+        SUBSTRING(value\, CHARINDEX(':'\, value) + 1\, LEN(value))
+    ) AS [I_SHIP_INST]
+    FROM STRING_SPLIT( /**%SHIP_LIST%**/'' \, '\,')
+    WHERE value LIKE '%:%'
+
+)
+
+","","","","","","",""
+"Woody_main_2025-12-25","0","DMTT_T_PRESS_ASSIGN_SHIP_JOB","2","0","CARD","","SELECT '' AS I_ASSIGNTO","","","","","","",""
+"Woody_main_2025-12-25","0","DMTT_T_PRESS_CONF_DELIIVERY_ORDER","0","0","CARD","","SELECT '' AS [SELECTED]","","","","","","",""
+"Woody_main_2025-12-25","0","DMTT_T_PRESS_CONF_DELIIVERY_ORDER","1","1","LIST","","
+SELECT *
+FROM (
+
+    -- Level 1 : Header
+    SELECT  
+           1 AS [Lvl]                -- Level = Header
+          \,'' AS [CHK]
+          \,[H].[I_SONO]             -- SO No.
+          \,'' AS [INTERNAL_NO]
+          \,NULL AS [I_LNNO]
+          \,NULL AS [I_COMPCLS]          -- SO Status
+          \,[H].[I_CUSTOMER_PO]      -- Customer PO No
+          \,NULL AS [I_DLYDATE]          -- Delivery Date
+
+          \,[H].[I_CSCODE]           -- Customer Code
+          \,[MC].[I_NAME]            -- Customer Name
+          \,[H].[I_SODATE]           -- SO Date 
+
+          \,NULL AS [I_QTY]          -- SO Qty
+          \,NULL AS [I_DLY_PLACE]    -- Delivery Place
+          \,[H].[I_ENDUSER]          -- P.I.C
+
+          \,NULL AS [I_SHIP_CFM]     -- Delivered
+          \,NULL AS [I_SHP_PCK]      -- Picked
+          \,NULL AS [BALANCE]        -- Balance
+          \,ISNULL( NULL \, 0) AS [I_CONFIRM_STATUS]
+
+          \,[H].[CREATED_DATE]
+          \,[H].[CREATED_BY]
+          \,[H].[CREATED_PRG_NM]
+          \,[H].[UPDATED_DATE]
+          \,[H].[UPDATED_BY]
+          \,[H].[UPDATED_PRG_NM]
+          \,[H].[MODIFY_COUNT]
+    FROM [T_PR_SORD_H] [H]
+        LEFT JOIN [MS_CS] AS [MC] 
+            ON [MC].[I_CSCODE] = [H].[I_CSCODE]
+
+    UNION ALL
+
+    -- Level 2 : Detail
+    SELECT  
+           2 AS [Lvl]
+          \,'' AS [CHK]
+          \,[D].[I_SONO]
+          \,[D].[INTERNAL_NO]
+          \,[D].[I_LNNO]
+          \,ISNULL([D].[I_COMPCLS]\,'') AS [I_COMPCLS]
+          \,ISNULL([H].[I_CUSTOMER_PO]\,'') AS [I_CUSTOMER_PO]
+          \,[D].[I_DLYDATE]
+
+          \,ISNULL([H].[I_CSCODE]\,'') AS [I_CSCODE]
+          \,ISNULL([MC].[I_NAME]\,'') AS [I_NAME]
+          \,ISNULL([H].[I_SODATE]\,GETDATE()) AS [I_SODATE]
+
+          \,[D].[I_QTY]
+          \,[D].[I_DLY_PLACE]
+          \,ISNULL([H].[I_ENDUSER]\,'') AS [I_ENDUSER]
+
+          \,ISNULL([SI].[I_SHIP_CFM]\,0) AS [I_SHIP_CFM]
+          \,ISNULL([SI].[I_SHP_PCK]\,0)  AS [I_SHP_PCK]
+
+          \,CASE 
+                WHEN ISNULL([D].[I_QTY]\,0)
+                   - ISNULL([SI].[I_SHIP_CFM]\,0)
+                   - ISNULL([SI].[I_SHP_PCK]\,0) < 0
+                THEN 0
+                ELSE ISNULL([D].[I_QTY]\,0)
+                   - ISNULL([SI].[I_SHIP_CFM]\,0)
+                   - ISNULL([SI].[I_SHP_PCK]\,0)
+           END AS [BALANCE]
+          \,ISNULL( [D].[I_CONFIRM_STATUS] \, 0) AS [I_CONFIRM_STATUS]
+
+          \,[D].[CREATED_DATE]
+          \,[D].[CREATED_BY]
+          \,[D].[CREATED_PRG_NM]
+          \,[D].[UPDATED_DATE]
+          \,[D].[UPDATED_BY]
+          \,[D].[UPDATED_PRG_NM]
+          \,[D].[MODIFY_COUNT]
+
+    FROM [T_PR_SORD_D] [D]
+    LEFT JOIN [T_PR_SORD_H] [H] ON [H].[I_SONO] = [D].[I_SONO]
+    LEFT JOIN [MS_CS] AS [MC] ON [MC].[I_CSCODE] = [H].[I_CSCODE]
+    LEFT JOIN [T_PR_SHIP_INST] AS [SI] ON [SI].[I_SONO] = [D].[I_SONO]
+
+
+) AS A
+-- ORDER BY [Lvl]\, [I_SONO]\, [I_LNNO]
+
+
+","","","","","","",""
+"Woody_main_2025-12-25","0","DMTT_T_PRESS_CREATE_INVOICE","1","1","LIST","Invoice Detail","SELECT
+     [D].[I_INVOICE_NO] -- Invoice No
+    \,[D].[INTERNAL_NO] -- Internal No.
+    \,[D].[I_INVOICE_LNNO] -- Line no
+    \,[D].[I_ITEMCODE] -- Part ID
+
+    \,[MS].[I_DESC] -- Part Name
+    \,[MS].[I_PKGCD] -- Packaging Type
+
+    \,[D].[I_PALLET_QTY] -- Pallet
+    \,[D].[I_QTY] -- Qty
+
+    \,[D].[I_NET_WGT] -- Net Weight
+    \,[D].[I_UNIT_PRICE] -- Unit Price
+    \,[D].[I_AMOUNT] -- Total Price
+
+    \,[H].[I_SHIP_ORDER_NO]
+FROM [T_PR_INVOICE_D] [D]
+
+INNER JOIN [T_PR_INVOICE_H] [H]
+    ON [H].[I_INVOICE_NO] = [D].[I_INVOICE_NO]
+
+LEFT JOIN [MS_PRFG] [MS]
+    ON [MS].[I_ITEMCODE] = [D].[I_ITEMCODE]
+
+WHERE [H].[I_SHIP_ORDER_NO] = /**%I_SHIP_ORDER_NO%**/''
+","","","","","","",""
+"Woody_main_2025-12-25","0","DMTT_T_PRESS_CREATE_INVOICE","2","0","CARD","","SELECT 
+     [IH].[I_SHIP_ORDER_NO]           AS [I_SHIP_ORDER_NO]
+    \,[IH].[I_INVOICE_NO]
+
+    \,[H].[I_SHIP_INST_DATE]           AS [I_SHIP_ORDER_DATE]
+    \,[IH].[I_INVOICE_DATE]
+
+    \,[H].[I_CSCODE]                   AS [I_CORRESP_CODE]
+    \,[CS].[I_REMARK]                  AS [I_ATTN]
+    \,[H].[I_SHIPTO]                   AS [I_SHIP_TO]
+
+    \,[IH].[CREATED_DATE]
+    \,[IH].[CREATED_BY]
+    \,[IH].[CREATED_PRG_NM]
+    \,[IH].[UPDATED_DATE]
+    \,[IH].[UPDATED_BY]
+    \,[IH].[UPDATED_PRG_NM]
+    \,[IH].[MODIFY_COUNT]
+FROM [T_PR_INVOICE_H] [IH]
+
+LEFT JOIN [T_PR_SHIP_INST_H] [H]
+    ON [H].[I_SHIP_INST] = [IH].[I_SHIP_ORDER_NO]
+
+LEFT JOIN [MS_CS] [CS]
+    ON [CS].[I_CSCODE] = [H].[I_CSCODE]
+
+WHERE [IH].[I_SHIP_ORDER_NO] = /**%I_SHIP_ORDER_NO%**/''","","","","","","",""
+"Woody_main_2025-12-25","0","DMTT_T_PRESS_QT","0","0","CARD","Header","-- Header
+SELECT DISTINCT
+     [QH].[I_QT_NO]
+    \,[QH].[I_QT_MTH]
+    \,[QH].[I_METAL_PRICE]
+    \,[QH].[I_CSCODE]
+    \,[QH].[I_PO_MONTH]
+    \,[QH].[I_EXG_MONTH]
+    \,'' AS [I_EXG_RATE_TYPE]
+
+    \,CASE 
+        WHEN [QH].[I_CURRENCY] = 'THB' THEN 1
+        ELSE [QH].[I_EXG_RATE]
+     END AS [I_EXG_RATE]
+
+    \,[QH].[I_CURRENCY]
+    \,[QH].[I_REM1]
+    \,[MP].[I_QTPATTERN] AS [I_TYPE]
+    \,'' AS [B]
+
+    \,[QH].[CREATED_DATE]
+    \,[QH].[CREATED_BY]
+    \,[QH].[CREATED_PRG_NM]
+    \,[QH].[UPDATED_DATE]
+    \,[QH].[UPDATED_BY]
+    \,[QH].[UPDATED_PRG_NM]
+    \,[QH].[MODIFY_COUNT]
+
+FROM [T_PR_QT_H] AS [QH]
+
+INNER JOIN [MS_CS] AS [MC]
+    ON [MC].[I_CSCODE] = [QH].[I_CSCODE]
+
+INNER JOIN [MS_EXG] AS [MX]
+    ON [MX].[I_CURCOD] = [MC].[I_CURRENCY]
+
+LEFT JOIN [T_PR_QT_D] AS [QD]
+    ON [QD].[I_QT_NO] = [QH].[I_QT_NO]
+
+LEFT JOIN [MS_PRFG] AS [MP]
+    ON [MP].[I_ITEMCODE] = [QD].[I_ITEMCODE]
+","","","","","","",""
+"Woody_main_2025-12-25","0","DMTT_T_PRESS_QT","1","1","LIST","Detail","-- Detail
+SELECT
+    [QD].[I_QT_NO]\,                 -- Quotation ID
+    [QD].[INTERNAL_NO]\,        -- Internal No
+
+    [MP].[I_ITEMCODE]\,
+    [MP].[I_DESC]\,
+    [MP].[I_COMMODITY]\,
+    [MP].[I_THICK]\,
+    [MP].[I_WIDTH]\,
+
+    ([MP].[I_PROD_WGT] / 100.0) * (200.0 - [MP].[I_YIELD]) AS [I_PROD_WGT]\,
+    ([MP].[I_RM_WGT]   / 100.0) * (200.0 - [MP].[I_YIELD]) AS [I_RM_WGT]\,
+    ([MP].[I_LOSS_WGT] / 100.0) * (200.0 - [MP].[I_YIELD]) AS [I_LOSS_WGT]\,
+
+    [MP].[I_PITCH]\,
+    '' AS [MAT_COST]\,
+    '' AS [SCRAP_COST]\,
+    '' AS [MAT_AMOUNT]\,
+    '' AS [SCRAP_AMOUNT]\,
+
+    [MP].[I_FEE_PROCESS]\,
+    [MP].[I_FEE_CUSTOM]\,
+    [MP].[I_FEE_PACK]\,
+    [MP].[I_FEE_EXPENSE]\,
+    [MP].[I_FEE_DLY]\,
+
+    COALESCE([MP].[I_FEE_PROCESS]\, 0)
+  + COALESCE([MP].[I_FEE_CUSTOM]\, 0)
+  + COALESCE([MP].[I_FEE_PACK]\, 0)
+  + COALESCE([MP].[I_FEE_EXPENSE]\, 0)
+  + COALESCE([MP].[I_FEE_DLY]\, 0) AS [MANAGEMENT_EXPENSE]\,
+
+    ROUND(RAND(CHECKSUM(NEWID())) * 1350 + 150\, 2) AS [I_SELLING_PRICE]\,
+
+    [MP].[I_QTPATTERN]\,
+    [MP].[I_CSCODE]\,
+    NULL AS [I_QT_LN]
+FROM [MS_PRFG] AS [MP]
+LEFT JOIN [T_PR_QT_D] AS [QD]
+    ON [QD].[I_ITEMCODE] = [MP].[I_ITEMCODE]
+LEFT JOIN [T_PR_QT_H] AS [QH]
+    ON [QH].[I_QT_NO] = [QD].[I_QT_NO]
+
+WHERE 1 = 2
+","","","","","","",""
+"Woody_main_2025-12-25","0","DMTT_T_PRESS_QT_LIST","0","1","LIST","Search Result","-- LVL 1 : HEADER 
+SELECT
+       /**%CHK%**/ '' AS [CHK]\,
+       '1' AS [LVL]\,
+       [QH].[I_QT_MTH]\,
+       [QH].[I_QT_NO]\,
+       [QH].[I_PO_MONTH]\,
+       [QH].[I_EXG_MONTH]\,
+       [QH].[I_CSCODE]\,
+       [MC].[I_NAME]       AS [I_NAME]\,
+       '' AS [I_QT_STATUS]\,
+       [QH].[I_REM1]\,
+       NULL                AS [I_ITEMCODE]\,
+       NULL                AS [I_DESC]\,
+       [QH].[I_TYPE]\, 
+       NULL                AS [I_COMMODITY]\,
+       NULL                AS [I_THICK]\,
+       NULL                AS [I_WIDTH]\,
+       NULL                AS [I_PROD_WGT]\,
+       [QH].[I_CURRENCY]\,
+       NULL AS [I_UNIT_PRICE]\,
+       NULL AS [I_QT_LN]
+FROM [T_PR_QT_H] AS [QH]
+    LEFT JOIN [MS_CS] AS [MC] ON [MC].[I_CSCODE] = [QH].[I_CSCODE]
+
+UNION ALL
+
+-- LVL 2 : DETAIL
+SELECT
+       /**%CHK%**/ '' AS [CHK]\,
+       '2' AS [LVL]\,
+       [QH].[I_QT_MTH]\,
+       [QD].[I_QT_NO]\,
+       [QH].[I_PO_MONTH]\,
+       [QH].[I_EXG_MONTH]\,
+       [QH].[I_CSCODE]\,
+       [MC].[I_NAME]\,
+       [QD].[I_QT_STATUS]\,
+       [QH].[I_REM1]\,
+       [QD].[I_ITEMCODE]\,
+       [MP].[I_DESC]\,
+       [QH].[I_TYPE]\,
+       [QD].[I_COMMODITY]\,
+       [QD].[I_THICK]\,
+       [QD].[I_WIDTH]\,
+       [QD].[I_PROD_WGT]\,
+       [QH].[I_CURRENCY]\,
+       NULL AS [I_UNIT_PRICE]\,
+       [QD].[I_QT_LN]
+FROM [T_PR_QT_D] AS [QD]
+    LEFT JOIN [T_PR_QT_H] AS [QH] ON [QH].[I_QT_NO] = [QD].[I_QT_NO]
+    LEFT JOIN [MS_CS] AS [MC] ON [MC].[I_CSCODE] = [QH].[I_CSCODE]
+    LEFT JOIN [MS_PRFG] AS [MP] ON [MP].[I_ITEMCODE] = [QD].[I_ITEMCODE]
+","","","","","","",""
+"Woody_main_2025-12-25","0","DMTT_T_PRESS_QT_LIST","1","0","CARD","","SELECT '' AS [SELECTED]","","","","","","",""
+"Woody_main_2025-12-25","0","DMTT_T_PRESS_SALES_ORDER","0","0","CARD","Header","SELECT 
+       [SDH].[I_SONO]         AS [I_SONO]\,
+       [SDH].[I_QT_NO]        AS [I_QT_NO]\,
+       [SDH].[I_SODATE]       AS [I_SODATE]\,
+       ''      AS [I_COMPCLS]\,
+       [SDH].[I_CUSTOMER_PO]  AS [I_CUSTOMER_PO]\,
+       [SDH].[I_CSCODE]       AS [I_CSCODE]\,
+       [MC].[I_NAME]          AS [I_NAME]\,      -- Customer Name
+       [SDH].[I_CURRENCY]     AS [I_CURRENCY]\,
+       [SDH].[I_SHIPTO]       AS [I_SHIPTO]\,
+       [SDH].[I_BILLTO]       AS [I_BILLTO]\,
+       [SDH].[I_ENDUSER]      AS [I_ENDUSER]\,
+       [SDH].[I_REM1]         AS [I_REM1]\,
+       NULL      AS [I_DLYDATE]\,
+       NULL                   AS [I_ITEMCODE]\,
+       NULL                   AS [I_DESC]\,
+
+       [SDH].[CREATED_DATE]\,
+       [SDH].[CREATED_BY]\,
+       [SDH].[CREATED_PRG_NM]\,
+       [SDH].[UPDATED_DATE]\,
+       [SDH].[UPDATED_BY]\,
+       [SDH].[UPDATED_PRG_NM]\,
+       [SDH].[MODIFY_COUNT]
+FROM [T_PR_SORD_H] AS [SDH]
+LEFT JOIN [MS_CS] AS [MC]
+       ON [MC].[I_CSCODE] = [SDH].[I_CSCODE]
+WHERE [SDH].[I_SONO] = /**%I_SONO%**/'' 
+
+","","","","","","",""
+"Woody_main_2025-12-25","0","DMTT_T_PRESS_SALES_ORDER","1","1","LIST","Detail","SELECT
+       [SDD].[I_SONO]\,
+       [SDD].[I_LNNO]\,
+       [SDD].[I_ITEMCODE]\,
+       [MP].[I_DESC]          AS [I_DESC]\,
+       [SDD].[I_UNTPRI]\,
+       NULL   AS [I_QTY]\,   
+       [SDD].[I_AMOUNT]\,
+       [SDD].[I_DLY_PLACE]\,
+       [SDD].[INTERNAL_NO]\,
+
+       [SDD].[CREATED_DATE]\,
+       [SDD].[CREATED_BY]\,
+       [SDD].[CREATED_PRG_NM]\,
+       [SDD].[UPDATED_DATE]\,
+       [SDD].[UPDATED_BY]\,
+       [SDD].[UPDATED_PRG_NM]\,
+       [SDD].[MODIFY_COUNT]
+FROM [T_PR_SORD_D] AS [SDD]
+INNER JOIN [MS_PRFG] AS [MP]
+        ON [MP].[I_ITEMCODE] = [SDD].[I_ITEMCODE]
+WHERE [SDD].[I_SONO] = /**%I_SONO%**/'' 
+","","","","","","",""
+"Woody_main_2025-12-25","0","DMTT_T_PRESS_SALES_ORDER_LIST","0","0","CARD","","SELECT '' AS [SELECTED]","","","","","","",""
+"Woody_main_2025-12-25","0","DMTT_T_PRESS_SALES_ORDER_LIST","1","1","LIST","","SELECT *
+FROM (
+
+    -- Level 1 : Header
+    SELECT  
+           1 AS [Lvl]                -- Level = Header
+          \,'' AS [CHK]
+          \,[H].[I_SONO]             -- SO No.
+          \,NULL AS [I_LNNO]
+          \,NULL AS [I_COMPCLS]          -- SO Status
+          \,[H].[I_CUSTOMER_PO]      -- Customer PO No
+          \,NULL AS [I_DLYDATE]          -- Delivery Date
+
+          \,[H].[I_CSCODE]           -- Customer Code
+          \,[MC].[I_NAME]            -- Customer Name
+          \,[H].[I_SODATE]           -- SO Date 
+
+          \,NULL AS [I_AMOUNT]       -- Amount
+          \,NULL AS [I_UNTPRI]       -- Unit Price
+          \,NULL AS [I_QTY]          -- SO Qty
+          \,NULL AS [I_DLY_PLACE]    -- Delivery Place
+          \,[H].[I_ENDUSER]          -- P.I.C
+
+          \,NULL AS [I_SHIP_CFM]     -- Delivered
+          \,NULL AS [I_SHP_PCK]      -- Picked
+          \,NULL AS [BALANCE]        -- Balance
+          \,ISNULL( NULL \, 0) AS [I_CONFIRM_STATUS]
+
+          \,[H].[CREATED_DATE]
+          \,[H].[CREATED_BY]
+          \,[H].[CREATED_PRG_NM]
+          \,[H].[UPDATED_DATE]
+          \,[H].[UPDATED_BY]
+          \,[H].[UPDATED_PRG_NM]
+          \,[H].[MODIFY_COUNT]
+    FROM [T_PR_SORD_H] [H]
+        LEFT JOIN [MS_CS] AS [MC] 
+            ON [MC].[I_CSCODE] = [H].[I_CSCODE]
+
+    UNION ALL
+
+    -- Level 2 : Detail
+    SELECT  
+           2 AS [Lvl]
+          \,'' AS [CHK]
+          \,[D].[I_SONO]
+          \,[D].[I_LNNO]
+          \,ISNULL([D].[I_COMPCLS]\,'') AS [I_COMPCLS]
+          \,ISNULL([H].[I_CUSTOMER_PO]\,'') AS [I_CUSTOMER_PO]
+          \,[D].[I_DLYDATE]
+
+          \,ISNULL([H].[I_CSCODE]\,'') AS [I_CSCODE]
+          \,ISNULL([MC].[I_NAME]\,'') AS [I_NAME]
+          \,ISNULL([H].[I_SODATE]\,GETDATE()) AS [I_SODATE]
+      
+          \,[D].[I_AMOUNT]
+          \,[D].[I_UNTPRI]
+          \,[D].[I_QTY]
+          \,[D].[I_DLY_PLACE]
+          \,ISNULL([H].[I_ENDUSER]\,'') AS [I_ENDUSER]
+
+          \,ISNULL([SI].[I_SHIP_CFM]\,0) AS [I_SHIP_CFM]
+          \,ISNULL([SI].[I_SHP_PCK]\,0)  AS [I_SHP_PCK]
+
+          \,CASE 
+                WHEN ISNULL([D].[I_QTY]\,0)
+                   - ISNULL([SI].[I_SHIP_CFM]\,0)
+                   - ISNULL([SI].[I_SHP_PCK]\,0) < 0
+                THEN 0
+                ELSE ISNULL([D].[I_QTY]\,0)
+                   - ISNULL([SI].[I_SHIP_CFM]\,0)
+                   - ISNULL([SI].[I_SHP_PCK]\,0)
+           END AS [BALANCE]
+          \,ISNULL( [D].[I_CONFIRM_STATUS] \, 0) AS [I_CONFIRM_STATUS]
+          \,[D].[CREATED_DATE]
+          \,[D].[CREATED_BY]
+          \,[D].[CREATED_PRG_NM]
+          \,[D].[UPDATED_DATE]
+          \,[D].[UPDATED_BY]
+          \,[D].[UPDATED_PRG_NM]
+          \,[D].[MODIFY_COUNT]
+
+    FROM [T_PR_SORD_D] [D]
+    LEFT JOIN [T_PR_SORD_H] [H] ON [H].[I_SONO] = [D].[I_SONO]
+    LEFT JOIN [MS_CS] AS [MC] ON [MC].[I_CSCODE] = [H].[I_CSCODE]
+    LEFT JOIN [T_PR_SHIP_INST] AS [SI] ON [SI].[I_SONO] = [D].[I_SONO]
+
+
+) AS A
+-- ORDER BY [Lvl]\, [I_SONO]\, [I_LNNO]
+
+
+","","","","","","",""
+"Woody_main_2025-12-25","0","DMTT_T_PRESS_SHIPMENT_INST","0","0","CARD","Header","SELECT
+         [SI].[I_SHIP_INST]        -- Shipment Instruction No
+        \,[SI].[I_SHIP_INST_DATE]   -- Shipment Instruction Date
+        \,[SI].[I_SHIP_CFM]         -- Shipment Status
+        \,[SI].[I_CSCODE]           -- Customer Code
+        \,[CS].[I_NAME]             -- Customer Name
+        \,[SI].[I_SHIP_DLY_DATE]    -- Shipment Delivery Date
+        \,[SI].[I_SHIPTO]           -- Ship To
+        \,[SI].[I_ENDUSER]          -- P.I.C
+
+        \,[SI].[CREATED_DATE]
+        \,[SI].[CREATED_BY]
+        \,[SI].[CREATED_PRG_NM]
+        \,[SI].[UPDATED_DATE]
+        \,[SI].[UPDATED_BY]
+        \,[SI].[UPDATED_PRG_NM]
+        \,[SI].[MODIFY_COUNT]
+        \, '' AS [b]
+FROM [T_PR_SHIP_INST_H] [SI]
+    LEFT JOIN [MS_CS] [CS]
+        ON [CS].[I_CSCODE] = [SI].[I_CSCODE]
+WHERE [SI].[I_SHIP_INST] = /**%I_SHIP_INST%**/''
+","","","","","","",""
+"Woody_main_2025-12-25","0","DMTT_T_PRESS_SHIPMENT_INST","1","1","LIST","DO Balance","SELECT
+     [SI].[I_SHIP_LNNO]        -- Shipment Instruction Line 
+    \,[SI].[I_SHIP_INST]        -- Shipment Instruction No
+    \,[SI].[INTERNAL_NO]        -- Internal No
+    \,[SI].[I_SONO]             -- SO No
+    \,[SI].[I_ITEMCODE]         -- Part No
+    \,[MP].[I_DESC]             -- Part Name
+
+    \,[SI].[I_PALLET_QTY]       -- Pallet QTY
+    \,[SI].[I_BALANCE_QTY]      -- SO Balance QTY
+    \,ISNULL([SI].[I_SHIP_QTY]\, 0) AS [I_SHIP_QTY] -- Shipment QTY
+    \,[SI].[I_BOX_QTY]          -- Box QTY
+
+    \,[SI].[I_LOTNO_FR]         -- Lot From
+    \,[SI].[I_LOTNO_TO]         -- Lot To
+    \,[WO].[I_WODATE]           -- MFG Date
+
+    \,[SI].[CREATED_DATE]
+    \,[SI].[CREATED_BY]
+    \,[SI].[CREATED_PRG_NM]
+    \,[SI].[UPDATED_DATE]
+    \,[SI].[UPDATED_BY]
+    \,[SI].[UPDATED_PRG_NM]
+    \,[SI].[MODIFY_COUNT]
+
+FROM [T_PR_SHIP_INST_D] AS [SI]
+
+LEFT JOIN [MS_PRFG] AS [MP]
+    ON [MP].[I_ITEMCODE] = [SI].[I_ITEMCODE]
+
+LEFT JOIN [T_PR_WOH] AS [WO]
+    ON [WO].[I_SONO] = [SI].[I_SONO]
+
+WHERE [SI].[I_SHIP_INST] = /**%I_SHIP_INST%**/''","","","","","","",""
+"Woody_main_2025-12-25","0","DMTT_T_PRESS_SHIPMENT_INST_LIST","0","0","CARD","","SELECT '' AS [SELECTED]","","","","","","",""
+"Woody_main_2025-12-25","0","DMTT_T_PRESS_SHIPMENT_INST_LIST","1","1","LIST","","SELECT 
+     '' AS [SEL_CHK]
+    \,[SH].[I_SHIP_INST]              -- Shipment Instruction No
+    \,[SD].[I_SHP_PKG_STATUS]         -- Picking Status
+    \,[SH].[I_SHIP_DLY_DATE]          -- Delivery Date
+
+    \,[SH].[I_CSCODE]                 -- Customer Code
+    \,[CS].[I_NAME]                   -- Customer Name
+    \,[SH].[I_SHIPTO]                 -- Ship To
+    \,[SD].[I_SONO]                   -- SO No.
+    \,[SH].[I_ENDUSER]                -- P.I.C
+    \,[SD].[I_INVOICE_NO]             -- Invoice No.
+FROM [T_PR_SHIP_INST_H] [SH]
+    OUTER APPLY (
+        SELECT TOP 1
+               D.I_SHP_PKG_STATUS\,
+               D.I_SONO\,
+               D.I_INVOICE_NO
+        FROM [T_PR_SHIP_INST_D] D
+        WHERE D.I_SHIP_INST = SH.I_SHIP_INST
+        ORDER BY D.I_SHIP_LNNO
+    ) [SD]
+    LEFT JOIN [MS_CS] [CS]
+        ON [CS].[I_CSCODE] = [SH].[I_CSCODE]
+","","","","","","",""
+"Woody_main_2025-12-25","0","DMTT_T_PRESS_SHIPMENT_JOB_DETAILS","0","0","CARD","Header","SELECT
+         [SI].[I_SHIP_INST]        -- Shipment Instruction No
+        \,[SI].[I_SHIP_INST_DATE]   -- Shipment Instruction Date
+        \,[SI].[I_SHIP_CFM]         -- Shipment Status
+        \,[SI].[I_CSCODE]           -- Customer Code
+        \,[CS].[I_NAME]             -- Customer Name
+        \,[SI].[I_SHIP_DLY_DATE]    -- Shipment Delivery Date
+        \,[SI].[I_SHIPTO]           -- Ship To
+        \,[SI].[I_ENDUSER]          -- P.I.C
+
+        \,[SI].[CREATED_DATE]
+        \,[SI].[CREATED_BY]
+        \,[SI].[CREATED_PRG_NM]
+        \,[SI].[UPDATED_DATE]
+        \,[SI].[UPDATED_BY]
+        \,[SI].[UPDATED_PRG_NM]
+        \,[SI].[MODIFY_COUNT]
+        \, '' AS [b]
+FROM [T_PR_SHIP_INST_H] [SI]
+    LEFT JOIN [MS_CS] [CS]
+        ON [CS].[I_CSCODE] = [SI].[I_CSCODE]
+
+WHERE [SI].[I_SHIP_INST] = /**%I_SHIP_INST%**/''
+","","","","","","",""
+"Woody_main_2025-12-25","0","DMTT_T_PRESS_SHIPMENT_JOB_DETAILS","1","1","LIST","DO Balance","SELECT
+     [SI].[I_SHIP_LNNO]
+    \,[SI].[I_SHIP_INST]
+    \,[SI].[INTERNAL_NO]
+    \,[SI].[I_SONO]
+    \,[SI].[I_ITEMCODE]
+    \,[MP].[I_DESC]
+
+    \,[SD].[I_QTY]                               -- SO Balance QTY
+    \,ISNULL([SI].[I_SHIP_QTY]\, 1) AS [I_SHIP_QTY]
+
+    \,[MP].[I_PCS_BOX]
+    \,[SI].[I_LOTNO_FR]
+    \,[SI].[I_LOTNO_TO]
+
+    \,[WO].[I_WODATE]                            -- MFG Date
+
+    \,[SI].[CREATED_DATE]
+    \,[SI].[CREATED_BY]
+    \,[SI].[CREATED_PRG_NM]
+    \,[SI].[UPDATED_DATE]
+    \,[SI].[UPDATED_BY]
+    \,[SI].[UPDATED_PRG_NM]
+    \,[SI].[MODIFY_COUNT]
+FROM [T_PR_SHIP_INST_D] [SI]
+
+LEFT JOIN [MS_PRFG] [MP]
+    ON [MP].[I_ITEMCODE] = [SI].[I_ITEMCODE]
+
+OUTER APPLY (
+    SELECT SUM([D].[I_QTY]) AS [I_QTY]
+    FROM [T_PR_SORD_D] [D]
+    WHERE [D].[I_SONO] = [SI].[I_SONO]
+) [SD]
+
+OUTER APPLY (
+    SELECT TOP 1 [W].[I_WODATE]
+    FROM [T_PR_WOH] [W]
+    WHERE [W].[I_SONO] = [SI].[I_SONO]
+    ORDER BY [W].[I_WODATE] DESC
+) [WO]
+
+WHERE [SI].[I_SHIP_INST] = /**%I_SHIP_INST%**/''
+
+-- ORDER BY [SI].[I_SHIP_LNNO]
+","","","","","","",""
+"Woody_main_2025-12-25","0","DMTT_T_PRESS_SHIPMENT_JOB_LIST","0","0","LIST","","SELECT 
+     [SH].[I_SHIP_INST]              -- Shipment Instruction No
+    \,[SD].[I_SHP_PKG_STATUS]         -- Picking Status
+    \,[SH].[I_SHIP_DLY_DATE]          -- Delivery Date
+
+    \,[SH].[I_CSCODE]                 -- Customer Code
+    \,[CS].[I_NAME]                   -- Customer Name
+    \,[SH].[I_SHIPTO]                 -- Ship To
+    \,[SD].[I_SONO]                   -- SO No.
+    \,[SH].[I_ENDUSER]                -- P.I.C
+    \,[SD].[I_ASSIGNTO]               -- Assigned To
+
+    \,[SD].[I_INVOICE_NO]             -- Invoice No.
+FROM [T_PR_SHIP_INST_H] [SH]
+    OUTER APPLY (
+        SELECT TOP 1
+               D.I_SHP_PKG_STATUS\,
+               D.I_SONO\,
+               D.I_ASSIGNTO\,
+               D.I_INVOICE_NO
+        FROM [T_PR_SHIP_INST_D] D
+        WHERE D.I_SHIP_INST = SH.I_SHIP_INST
+        ORDER BY D.I_SHIP_LNNO
+    ) [SD]
+    LEFT JOIN [MS_CS] [CS]
+        ON [CS].[I_CSCODE] = [SH].[I_CSCODE]
+","","","","","","",""
+"Woody_main_2025-12-25","0","DMTT_T_SHP010_CS","0","0","LIST","","SELECT I_CSCODE
+\,I_NAME
+\,I_ADDR1
+FROM MS_CS","","","","","","",""
+"Woody_main_2025-12-25","0","DMTT_USER_LIST","0","0","LIST","","SELECT 
+ [USER_ID]
+\,[USER_NM]
+
+FROM [TLN_M_USER]","","","","","","",""

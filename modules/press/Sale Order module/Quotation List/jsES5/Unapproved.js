@@ -1,6 +1,8 @@
 var data = TALON.getBlockData_List(2);
+var UserInfo  = TALON.getUserInfoMap();
+var UserId    = UserInfo['USER_ID'];
+var ProgramNM = UserInfo['FUNC_ID'];
 var selectedItem = null;
-
 
 data.forEach(function(item) {
     if (item['CHK'] === "1" && !selectedItem) {
@@ -8,11 +10,12 @@ data.forEach(function(item) {
     }
 });
 
+
 if (!selectedItem) {
     TALON.addErrorMsg('⚠️ No quotation selected');
 } else {
 
-    var checkStatus = "SELECT [I_QT_STATUS] FROM [T_PR_QT] WHERE [I_QT_NO] = '" 
+    var checkStatus = "SELECT [I_QT_STATUS] FROM [T_PR_QT_D] WHERE [I_QT_NO] = '" 
         + selectedItem['I_QT_NO'] + "'";
 
     var Status = TalonDbUtil
@@ -28,13 +31,22 @@ if (!selectedItem) {
     } else {
 
         data.forEach(function(item) {
-            if (item['CHK'] === "1") {
-                var sql = "UPDATE T_PR_QT SET [I_QT_STATUS] = '0' " +
-                          "WHERE I_QT_NO = '" + item['I_QT_NO'] + "'";
-                TalonDbUtil.update(TALON.getDbConfig(), sql);
-            }
-        });
+        if (item['CHK'] === "1") {
 
-        TALON.addMsg('✅ Quotation Unapproved Successfully');
+            var sql =
+                "UPDATE [T_PR_QT_D] SET " +
+                " [I_QT_STATUS]   = '0', " +
+                " [MODIFY_COUNT]  = ISNULL([MODIFY_COUNT], 0) + 1, " +
+                " [UPDATED_DATE]  = GETDATE(), " +
+                " [CREATED_PRG_NM]= '" + ProgramNM + "', " +
+                " [CREATED_BY]    = '" + UserId + "' " +
+                "WHERE [I_QT_NO]  = '" + item['I_QT_NO'] + "'";
+
+            TalonDbUtil.update(TALON.getDbConfig(), sql);
+        }
+    });
+
+
+        TALON.addMsg('✅ Unapproved successfully');
     }
 }

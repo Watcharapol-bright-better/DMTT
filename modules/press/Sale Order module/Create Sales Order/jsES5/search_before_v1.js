@@ -6,16 +6,8 @@ var userId     = userInfo['USER_ID'];
 if (!searchData.I_SONO) {
 
     // DMTT_N_SO
-    var getNumbering = 
-    "DECLARE @Id NVARCHAR(MAX) " + 
-    "EXEC SP_RUN_NUMBERING_V1 " + 
-    " @CodeType = 'DMTT_N_SO', " + 
-    " @Format = N'SOPyyyymmxxxx', " + 
-    " @GeneratedNo = @Id OUTPUT " + 
-    "SELECT @Id AS [NUMBERING] ";
-
-    SONo = TalonDbUtil.select(TALON.getDbConfig(), getNumbering )[0]['NUMBERING'];
-    //TalonDbUtil.commit(TALON.getDbConfig());
+    var SONo = RunningNo.genId('DMTT_N_SO', 'SOPyyyymmxxxx', true);
+    
     var headerSql =
         "SELECT " +
         "   '" + SONo + "' AS [I_SONO], " +
@@ -27,23 +19,13 @@ if (!searchData.I_SONO) {
 
     var headerResult = TalonDbUtil.select(TALON.getDbConfig(), headerSql);
     TALON.setSearchedDisplayList(1, headerResult);
+    
     TALON.setSearchConditionData("I_SONO", SONo, "");
 
-    // --------------------------------------------
-    // var runtNumberingIn = 
-    //         "DECLARE @Id NVARCHAR(MAX) " + 
-    //         "EXEC SP_RUN_NUMBERING_V1 " + 
-    //         " @CodeType = 'DMTT_N_SOI', " + 
-    //         " @Format = N'yyyymmddxxxxxx', " + 
-    //         " @GeneratedNo = @Id OUTPUT " + 
-    //         "SELECT @Id AS [NUMBERING] ";    
-    // var internalNo = TalonDbUtil.select(TALON.getDbConfig(), runtNumberingIn )[0]['NUMBERING'];        
 
    var detailSql =
     "SELECT " +
     "   '" + SONo + "' AS [I_SONO], " +
-    //"   '" +internalNo+ "' AS [INTERNAL_NO]," + 
-    //"   ROW_NUMBER() OVER (PARTITION BY QD.I_QT_NO ORDER BY QD.INTERNAL_NO) AS [I_LNNO], " +
     "   QD.I_ITEMCODE, " +                  // Part No
     "   MP.I_DESC, " +                      // Part Name
     // "   QD.I_SELLING_PRICE AS [I_UNTPRI], " +

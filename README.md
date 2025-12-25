@@ -13,7 +13,7 @@
 
 `DMTT_T_PRESS_CONF_DELIIVERY_ORDER` : Confirm Delivery Order (Press)
 
-`DMTT_T_PRESS_SALES_ORDER_LIST` : Sales Order List (Press)
+
 
 
 ### [Invoice Modules] 
@@ -55,8 +55,6 @@
 - `DMTT_G_QT_APPROVE`
 - `DMTT_G_PR_PATTERN`
 - `DMTT_G_OS_COMFIRM`
-- `DMTT_G_SHP_PKG` (Shipment Picking Status)
-
 - `DMTT_G_SHIP_INT_STATUS` I_SHIP_CFM : Shipment Status 
  
 
@@ -65,9 +63,15 @@
 - `DMTT_T_SHP010_CS` : Ship To, I_SHIPTO | Bill To, I_BILLTO
 - `DMTT_USER_LIST` : DMTT User List
 - `DMTT_S_SO_LIST`: DMTT Sale Order Subform
+- `DMTT_S_CURRENCY` : Currency Subform
 
 ### [Table List]
 
+- `MS_PRFG`
+- `MS_CS`
+- `MS_EXG`
+
+- `T_PR_STOCK`
 - `T_PR_WOH`
 
 - `T_PR_QT_H`
