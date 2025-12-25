@@ -99,7 +99,7 @@ if (searchData.I_SHIP_INST === '') {
             'I_SONO'         : item['I_SONO'],
             'I_ITEMCODE'     : item['I_ITEMCODE'],
             'I_DESC'         : item['I_DESC'],
-            'I_BALANCE_QTY'          : item['I_BALANCE_QTY'],
+            'I_BALANCE_QTY'  : item['I_BALANCE_QTY'],
             'I_SHIP_QTY'     : item['I_SHIP_QTY'],
             'I_BOX_QTY'      : item['I_BOX_QTY'],
             'I_LOTNO_FR'     : item['I_LOTNO_FR'],

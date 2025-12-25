@@ -1,8 +1,8 @@
---DROP TABLE T_PR_QT_H
+-- DROP TABLE T_PR_QT_H
 
 
 CREATE TABLE [dbo].[T_PR_QT_H](
-    [I_QT_NO]           NVARCHAR(20) NOT NULL,   -- Quotation No
+    [I_QT_NO]           NVARCHAR(20) NOT NULL,   -- Quotation No (PK)
     [I_QT_MTH]          DATE NULL,
     [I_METAL_PRICE]     NVARCHAR(7) NULL,
     [I_CSCODE]          NVARCHAR(10) NOT NULL,
@@ -11,7 +11,6 @@ CREATE TABLE [dbo].[T_PR_QT_H](
     [I_EXG_RATE]        NUMERIC(14,8) NULL,
     [I_CURRENCY]        NVARCHAR(50) NULL,
     [I_REM1]            NVARCHAR(50) NULL,
-    [I_QT_STATUS]       NVARCHAR(1) NULL,
     [I_EXG_RATE_TYPE]   NVARCHAR(1) NULL,
     [I_TYPE]            NVARCHAR(1) NULL,
 
