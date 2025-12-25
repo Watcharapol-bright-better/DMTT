@@ -13,29 +13,12 @@ var dlyData = data['I_SHIP_DLY_DATE'];
 var custData = data['I_CSCODE'];
 var shipToData = data['I_SHIPTO'];
 
-
+//TALON.addMsg(dlyData);
 var fmt = sdfDisplay.format(dlyData);
 
 if (searchData.I_SHIP_INST === '') {
-    var runtNumbering = 
-        "DECLARE @Id NVARCHAR(MAX) " + 
-        "EXEC SP_RUN_NUMBERING_V1 " + 
-        " @CodeType = 'DMTT_N_SII', " + 
-        " @Format = N'yyyymmddxxxxxx', " + 
-        " @GeneratedNo = @Id OUTPUT " + 
-        "SELECT @Id AS [NUMBERING] ";
-    
-    var runtShipID = 
-        "DECLARE @Id NVARCHAR(MAX) " + 
-        "EXEC SP_RUN_NUMBERING_V1 " + 
-        " @CodeType = 'DMTT_N_SI', " + 
-        " @Format = N'SIyyyymmddxxxx', " + 
-        " @GeneratedNo = @Id OUTPUT " + 
-        "SELECT @Id AS [NUMBERING] ";
-    
-    internalNo = TalonDbUtil.select(TALON.getDbConfig(), runtNumbering )[0]['NUMBERING'];
 
-    var shipID = TalonDbUtil.select(TALON.getDbConfig(), runtShipID )[0]['NUMBERING'];
+    var shipID = RunningNo.genId('DMTT_N_SII', 'SIyymmddxxxx', true);
     var sqlHeader = "SELECT " +
     "GETDATE() AS [I_SHIP_INST_DATE]," +
     "'" +shipID+ "' AS [I_SHIP_INST]," +
@@ -45,7 +28,7 @@ if (searchData.I_SHIP_INST === '') {
     " '"+shipToData+"' AS [I_SHIPTO], " + // Ship To
     "'" +UserId+ "' AS [I_ENDUSER]";
     var setHeader = TalonDbUtil.select(TALON.getDbConfig(), sqlHeader );
-    TALON.setSearchedDisplayList(1, setHeader);
+    //TALON.setSearchedDisplayList(1, setHeader);
 
     var sql = ""
         + "SELECT "
@@ -89,10 +72,11 @@ if (searchData.I_SHIP_INST === '') {
 
     var data = TalonDbUtil.select(TALON.getDbConfig(), sql);
     var rows = [];
+
     
     data.forEach(function(item) {
         
-        internalNo = TalonDbUtil.select(TALON.getDbConfig(), runtNumbering )[0]['NUMBERING'];
+        var internalNo = RunningNo.genId('DMTT_N_SII', 'yyyymmddxxxxxx', true);
         var lineData = { 
             'I_SHIP_INST'    : shipID,
             'INTERNAL_NO'    : internalNo,

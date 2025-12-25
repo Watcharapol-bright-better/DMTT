@@ -68,13 +68,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-
-
-function resizeContents_end() {
-    applyButtonStyle();
-    updateBoxHeight();
-
-    function setRowNumbers(selectorPrefix) {
+function setRowNumbers(selectorPrefix) {
         const rowNoBoxes = document.querySelectorAll(`input[id^="${selectorPrefix}"]`);
         if (rowNoBoxes.length > 0) {
             let rowIndex = 1;
@@ -87,6 +81,43 @@ function resizeContents_end() {
             });
         }
     }
-    
+
+
+function hiddenField() {
+    const input = document.getElementById('TLN_1_I_SHIP_INST');
+    if (!input) return;
+
+    const tdInput = input.closest('td');
+    if (!tdInput) return;
+
+    const tdLabel = tdInput.previousElementSibling;
+
+    const hideCell = (el) => {
+        el.style.visibility = 'hidden';
+        el.style.border = 'none';
+        el.style.outline = 'none';
+        el.style.boxShadow = 'none';
+        el.style.background = 'transparent';
+    };
+
+    hideCell(tdInput);
+    if (tdLabel) hideCell(tdLabel);
+
+    input.style.visibility = 'hidden';
+    input.style.border = 'none';
+    input.style.outline = 'none';
+    input.style.boxShadow = 'none';
+    input.style.background = 'transparent';    
+}
+
+
+function resizeContents_end() {
+    applyButtonStyle();
+    updateBoxHeight();
+    hiddenField();
     setRowNumbers("TLN_2_I_SHIP_LNNO_");
+
+    // set id to box header
+    let valFrom = document.getElementById('TLN_2_I_SHIP_INST_0').value;
+    document.getElementsByName('1_I_SHIP_INST')[0].value = valFrom;
 }
