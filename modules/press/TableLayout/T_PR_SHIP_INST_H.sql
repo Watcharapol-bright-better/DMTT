@@ -1,10 +1,13 @@
 CREATE TABLE [dbo].[T_PR_SHIP_INST_H](
     [I_SHIP_INST]       NVARCHAR(20) NOT NULL,    -- Shipment Instruction No
     [I_SHIP_INST_DATE]  DATETIME NULL,            -- Shipment Instruction Date
+    [I_SHIP_CFM]        NVARCHAR(1) NULL,         -- Shipment Status   
     [I_CSCODE]          NVARCHAR(10) NULL,        -- Customer Code
     [I_SHIP_DLY_DATE]   DATETIME NULL,            -- Shipment Delivery Date
     [I_SHIPTO]          NVARCHAR(10) NULL,        -- Ship To
     [I_ENDUSER]         NVARCHAR(20) NULL,        -- P.I.C
+    [I_INVOICE_NO]      NVARCHAR(20) NULL,
+    [I_INVOICE_DATE]    DATETIME NULL,
 
     [CREATED_DATE]      DATETIME NULL,
     [CREATED_BY]        NVARCHAR(10) NULL,

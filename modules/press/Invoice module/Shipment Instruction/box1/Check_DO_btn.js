@@ -7,29 +7,18 @@ var UserId    = UserInfo['USER_ID'];
 var ProgramNM = UserInfo['FUNC_ID'];
 var now       = new java.util.Date();
 
-var data = TALON.getTargetData();
 
-var dlyData = data['I_SHIP_DLY_DATE'];
-var custData = data['I_CSCODE'];
-var shipToData = data['I_SHIPTO'];
-
-//TALON.addMsg(dlyData);
-var fmt = sdfDisplay.format(dlyData);
-
+// var searchData = TALON.getConditionData();
+// TALON.addMsg(typeof searchData.I_SHIP_INST);
 if (searchData.I_SHIP_INST === '') {
+    var data = TALON.getTargetData();
+    var dlyData = data['I_SHIP_DLY_DATE'];
+    var custData = data['I_CSCODE'];
+    var shipToData = data['I_SHIPTO'];
+    var fmt = sdfDisplay.format(dlyData);
 
-    var shipID = RunningNo.genId('DMTT_N_SII', 'SIyymmddxxxx', true);
-    var sqlHeader = "SELECT " +
-    "GETDATE() AS [I_SHIP_INST_DATE]," +
-    "'" +shipID+ "' AS [I_SHIP_INST]," +
-    "'0' AS [I_SHIP_CFM], " + // Shipment Status
-    " '"+custData+"' AS [I_CSCODE], " + // Customer Code
-    " '"+ sdfDisplay.format(dlyData) +"' AS [I_SHIP_DLY_DATE], " + // Delivery Date
-    " '"+shipToData+"' AS [I_SHIPTO], " + // Ship To
-    "'" +UserId+ "' AS [I_ENDUSER]";
-    var setHeader = TalonDbUtil.select(TALON.getDbConfig(), sqlHeader );
-    //TALON.setSearchedDisplayList(1, setHeader);
-
+    var shipID = RunningNo.genId('DMTT_N_SI', 'SIyymmddxxxx', true);
+    
     var sql = ""
         + "SELECT "
         + "    NULL AS [I_SHIP_LNNO], "
@@ -44,6 +33,7 @@ if (searchData.I_SHIP_INST === '') {
         + "    [ST].[MIN_LOTNO] AS [I_LOTNO_FR], "
         + "    [ST].[MAX_LOTNO] AS [I_LOTNO_TO], "
         + "    [WO].[I_WODATE], "
+        + "    '0' AS [I_SHP_PCK_STATUS], "
         + "    NULL AS [CREATED_DATE], "
         + "    NULL AS [CREATED_BY], "
         + "    NULL AS [CREATED_PRG_NM], "
@@ -89,6 +79,7 @@ if (searchData.I_SHIP_INST === '') {
             'I_LOTNO_FR'     : item['I_LOTNO_FR'],
             'I_LOTNO_TO'     : item['I_LOTNO_TO'],
             'I_WODATE'       : item['I_WODATE'],
+            'I_SHP_PCK_STATUS' : item['I_SHP_PCK_STATUS'],
             
             'CREATED_DATE'   : now,
             'CREATED_BY'     : UserId,
@@ -104,6 +95,5 @@ if (searchData.I_SHIP_INST === '') {
 
     // TALON.addMsg(JSON.stringify(rows));
     TALON.setSearchedDisplayList(2, rows);
-}
-
-
+    TALON.setSearchConditionData("I_SHIP_INST", shipID, "");
+} 

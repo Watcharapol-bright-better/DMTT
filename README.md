@@ -55,7 +55,7 @@
 - `DMTT_G_QT_APPROVE`
 - `DMTT_G_PR_PATTERN`
 - `DMTT_G_OS_COMFIRM`
-- `DMTT_G_SHIP_INT_STATUS` I_SHIP_CFM : Shipment Status 
+- `DMTT_G_SHIP_INT_STATUS` I_SHIP_CFM,  : Shipment Status 
  
 
 
