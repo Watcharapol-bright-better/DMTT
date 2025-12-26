@@ -85,8 +85,8 @@ function boxQRcode() {
     qrBox = document.createElement('div');
     qrBox.id = 'QR_BOX';
 
-    qrBox.style.width = '90px';
-    qrBox.style.height = '90px';
+    qrBox.style.width = '95px';
+    qrBox.style.height = '95px';
     qrBox.style.position = 'absolute';
     qrBox.style.right = '50px';
     qrBox.style.top = '10px';
@@ -106,9 +106,9 @@ function boxQRcode() {
         height: 80,
         correctLevel: QRCode.CorrectLevel.H
     });
-
-    container.style.minHeight =
-        container.offsetHeight + 40 + 'px';
+    //console.log(container.offsetHeight);
+    //container.style.minHeight = container.offsetHeight + 40 + 'px';
+    container.style.minHeight = 50 + 40 + 'px';
 }
 
 function resizeContents_end() {

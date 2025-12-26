@@ -30,7 +30,7 @@ for (var i = 0; i < DetailData.length; i++) {
 if (notPackedItems.length > 0) {
 
     TALON.addErrorMsg(
-        "❌ Items not in Completed status:\n" + 
+        "❌ Part No. not in Completed status:\n" + 
         "- " + notPackedItems.join("\n- ")
     );
     TALON.setIsSuccess(false);

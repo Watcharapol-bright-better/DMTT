@@ -22,7 +22,7 @@ FROM (
           ,[H].[I_ENDUSER]          -- P.I.C
 
           ,NULL AS [I_DELIVERED]    -- Delivered
-          ,NULL AS [I_SHP_PCK]      -- Picked
+          ,NULL AS [I_SHIP_QTY]      -- Picked
           ,NULL AS [BALANCE]        -- Balance
           ,ISNULL( NULL , 0) AS [I_CONFIRM_STATUS]
 
@@ -60,16 +60,16 @@ FROM (
           ,ISNULL([H].[I_ENDUSER],'') AS [I_ENDUSER]
 
           ,ISNULL(NULL,0) AS [I_DELIVERED] -- Delivered
-          ,ISNULL([SD].[I_SHP_PCK],0)  AS [I_SHP_PCK] -- Picked
+          ,ISNULL([SD].[I_SHIP_QTY],0)  AS [I_SHIP_QTY] -- Picked
 
           ,CASE 
                 WHEN ISNULL([D].[I_QTY],0)
                    - ISNULL(NULL,0)
-                   - ISNULL([SD].[I_SHP_PCK],0) < 0
+                   - ISNULL([SD].[I_SHIP_QTY],0) < 0
                 THEN 0
                 ELSE ISNULL([D].[I_QTY],0)
                    - ISNULL(NULL,0)
-                   - ISNULL([SD].[I_SHP_PCK],0)
+                   - ISNULL([SD].[I_SHIP_QTY],0)
            END AS [BALANCE]
           ,ISNULL( [D].[I_CONFIRM_STATUS] , 0) AS [I_CONFIRM_STATUS]
           ,[D].[CREATED_DATE]
