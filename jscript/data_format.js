@@ -121,3 +121,7 @@ var DateFmt = (function () {
 
 // var sdf = new SimpleDateFormat("yyyy-MM-dd");
 // var result = sdf.format(dateObj);
+
+var s = DateFmt.formatDate('Sat Dec 27 00:00:00 ICT 2025');
+print(s);
+

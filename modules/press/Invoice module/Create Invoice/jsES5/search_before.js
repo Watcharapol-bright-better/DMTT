@@ -15,7 +15,7 @@ if (shipOrderNo !== '' || shipOrderNo !== null) {
         + "    ,'"+runIV+"' AS [I_INVOICE_NO] "
         + "    ,[H].[I_SHIP_INST_DATE] AS [I_SHIP_ORDER_DATE] "
         + "    ,GETDATE() AS [I_INVOICE_DATE] "
-        + "    ,[H].[I_CSCODE] AS [I_CORRESP_CODE] "
+        + "    ,[H].[I_CSCODE] "
         + "    ,[CS].[I_REMARK] AS [I_ATTN] "
         + "    ,[H].[I_SHIPTO] AS [I_SHIP_TO] "
         + "    ,GETDATE() AS [CREATED_DATE] "
