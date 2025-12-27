@@ -1,4 +1,4 @@
---DROP TABLE T_PR_QT_D
+-- DROP TABLE T_PR_QT_D
 
 CREATE TABLE [dbo].[T_PR_QT_D](
     [I_QT_NO]           NVARCHAR(20) NOT NULL,   -- Quotation No (PK)
@@ -13,7 +13,6 @@ CREATE TABLE [dbo].[T_PR_QT_D](
     [I_WIDTH]           NUMERIC(14,6) NULL,
     [I_LENGTH]          NUMERIC(9,3) NULL,
     [I_SALE_UNIT]       NVARCHAR(10) NULL,
-    [I_QT_STATUS]       NVARCHAR(1) NULL,
 
     [I_RM_WGT]          NUMERIC(14,6) NULL,
     [I_LOSS_WGT]        NUMERIC(14,6) NULL,

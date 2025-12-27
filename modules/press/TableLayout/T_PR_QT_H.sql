@@ -13,6 +13,8 @@ CREATE TABLE [dbo].[T_PR_QT_H](
     [I_REM1]            NVARCHAR(50) NULL,
     [I_EXG_RATE_TYPE]   NVARCHAR(1) NULL,
     [I_TYPE]            NVARCHAR(1) NULL,
+    [I_QT_STATUS]       NVARCHAR(1) NULL,
+    [I_PIC]             NVARCHAR(50) NULL,
 
     [CREATED_DATE]      DATETIME NULL,
     [CREATED_BY]        NVARCHAR(10) NULL,

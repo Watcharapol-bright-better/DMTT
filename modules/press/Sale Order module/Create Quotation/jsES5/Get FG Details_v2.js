@@ -22,10 +22,13 @@ if (!csCode || !qtPattern) {
 
 } else {
 
+    var qtID = RunningNo.genId('DMTT_N_QT', 'QUTyyyymmxxxx', false);
+
     // INSERT TO : T_PR_QT table
     var sql = ""
         + "SELECT "
-        + "     [Q].[I_QTPATTERN] "
+        + "     '"+qtID+"' AS [I_QT_NO] "
+        + "    ,[Q].[I_QTPATTERN] "
         + "    ,[Q].[I_CSCODE] "
         + "    ,[Q].[I_ITEMCODE] "
         + "    ,[Q].[I_DESC] "

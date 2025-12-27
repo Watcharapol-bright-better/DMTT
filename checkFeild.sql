@@ -1,7 +1,7 @@
 USE DMTT_DEMO_PRESS;
 GO
 
-DECLARE @tblName NVARCHAR(MAX) = 'I_SALE_UNIT'
+DECLARE @tblName NVARCHAR(MAX) = 'I_ENDUSER'
 SELECT 
     t.name AS TableName,
     c.name AS ColumnName

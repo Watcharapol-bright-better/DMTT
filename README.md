@@ -29,6 +29,7 @@
 
 `DMTT_T_PRESS_CREATE_INVOICE` : Create Invoice (Press)
 
+`DMTT_T_PRESS_INVOICE_LIST` : Invoice List (Press)
 
 
 <br/>
@@ -52,7 +53,7 @@
 - `DMTT_T_SO_STATUS` : SO Status, I_COMPCLS
 - `DMTT_T_CURRENCY` : Currency, I_CURRENCY
 - `DMTT_T_CHK_BOX`
-- `DMTT_G_QT_APPROVE`
+- `DMTT_G_APPROVE`
 - `DMTT_G_PR_PATTERN`
 - `DMTT_G_OS_COMFIRM`
 - `DMTT_G_SHIP_INT_STATUS` I_SHIP_CFM,  : Shipment Status 

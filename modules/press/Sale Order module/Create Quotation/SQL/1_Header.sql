@@ -1,26 +1,39 @@
+-- Header
+SELECT
+      [QH].[I_QT_NO]
+     ,[QH].[I_QT_MTH]
+     ,[QH].[I_METAL_PRICE]
+     ,[QH].[I_CSCODE]
+     ,[MC].[I_NAME]
+     ,[QH].[I_PO_MONTH]
+     ,[QH].[I_EXG_MONTH]
+     ,''                                                    AS [I_EXG_RATE_TYPE]
 
-SELECT DISTINCT
-    [TQ].[I_QT_NO] AS [I_QT_NO],
-    [TQ].[I_QT_LN] AS [I_QT_LN],
-    [TQ].[I_QT_MTH] AS [I_QT_MTH],
-    [TQ].[I_METAL_PRICE],
-    [TQ].[I_CSCODE] AS [I_CSCODE],
-    [TQ].[I_PO_MONTH] AS [I_PO_MONTH],
-    [TQ].[I_EXG_MONTH] AS [I_EXG_MONTH],
-    [TQ].[I_EXG_RATE] AS [I_EXG_RATE],
-    [TQ].[I_CURRENCY] AS [I_CURRENCY],
-    [TQ].[I_REM1] AS [I_REM1],
-    [MP].[I_QTPATTERN] AS [I_TYPE],
-    '' AS [B],
-    [TQ].[CREATED_DATE] AS [CREATED_DATE],
-    [TQ].[CREATED_BY] AS [CREATED_BY],
-    [TQ].[CREATED_PRG_NM] AS [CREATED_PRG_NM],
-    [TQ].[UPDATED_DATE] AS [UPDATED_DATE],
-    [TQ].[UPDATED_BY] AS [UPDATED_BY],
-    [TQ].[UPDATED_PRG_NM] AS [UPDATED_PRG_NM],
-    [TQ].[MODIFY_COUNT] AS [MODIFY_COUNT]
-FROM
-    [T_PR_QT] AS [TQ]
-    INNER JOIN [MS_CS] AS [MC] ON [MC].[I_CSCODE] = [TQ].[I_CSCODE]
-    INNER JOIN [MS_EXG] AS [MX] ON [MX].[I_CURCOD] = [MC].[I_CURRENCY]
-    LEFT JOIN [MS_PRFG] AS [MP] ON [MP].[I_ITEMCODE] = [TQ].[I_ITEMCODE]
+     , IIF([QH].[I_CURRENCY] = 'THB', 1, [QH].[I_EXG_RATE]) AS [I_EXG_RATE]
+
+     ,[QH].[I_CURRENCY]
+     ,[QH].[I_PIC]
+     ,[QH].[I_TYPE]
+     ,''                                                    AS [B]
+
+     ,[QH].[CREATED_DATE]
+     ,[QH].[CREATED_BY]
+     ,[QH].[CREATED_PRG_NM]
+     ,[QH].[UPDATED_DATE]
+     ,[QH].[UPDATED_BY]
+     ,[QH].[UPDATED_PRG_NM]
+     ,[QH].[MODIFY_COUNT]
+
+FROM [T_PR_QT_H] AS [QH]
+
+         INNER JOIN [MS_CS] AS [MC]
+                    ON [MC].[I_CSCODE] = [QH].[I_CSCODE]
+
+         INNER JOIN [MS_EXG] AS [MX]
+                    ON [MX].[I_CURRENCY] = [MC].[I_CURRENCY]
+
+         LEFT JOIN [T_PR_QT_D] AS [QD]
+                   ON [QD].[I_QT_NO] = [QH].[I_QT_NO]
+
+         LEFT JOIN [MS_PRFG] AS [MP]
+                   ON [MP].[I_ITEMCODE] = [QD].[I_ITEMCODE]

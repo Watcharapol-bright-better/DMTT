@@ -5,7 +5,8 @@ CREATE TABLE [dbo].[T_PR_SHIP_INST_H](
     [I_CSCODE]          NVARCHAR(10) NULL,        -- Customer Code
     [I_SHIP_DLY_DATE]   DATETIME NULL,            -- Shipment Delivery Date
     [I_SHIPTO]          NVARCHAR(10) NULL,        -- Ship To
-    [I_ENDUSER]         NVARCHAR(20) NULL,        -- P.I.C
+    [I_PIC]             NVARCHAR(50) NULL,        -- P.I.C
+    [I_ENDUSER]         NVARCHAR(20) NULL,        
     [I_INVOICE_NO]      NVARCHAR(20) NULL,
     [I_INVOICE_DATE]    DATETIME NULL,
 

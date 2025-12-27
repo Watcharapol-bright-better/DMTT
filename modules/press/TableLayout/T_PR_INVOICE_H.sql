@@ -7,6 +7,7 @@ CREATE TABLE [dbo].[T_PR_INVOICE_H]
     [I_SHIP_ORDER_DATE] DATETIME     NULL,       -- Ship Order Date
     [I_DO_NO]          NVARCHAR(20)  NULL,       -- DO No
     [I_DO_DATE]        DATETIME      NULL,       -- DO Date
+    [I_TYPE]           NVARCHAR(1)    NULL,
 
     [I_CSCODE]         NVARCHAR(10)  NULL,       -- Customer
     [I_BILL_TO]        NVARCHAR(10)  NULL,       -- Bill To
@@ -37,6 +38,7 @@ CREATE TABLE [dbo].[T_PR_INVOICE_H]
 
     [I_REMARK]         NVARCHAR(50)  NULL,       -- Remark
     [I_SHIP_CFM]       NVARCHAR(30)  NULL,       -- Shipment Confirm Name
+    [I_APPR_STATUS]    NVARCHAR(1)   NULL,       -- Approve Status
     [I_APPR_NAME]      NVARCHAR(30)  NULL,       -- Approved Name
 
     [CREATED_DATE]     DATETIME      NULL,

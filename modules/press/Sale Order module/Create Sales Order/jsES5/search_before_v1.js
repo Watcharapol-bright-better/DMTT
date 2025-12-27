@@ -6,16 +6,18 @@ var userId     = userInfo['USER_ID'];
 if (!searchData.I_SONO) {
 
     // DMTT_N_SO
-    var SONo = RunningNo.genId('DMTT_N_SO', 'SOPyyyymmxxxx', true);
+    var SONo = RunningNo.genId('DMTT_N_SO', 'SOPyymmxxxx', true);
     
     var headerSql =
         "SELECT " +
         "   '" + SONo + "' AS [I_SONO], " +
         "   '00' AS [I_COMPCLS], " +
-        "   0 AS [I_CURRENCY], " +
+        "   [H].[I_CURRENCY], " +
         "   GETDATE() AS [I_SODATE], " +
         "   '" + searchData.I_QT_NO + "' AS [I_QT_NO], " +
-        "   '" + userId + "' AS [I_ENDUSER]";
+        "   '" + userId + "' AS [I_PIC]" +
+        "FROM [T_PR_QT_H] [H] WHERE [H].[I_QT_NO] =  '" + searchData.I_QT_NO + "'";
+
 
     var headerResult = TalonDbUtil.select(TALON.getDbConfig(), headerSql);
     TALON.setSearchedDisplayList(1, headerResult);

@@ -6,17 +6,9 @@ var ProgramNM = UserInfo['FUNC_ID'];
 var shipOrderNo = searchData['I_SHIP_ORDER_NO'];
 
 if (shipOrderNo !== '' || shipOrderNo !== null) {
-
-    var getIVNumbering = 
-        "DECLARE @Id NVARCHAR(MAX) " + 
-        "EXEC SP_RUN_NUMBERING_V1 " + 
-        " @CodeType = 'DMTT_N_IV', " + 
-        " @Format = N'IVyyyymmxxxxx', " + 
-        " @GeneratedNo = @Id OUTPUT " + 
-        "SELECT @Id AS [NUMBERING] ";
         
-    var runIV = TalonDbUtil.select(TALON.getDbConfig(), getIVNumbering )[0]['NUMBERING'];
-
+    var runIV = RunningNo.genId('DMTT_N_IV', 'IVyymmddxxxx');
+    
     var sqlBox1 = ""
         + "SELECT "
         + "     [H].[I_SHIP_INST] AS [I_SHIP_ORDER_NO] "
@@ -52,7 +44,7 @@ if (shipOrderNo !== '' || shipOrderNo !== null) {
         + "    ,[D].[I_ITEMCODE] "
         + "    ,[CS].[I_DESC] "
         + "    ,[CS].[I_PKGCD] "
-        + "    ,1 AS [I_PALLET_QTY] "
+        + "    ,[D].[I_PALLET_QTY] "
         + "    ,[D].[I_SHIP_QTY] AS [I_QTY] "
         + "    ,([D].[I_SHIP_QTY] * [CS].[I_PROD_WGT]) AS [I_NET_WGT] "
         + "    ,[SOD].[I_UNTPRI] AS [I_UNIT_PRICE] "

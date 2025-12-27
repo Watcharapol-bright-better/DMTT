@@ -54,4 +54,8 @@ function resizeContents_end() {
     updateBoxHeight();
     setRowNumbers("TLN_2_I_QT_LN_");
 
+    // set id to box header
+    let valFrom = document.getElementById('TLN_2_I_QT_NO_0').value;
+    document.getElementsByName('1_I_QT_NO')[0].value = valFrom;
+
 }

@@ -14,8 +14,10 @@ if (!selectedItem) {
     TALON.addErrorMsg('⚠️ No quotation selected');
 } else {
 
-    var checkStatus = "SELECT [I_QT_STATUS] FROM [T_PR_QT_D] WHERE [I_QT_NO] = '" 
+    var checkStatus = "SELECT [I_QT_STATUS] FROM [T_PR_QT_H] WHERE [I_QT_NO] = '" 
         + selectedItem['I_QT_NO'] + "'";
+
+    //TALON.addMsg(checkStatus);    
 
     var Status = TalonDbUtil
         .select(TALON.getDbConfig(), checkStatus)[0]['I_QT_STATUS'];
@@ -34,7 +36,7 @@ if (!selectedItem) {
         if (item['CHK'] === "1") {
 
             var sql =
-                "UPDATE [T_PR_QT_D] SET " +
+                "UPDATE [T_PR_QT_H] SET " +
                 " [I_QT_STATUS]   = '1', " +
                 " [MODIFY_COUNT]  = ISNULL([MODIFY_COUNT], 0) + 1, " +
                 " [UPDATED_DATE]  = GETDATE(), " +
