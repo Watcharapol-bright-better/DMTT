@@ -45,7 +45,7 @@ if (_I_SHIP_ORDER_NO !== '' || _I_SHIP_ORDER_NO !== null) {
     if (isReady === 1) {
          TALON.addErrorMsg('⚠️ '+ currType +' ['+searchData.I_INVOICE_NO+'] already exists. ');
     } else {
-        
+
         switch (_I_TYPE) {
             case invoiceType['Debit Note']:
                 runIV = RunningNo.genId('DMTT_N_DN', 'DNyymmddxxxx', true);
@@ -128,7 +128,7 @@ if (_I_SHIP_ORDER_NO !== '' || _I_SHIP_ORDER_NO !== null) {
         var lnNo = 1;
         DetailData.forEach(function (Box2) {
         
-            internalNo = RunningNo.genId('DMTT_N_IV_IN', 'yyyymmddxxxxx', true);
+            internalNo = RunningNo.genId('DMTT_N_IV_IN', 'yyyymmddxxxxxxx', true);
         
             Box2['I_INVOICE_NO']   = runIV;
             Box2['INTERNAL_NO']    = internalNo;

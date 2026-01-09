@@ -1,9 +1,9 @@
 Private Sub Workbook_Open()
-
+    
     ' Sheet names
     Dim mainWS As String: mainWS = "Packing list"
     Dim dataWS As String: dataWS = "raw_data"
-
+    
     ' Local variables
     Dim sh As Worksheet
     Dim mainExists As Boolean
@@ -12,7 +12,7 @@ Private Sub Workbook_Open()
     Dim lastRow As Long
     Dim index As Long
     Dim tableStartRow As Long
-
+    
     ' Check required sheets
     For Each sh In Worksheets
         If sh.Name = mainWS Then
@@ -21,19 +21,18 @@ Private Sub Workbook_Open()
             dataExists = True
         End If
     Next sh
-
-    ' Stop if any sheet is missing
+    
     If Not (mainExists And dataExists) Then Exit Sub
-
+    
     ' Get last row from data sheet
     With Worksheets(dataWS)
         lastRow = .Cells(.Rows.Count, "A").End(xlUp).Row
         If lastRow < 2 Then lastRow = 2
     End With
-
+    
     ' Start row in main sheet
     rowStart = 14
-
+    
     ' Loop data rows
     For index = 2 To lastRow
     
@@ -50,6 +49,9 @@ Private Sub Workbook_Open()
         rowStart = rowStart + 7
     
     Next index
+    
+    ' Remove template table
+    Worksheets(mainWS).Rows("7:14").Delete
 
 End Sub
 
