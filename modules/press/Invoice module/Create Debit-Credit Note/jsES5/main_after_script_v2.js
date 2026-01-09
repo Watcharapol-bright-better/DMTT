@@ -1,4 +1,3 @@
-var searchData = TALON.getConditionData();
 var HeaderData = TALON.getBlockData_Card(1);
 var DetailData = TALON.getBlockData_List(2);
 var UserInfo   = TALON.getUserInfoMap();
@@ -25,7 +24,6 @@ var _I_TYPE = HeaderData['I_TYPE'];
 //TALON.addMsg('Invoice Type : ' + _I_TYPE);
 
 var invoiceType = {
-    'Invoice' : '0',
     'Debit Note': '1',
     'Credit Note' : '2'
 };
@@ -92,7 +90,7 @@ if (_I_SHIP_ORDER_NO !== '' || _I_SHIP_ORDER_NO !== null) {
 
     // ====================================
 
-    var detailCol = [
+    var DetailCol = [
         'I_INVOICE_NO',
         'INTERNAL_NO',
         'I_INVOICE_LNNO',
@@ -118,7 +116,7 @@ if (_I_SHIP_ORDER_NO !== '' || _I_SHIP_ORDER_NO !== null) {
     var lnNo = 1;
     DetailData.forEach(function (Box2) {
     
-        internalNo = RunningNo.genId('DMTT_N_IV_IN', 'yyyymmddxxxxx');
+        internalNo = RunningNo.genId('DMTT_N_IV_IN', 'yyyymmddxxxxx', true);
     
         Box2['I_INVOICE_NO']   = runIV;
         Box2['INTERNAL_NO']    = internalNo;
@@ -136,7 +134,7 @@ if (_I_SHIP_ORDER_NO !== '' || _I_SHIP_ORDER_NO !== null) {
             TALON.getDbConfig(),
             'T_PR_INVOICE_D',
             Box2,
-            detailCol
+            DetailCol
         );
     
         lnNo++;
@@ -154,5 +152,10 @@ if (_I_SHIP_ORDER_NO !== '' || _I_SHIP_ORDER_NO !== null) {
         "WHERE [I_SHIP_INST]  = '" + _I_SHIP_ORDER_NO + "'";
     TalonDbUtil.update(TALON.getDbConfig(), sql);
 
-    TALON.addMsg('✅ Sales Order created successfully ');
+    var currType =
+        (_I_TYPE === '1') ? 'Debit Note' :
+        (_I_TYPE === '2') ? 'Credit Note' :
+        'Unknown';
+
+    TALON.addMsg('✅ '+ currType +' created successfully ');
 }

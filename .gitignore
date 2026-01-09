@@ -3,3 +3,4 @@ Docker
 .idea
 jscript/macro
 deploy
+backup/*.bak
