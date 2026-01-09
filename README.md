@@ -3,6 +3,8 @@
 ## Function List
 
 ### [Sale Order Modules]
+`DMTT_PRESS_QT_DOWNLOAD` : Print Quotation
+
 `DMTT_T_PRESS_QT` : Create Quotation (Press)
 
 `DMTT_T_PRESS_QT_LIST` : Quotation List (Press)
@@ -31,6 +33,13 @@
 
 `DMTT_T_PRESS_INVOICE_LIST` : Invoice List (Press)
 
+`DMTT_T_PRESS_DELIVERY_ORDER_DOWNLOAD` : Print Delivery Order (Press)
+
+`DMTT_T_PRESS_SHIP_ORDER_DOWNLOAD` : Print Shipping Order (Press)
+
+`DMTT_T_PRESS_PACKAGE_LIST_DOWNLOAD` : Print Packing List (Press)
+
+`DMTT_T_PRESS_CREATE_DNCN` : Create Debit/Credit Note (Press)
 
 <br/>
 
@@ -38,8 +47,6 @@
 
 
 ### [ID Numbering]
-- `DMTT_N_SO`
-- `DEMO_QT`
 - `DMTT_N_LNNO`
 - `DMTT_N_QT`
 - `DMTT_N_QT_IN`
@@ -50,6 +57,7 @@
 
 
 ### [Hunyo Code]
+- `DMTT_G_INVOICE_TYPE` : Invoice Type
 - `DMTT_T_SO_STATUS` : SO Status, I_COMPCLS
 - `DMTT_T_CURRENCY` : Currency, I_CURRENCY
 - `DMTT_T_CHK_BOX`
@@ -65,6 +73,7 @@
 - `DMTT_USER_LIST` : DMTT User List
 - `DMTT_S_SO_LIST`: DMTT Sale Order Subform
 - `DMTT_S_CURRENCY` : Currency Subform
+- `DMTT_S_INVOICE_TYPE` : Allowed Invoice Type Subform
 
 ### [Table List]
 
