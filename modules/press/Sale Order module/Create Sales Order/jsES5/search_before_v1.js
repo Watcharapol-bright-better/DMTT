@@ -5,6 +5,8 @@ var userId     = userInfo['USER_ID'];
 
 if (!searchData.I_SONO) {
 
+    //TALON.addMsg(searchData['I_NAME']);
+
     // DMTT_N_SO
     var SONo = RunningNo.genId('DMTT_N_SO', 'SOPyymmxxxx', true);
     
@@ -12,11 +14,14 @@ if (!searchData.I_SONO) {
         "SELECT " +
         "   '" + SONo + "' AS [I_SONO], " +
         "   '00' AS [I_COMPCLS], " +
+        "   [MC].[I_CSCODE], " +
         "   [H].[I_CURRENCY], " +
         "   GETDATE() AS [I_SODATE], " +
         "   '" + searchData.I_QT_NO + "' AS [I_QT_NO], " +
         "   '" + userId + "' AS [I_PIC]" +
-        "FROM [T_PR_QT_H] [H] WHERE [H].[I_QT_NO] =  '" + searchData.I_QT_NO + "'";
+        "FROM [T_PR_QT_H] " +
+        "LEFT JOIN [MS_CS] AS [MC] ON [MC].[I_NAME] = '"+searchData['I_NAME']+"'" +
+        " [H] WHERE [H].[I_QT_NO] =  '" + searchData.I_QT_NO + "'"
 
 
     var headerResult = TalonDbUtil.select(TALON.getDbConfig(), headerSql);

@@ -1,4 +1,18 @@
 
+function formatDateYMD(date) {
+    var SimpleDateFormat = Java.type("java.text.SimpleDateFormat");
+    var sdfDisplay = new SimpleDateFormat("yyyy-MM-dd");
+
+    return sdfDisplay.format(date);
+}
+
+function formatDateYMDHMS(date) {
+    var SimpleDateFormat = Java.type("java.text.SimpleDateFormat");
+    var sdfDisplay = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+    return sdfDisplay.format(date);
+}
+
 
 function _isString(val) {
     return typeof val === "string";
@@ -30,57 +44,46 @@ var DateFmt = (function () {
 
     var SimpleDateFormat = Java.type("java.text.SimpleDateFormat");
     var Locale = Java.type("java.util.Locale");
+    var GregorianCalendar = Java.type("java.util.GregorianCalendar");
+
+    function _newSDF(pattern) {
+        var sdf = new SimpleDateFormat(pattern, Locale.ENGLISH);
+        sdf.setCalendar(new GregorianCalendar());
+        return sdf;
+    }
 
     function _parseDate(dateStr) {
 
         var formats = [
             "yyyy-MM-dd HH:mm:ss",
             "yyyy-MM-dd",
-            "EEE MMM dd HH:mm:ss z yyyy" // Mon Dec 29 00:00:00 ICT 2025 / GMT
+            "EEE MMM dd HH:mm:ss z yyyy"
         ];
 
-        var i, sdf;
-
-        for (i = 0; i < formats.length; i++) {
+        for (var i = 0; i < formats.length; i++) {
             try {
-                sdf = new SimpleDateFormat(formats[i], Locale.ENGLISH);
-                return sdf.parse(dateStr);
-            } catch (e) {
-                // try next format
-            }
+                return _newSDF(formats[i]).parse(dateStr);
+            } catch (e) {}
         }
-
         return null;
     }
 
     function formatDate(dateStr) {
-
-        if (!_isString(dateStr)) {
-            return null;
-        }
+        if (typeof dateStr !== "string") return null;
 
         var date = _parseDate(dateStr);
-        if (!date) {
-            return null;
-        }
+        if (!date) return null;
 
-        var sdf = new SimpleDateFormat("yyyy-MM-dd");
-        return sdf.format(date);
+        return _newSDF("yyyy-MM-dd").format(date);
     }
 
     function formatDateTime(dateStr) {
-
-        if (!_isString(dateStr)) {
-            return null;
-        }
+        if (typeof dateStr !== "string") return null;
 
         var date = _parseDate(dateStr);
-        if (!date) {
-            return null;
-        }
+        if (!date) return null;
 
-        var sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        return sdf.format(date);
+        return _newSDF("yyyy-MM-dd HH:mm:ss").format(date);
     }
 
     return {
@@ -169,3 +172,11 @@ var RunningNo = (function () {
 
 })();
 
+
+
+print(DateFmt.formatDateTime("Thu Dec 25 06:38:09 GMT 2025"));
+print(DateFmt.formatDate("Mon Dec 29 00:00:00 ICT 2025"));
+print(DateFmt.formatDateTime("2025-01-10 14:30:00"));
+
+var now = new java.util.Date();
+print(DateFmt.formatDateTime(now.toString()));
