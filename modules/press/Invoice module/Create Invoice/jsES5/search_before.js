@@ -7,12 +7,13 @@ var shipOrderNo = searchData['I_SHIP_ORDER_NO'];
 
 if (shipOrderNo !== '' || shipOrderNo !== null) {
         
-    var runIV = RunningNo.genId('DMTT_N_IV', 'IVyymmddxxxx');
+    var runIV = RunningNo.genId('DMTT_N_IV', 'IVyymmddxxxx', true);
     
     var sqlBox1 = ""
         + "SELECT "
         + "     [H].[I_SHIP_INST] AS [I_SHIP_ORDER_NO] "
         + "    ,'"+runIV+"' AS [I_INVOICE_NO] "
+        + "    ,'0' AS [I_TYPE] "
         + "    ,[H].[I_SHIP_INST_DATE] AS [I_SHIP_ORDER_DATE] "
         + "    ,GETDATE() AS [I_INVOICE_DATE] "
         + "    ,[H].[I_CSCODE] "
