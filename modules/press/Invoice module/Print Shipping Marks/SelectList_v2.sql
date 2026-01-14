@@ -1,5 +1,6 @@
 SELECT
      [SD].[I_SHIP_INST]        -- Shipment Instruction No
+    ,[SD].[I_SHIP_INST] AS [QRCODE]
     ,[SD].[I_SONO]             -- Order No
     ,[SOH].[I_CSCODE]          -- Customer Code
     ,[CS].[I_NAME]             -- Customer Name
@@ -7,7 +8,10 @@ SELECT
     ,[SD].[I_ITEMCODE]         -- Part No
     ,[MP].[I_DESC]             -- Part Name
 
-    ,[SD].[I_PALLET_QTY]       -- Pallet QTY
+    ,(
+        ([MP].[I_PCS_BOX]/[MP].[I_BOX_PALLET]) -- 1 Pallet สามารถบรรจุได้กี่ชิ้น
+        / [SD].[I_SHIP_QTY] -- จะส่งทั้งหมดกี่ชิ้น
+     ) AS [I_PALLET_QTY]  -- Pallet QTY
     ,[SD].[I_BOX_QTY] AS [PACKAGE]          -- Box QTY
     ,([SD].[I_SHIP_QTY] * [MP].[I_PROD_WGT]) + ([SD].[I_BOX_QTY] * ISNULL([PKG].[I_WEIGHT], 1)) AS [NET_WGT] -- Net Weight
 

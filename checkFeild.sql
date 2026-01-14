@@ -1,14 +1,13 @@
-USE DMTT_DEMO_PRESS;
-GO
+
 
 DECLARE @tblName NVARCHAR(MAX) = 'I_ENDUSER'
-SELECT 
+SELECT
     t.name AS TableName,
     c.name AS ColumnName
-FROM 
+FROM
     sys.columns c
     INNER JOIN sys.tables t ON c.object_id = t.object_id
-WHERE 
+WHERE
     c.name = @tblName
-ORDER BY 
-    t.name;
+ORDER BY
+    t.name
