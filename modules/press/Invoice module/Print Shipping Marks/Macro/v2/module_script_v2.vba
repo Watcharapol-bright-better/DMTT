@@ -72,11 +72,9 @@ Sub tranferData(fromRow As Long, wsMain As Worksheet, groupRowIndex As Long)
     wsMain.Cells(12 + baseOffset, calData).Value = wsData.Cells(fromRow, "P").Value   ' Invoice No.
     wsMain.Cells(13 + baseOffset, calData).Value = wsData.Cells(fromRow, "Q").Value   ' Delivery Date
     
-    ' --- Weight columns (J / V / AH) ---
+    ' --- Weight columns (J / V / AH) ---    
     wsMain.Cells(10 + baseOffset, colWeight).Value = wsData.Cells(fromRow, "I").Value ' Net Weight
     wsMain.Cells(11 + baseOffset, colWeight).Value = wsData.Cells(fromRow, "K").Value ' Gross Weight
 
 
 End Sub
-
-
