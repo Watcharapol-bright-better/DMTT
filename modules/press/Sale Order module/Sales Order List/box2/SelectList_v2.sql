@@ -60,16 +60,16 @@ FROM (
           ,ISNULL([H].[I_ENDUSER],'') AS [I_ENDUSER]
 
           ,ISNULL(NULL,0) AS [I_DELIVERED] -- Delivered
-          ,ISNULL([SD].[I_SHIP_QTY],0)  AS [I_SHIP_QTY] -- Picked
+          ,ISNULL([SHIP].[TOTAL_SHIP_QTY],0)  AS [I_SHIP_QTY] -- Picked 
 
           ,CASE 
                 WHEN ISNULL([D].[I_QTY],0)
                    - ISNULL(NULL,0)
-                   - ISNULL([SD].[I_SHIP_QTY],0) < 0
+                   - ISNULL([SHIP].[TOTAL_SHIP_QTY],0) < 0
                 THEN 0
                 ELSE ISNULL([D].[I_QTY],0)
                    - ISNULL(NULL,0)
-                   - ISNULL([SD].[I_SHIP_QTY],0)
+                   - ISNULL([SHIP].[TOTAL_SHIP_QTY],0)
            END AS [BALANCE]
           ,ISNULL( [D].[I_CONFIRM_STATUS] , 0) AS [I_CONFIRM_STATUS]
           ,[D].[CREATED_DATE]
@@ -81,10 +81,23 @@ FROM (
           ,[D].[MODIFY_COUNT]
 
     FROM [T_PR_SORD_D] [D]
-    LEFT JOIN [T_PR_SORD_H] [H] ON [H].[I_SONO] = [D].[I_SONO]
-    LEFT JOIN [MS_CS] AS [MC] ON [MC].[I_CSCODE] = [H].[I_CSCODE]
-    LEFT JOIN [T_PR_SHIP_INST_D] AS [SD] ON [SD].[I_SONO] = [D].[I_SONO]
+    LEFT JOIN [T_PR_SORD_H] [H] 
+        ON [H].[I_SONO] = [D].[I_SONO]
 
+    LEFT JOIN [MS_CS] [MC] 
+        ON [MC].[I_CSCODE] = [H].[I_CSCODE]
+
+    LEFT JOIN (
+        -- รวม I_SHIP_QTY ทั้งหมดของแต่ละ SO + ITEMCODE
+        SELECT 
+             [I_SONO]
+            ,[I_ITEMCODE]
+            ,SUM([I_SHIP_QTY]) AS [TOTAL_SHIP_QTY]
+        FROM [T_PR_SHIP_INST_D]
+        GROUP BY [I_SONO], [I_ITEMCODE]
+    ) [SHIP]
+        ON [SHIP].[I_SONO] = [D].[I_SONO]
+        AND [SHIP].[I_ITEMCODE] = [D].[I_ITEMCODE]
 
 ) AS A
 -- ORDER BY [Lvl], [I_SONO], [I_LNNO]
