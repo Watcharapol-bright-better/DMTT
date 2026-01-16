@@ -105,7 +105,7 @@ function getApprStatusBadge(statusCode) {
 
 function createTableHTML(items) {
   var html = '<div style="font-family: Arial, sans-serif;">';
-  html += '<h2 style="color: #333;">Invoice List</h2>';
+  html += '<h2 style="color: #333;">Invoice List (Press)</h2>';
   html += '<table style="border-collapse: collapse; width: 100%; margin-top: 20px;">';
   html += '<thead>';
   html += '<tr style="background-color: #4c5eaf; color: white;">';
@@ -169,5 +169,5 @@ if (!selectedItems || selectedItems.length === 0) {
   message.setContent(body, "text/html; charset=utf-8"); 
 
   Transport.send(message);
-  TALON.addMsg("✅ Mail sent successfully to " + selectedItems.length + " invoice(s) ");
+  TALON.addMsg("✅ Mail sent successfully to " + selectedItems.length + " invoices ");
 }
