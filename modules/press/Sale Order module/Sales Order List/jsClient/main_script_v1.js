@@ -1,27 +1,37 @@
+
 /**
  * เมื่อกด checkbox:
- * - ถ้ากดติ๊ก : เพิ่มค่าจาก targetField ไปไว้ใน selectedField (แต่ถ้าไม่มีข้อมูลใน targetField ให้ข้าม)
- * - ถ้ากดยกเลิก : ลบค่านั้นออกจาก selectedField
+ * - ถ้ากดติ๊ก : เพิ่มค่าจาก targetField ไปไว้ใน holdVal (แต่ถ้าไม่มีข้อมูลใน targetField ให้ข้าม)
+ * - ถ้ากดยกเลิก : ลบค่านั้นออกจาก holdVal
  */
 function onCheckboxClick(checkbox, blockNo) {
     const keySono = "I_SONO";
-    const keyLnno = "I_LNNO";
+    const keyLnno = "Lvl_$TLN_LEAF_DISP";
 
     if (!checkbox || !checkbox.name) return;
 
     const index = checkbox.name.split('_').pop();
 
-    const sonoField = document.querySelector(`#TLN_${blockNo}_${keySono}_${index}`);
-    const lnnoField = document.querySelector(`#TLN_${blockNo}_${keyLnno}_${index}`);
-    const selectedField = document.getElementsByName('CNDTN_SELECTED')[0];
+    // #TLN_2_I_SONO_1
+    let craftSO = `#TLN_${blockNo}_${keySono}_${index}`;
+    const sonoField = document.querySelector(craftSO);
 
-    if (!sonoField || !lnnoField || !selectedField) return;
+    // TLN_2_Lvl_$TLN_LEAF_DISP_1
+    let craftId = `TLN_${blockNo}_${keyLnno}_${index}`;
+    const lnnoField = document.getElementById(craftId);
+    const holdVal = document.getElementsByName('CNDTN_SELECTED')[0];
+
+    if (!sonoField || !lnnoField || !holdVal) return;
+
+    if(!lnnoField) {
+       document.querySelector(`input[type="checkbox"][id^="TLN_2_CHK_${index}"]`).click();
+    }
 
     const sono = sonoField.value;
     const lnno = lnnoField.value;
 
     const selectedMap = {};
-    const entries = selectedField.value.split(',').filter(v => v.trim() !== '');
+    const entries = holdVal.value.split(',').filter(v => v.trim() !== '');
 
     entries.forEach(entry => {
         const [idx, val] = entry.split(':');
@@ -41,7 +51,7 @@ function onCheckboxClick(checkbox, blockNo) {
         .map(([idx, val]) => `${idx}:${val}`)
         .join(',') + (Object.keys(selectedMap).length ? ',' : '');
 
-    selectedField.value = newSelected;
+    holdVal.value = newSelected;
 }
 
 

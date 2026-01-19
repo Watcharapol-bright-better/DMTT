@@ -16,6 +16,7 @@ SELECT
      ,[QH].[I_TYPE]
      ,''                                                    AS [B]
 
+     ,[QH].[I_QT_STATUS]
      ,[QH].[CREATED_DATE]
      ,[QH].[CREATED_BY]
      ,[QH].[CREATED_PRG_NM]
@@ -37,3 +38,5 @@ FROM [T_PR_QT_H] AS [QH]
 
          LEFT JOIN [MS_PRFG] AS [MP]
                    ON [MP].[I_ITEMCODE] = [QD].[I_ITEMCODE]
+
+WHERE [QH].[I_QT_NO] = /**%I_QT_NO%**/''

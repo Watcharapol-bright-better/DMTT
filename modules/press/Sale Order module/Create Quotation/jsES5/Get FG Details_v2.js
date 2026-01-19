@@ -25,6 +25,7 @@ if (!csCode || !qtPattern) {
     var qtID = RunningNo.genId('DMTT_N_QT', 'QUTyyyymmxxxx', false);
 
     // INSERT TO : T_PR_QT table
+    // I_QT_STATUS : '0'
     var sql = ""
         + "SELECT "
         + "     '"+qtID+"' AS [I_QT_NO] "

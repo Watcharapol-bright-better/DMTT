@@ -5,7 +5,7 @@
 ### [Sale Order Modules]
 `DMTT_PRESS_QT_DOWNLOAD` : Print Quotation
 
-`DMTT_T_PRESS_QT` : Create Quotation (Press)
+`DMTT_T_PRESS_QT` : Create Quotation (Press) ^
 
 `DMTT_T_PRESS_QT_LIST` : Quotation List (Press) ^
 
@@ -78,6 +78,7 @@
 - `DMTT_G_PR_PATTERN`
 - `DMTT_G_OS_COMFIRM`
 - `DMTT_G_SHIP_INT_STATUS` I_SHIP_CFM,  : Shipment Status 
+- `DMTT_G_EMAIL_CFT`
  
 
 
