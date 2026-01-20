@@ -1,9 +1,23 @@
 # DMTT (Sale Order/Invoice modules)
 
+## function group master
+`PR_SALE_ORDER` : Sale Order (Press)
+`PR_INVOICE` : Invoice (Press)
+
+## group config
+`system` : PR_SALE_ORDER
+`system` : PR_INVOICE
+
+## function group
+`PR_SALE_ORDER` : <Func_ID>-<Func_Name> | TALON/APPLICATION/GENERALFREE/GENERALFREE.xhtml?PARAM_FUNC_ID=<Func_ID>&INIT_SEARCH=true
+`PR_INVOICE` : <Func_ID>-<Func_Name> | TALON/APPLICATION/GENERALFREE/GENERALFREE.xhtml?PARAM_FUNC_ID=<Func_ID>&INIT_SEARCH=true
+
+### PR_SALE_ORDER,PR_INVOICE
+
 ## Function List
 
 ### [Sale Order Modules]
-`DMTT_PRESS_QT_DOWNLOAD` : Print Quotation
+`DMTT_PRESS_QT_DOWNLOAD` : Print Quotation (Press)
 
 `DMTT_T_PRESS_QT` : Create Quotation (Press) ^
 
@@ -109,4 +123,3 @@
 
 - `T_PR_INVOICE_H`
 - `T_PR_INVOICE_D`
-
