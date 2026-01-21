@@ -9,7 +9,6 @@
  * Case 2: Total Delivery Qty not equals SO Qty
  *         - "Delivery Qty does not equal to SO Qty"
  *************************************************/
-
 var data = TALON.getBlockData_List(2);
 
 var isAllMatched = true;
@@ -56,7 +55,10 @@ function onQtyChk(item) {
     }
 }
 
-
+/**
+ * Main
+ * - Start logic only when CHK = 1 and Lvl = 2
+ */
 data.forEach(function(item) {
 
     if (item['CHK'] === "1" && item['Lvl'] == 2) {
@@ -69,7 +71,10 @@ data.forEach(function(item) {
     }
 });
 
-
+/**
+ * Final result message
+ * - Show main message only
+ */
 if (hasProcess && isAllMatched) {
     TALON.addMsg("Confirmed Successfully");
     TALON.setIsSuccess(true);
