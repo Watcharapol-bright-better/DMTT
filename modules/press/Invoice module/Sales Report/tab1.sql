@@ -1,0 +1,10 @@
+-- tab 1 : Summary
+SELECT 
+	 [INH].[I_CSCODE]
+	,[IND].[I_ITEMCODE]
+	,[IND].[I_AMOUNT]
+	--,[INH].[I_TYPE]
+FROM [T_PR_INVOICE_H] [INH]
+	LEFT JOIN [T_PR_INVOICE_D] [IND]
+		ON [IND].[I_INVOICE_NO] = [INH].[I_INVOICE_NO]
+

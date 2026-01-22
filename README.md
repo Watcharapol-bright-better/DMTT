@@ -3,10 +3,12 @@
 ## function group master
 `PR_SALE_ORDER` : Sale Order (Press)
 `PR_INVOICE` : Invoice (Press)
+`PR_SHIP_INST` : Shipment (Press) +
 
 ## group config
 `system` : PR_SALE_ORDER
 `system` : PR_INVOICE
+`system` : PR_SHIP_INST +
 
 ## function group
 `PR_SALE_ORDER` : <Func_ID>-<Func_Name> | TALON/APPLICATION/GENERALFREE/GENERALFREE.xhtml?PARAM_FUNC_ID=<Func_ID>&INIT_SEARCH=true
@@ -34,17 +36,17 @@
 
 
 ### [Invoice Modules] 
-`DMTT_T_PRESS_SHIPMENT_INST` : Create Shipment Instruction (Press)
+`DMTT_T_PRESS_SHIPMENT_INST` : Create Shipment Instruction (Press) ^
 
 `DMTT_T_PRESS_SHIPMENT_INST_DETAIL` : Shipment Instruction Detail (Press) 
 
 `DMTT_T_PRESS_SHIPMENT_INST_LIST` : Shipment Instruction List (Press)
 
-`DMTT_T_PRESS_ASSIGN_SHIP_JOB` : Assign Shipment Job (Press)
+`DMTT_T_PRESS_ASSIGN_SHIP_JOB` : Assign Shipment Job (Press) ^
 
 `DMTT_T_PRESS_SHIPMENT_JOB_LIST` : Shipment Job List (Press)
 
-`DMTT_T_PRESS_SHIPMENT_JOB_DETAILS` : Shipment Job Details (Press)
+`DMTT_T_PRESS_SHIPMENT_JOB_DETAILS` : Shipment Job Details (Press) ^
 
 `DMTT_T_PRESS_CREATE_INVOICE` : Create Invoice (Press)
 
@@ -64,7 +66,9 @@
 
 `DMTT_T_PRESS_DNCN_DETAIL` : Debit/Credit Note Detail (Press) 
 
+`DMTT_T_PRESS_SCAN_QA` : Scan QA (Press) +
 
+`DMTT_R_PRESS_SALES` : Sales Report (Press) +
 
 
 <br/>
@@ -123,3 +127,6 @@
 
 - `T_PR_INVOICE_H`
 - `T_PR_INVOICE_D`
+
+
+https://sandbox-dev-talon.bright-better.com/Talon/;jsessionid=351a87ace63d0b101a7f40fdcd29

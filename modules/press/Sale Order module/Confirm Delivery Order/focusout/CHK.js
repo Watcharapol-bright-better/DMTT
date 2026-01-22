@@ -1,4 +1,4 @@
-var checkbox = %2_CHK%;
+var checkbox = ''// %2_CHK%;
 
 if (checkbox) {
     checkbox.addEventListener('focusout', function() {

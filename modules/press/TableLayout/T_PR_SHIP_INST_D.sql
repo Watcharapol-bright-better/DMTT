@@ -2,6 +2,7 @@ CREATE TABLE [dbo].[T_PR_SHIP_INST_D](
     [I_SHIP_INST]        NVARCHAR(20) NOT NULL,   -- Shipment Instruction No
     [INTERNAL_NO]        NVARCHAR(20) NOT NULL,   -- Internal No
     [I_SHIP_LNNO]        NUMERIC(3,0) NULL,       -- Shipment Instruction Line
+    [I_PALLET_NO]        NVARCHAR(20) NULL,       -- Pallet No
     [I_SONO]             NVARCHAR(20) NULL,       -- SO No
     [I_ITEMCODE]         NVARCHAR(25) NULL,       -- Part No
     [I_SHIP_QTY]         NUMERIC(10,0) NULL,      -- Shipment QTY
