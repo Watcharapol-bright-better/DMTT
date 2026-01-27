@@ -1,38 +1,33 @@
-CREATE TABLE [dbo].[T_PR_SHIP_INST_D](
-    [I_SHIP_INST]        NVARCHAR(20) NOT NULL,   -- Shipment Instruction No
-    [INTERNAL_NO]        NVARCHAR(20) NOT NULL,   -- Internal No
-    [I_SHIP_LNNO]        NUMERIC(3,0) NULL,       -- Shipment Instruction Line
-    [I_PALLET_NO]        NVARCHAR(20) NULL,       -- Pallet No
-    [I_SONO]             NVARCHAR(20) NULL,       -- SO No
-    [I_ITEMCODE]         NVARCHAR(25) NULL,       -- Part No
-    [I_SHIP_QTY]         NUMERIC(10,0) NULL,      -- Shipment QTY
-    [I_BALANCE_QTY]      NUMERIC(10,0) NULL,      -- SO Balance QTY
-    [I_BOX_QTY]          NUMERIC(10,0) NULL,      -- Box QTY
-    [I_PALLET_QTY]       NUMERIC(10,0) NULL,      -- Pallet QTY
-    [I_LOTNO_FR]         NVARCHAR(25) NULL,       -- Lot From
-    [I_LOTNO_TO]         NVARCHAR(25) NULL,       -- Lot To
-    [I_SHP_PCK_STATUS]   NVARCHAR(1) NULL,        -- Picked Status
-    [I_ASSIGNTO]         NVARCHAR(20) NULL,
 
-    [CREATED_DATE]       DATETIME NULL,
-    [CREATED_BY]         NVARCHAR(10) NULL,
-    [CREATED_PRG_NM]     NVARCHAR(50) NULL,
-    [UPDATED_DATE]       DATETIME NULL,
-    [UPDATED_BY]         NVARCHAR(10) NULL,
-    [UPDATED_PRG_NM]     NVARCHAR(50) NULL,
-    [MODIFY_COUNT]       NUMERIC(10,0) NULL,
+CREATE TABLE [dbo].[T_PR_SHIP_INST_D](
+	[I_SHIP_INST]       [NVARCHAR](20) NOT NULL,    -- Shipment Instruction No
+	[INTERNAL_NO]       [NVARCHAR](20) NOT NULL,    -- Internal No
+	[I_SHIP_LNNO]       [NUMERIC](3, 0) NULL,       -- Shipment Line No
+	[I_PALLET_NO]       [NVARCHAR](20) NULL,        -- Pallet No
+	[I_SONO]            [NVARCHAR](20) NULL,        -- Sales Order No
+	[I_ITEMCODE]        [NVARCHAR](25) NULL,        -- Part No
+	[I_SHIP_QTY]        [NUMERIC](10, 0) NULL,      -- Shipment QTY
+	[I_BALANCE_QTY]     [NUMERIC](10, 0) NULL,      -- SO Balance QTY
+	[I_BOX_QTY]         [NUMERIC](10, 0) NULL,      -- Box QTY
+	[I_PALLET_QTY]      [NUMERIC](10, 0) NULL,      -- Pallet QTY
+	[I_LOTNO_FR]        [NVARCHAR](25) NULL,        -- Lot No From
+	[I_LOTNO_TO]        [NVARCHAR](25) NULL,        -- Lot No To
+	[I_SHP_PCK_STATUS]  [NVARCHAR](1) NULL,         -- Picked Status
+	[I_QA_STATUS]       [NVARCHAR](1) NULL,         -- Scan QA Status
+	[I_ASSIGNTO]        [NVARCHAR](20) NULL,        -- Assign To
+
+	[CREATED_DATE]      [DATETIME] NULL,
+	[CREATED_BY]        [NVARCHAR](10) NULL,
+	[CREATED_PRG_NM]    [NVARCHAR](50) NULL,
+	[UPDATED_DATE]      [DATETIME] NULL,
+	[UPDATED_BY]        [NVARCHAR](10) NULL,
+	[UPDATED_PRG_NM]    [NVARCHAR](50) NULL,
+	[MODIFY_COUNT]      [NUMERIC](10, 0) NULL,
 
  CONSTRAINT [PK_T_PR_SHIP_INST_D] PRIMARY KEY CLUSTERED
 (
-    [I_SHIP_INST] ASC,
-    [INTERNAL_NO] ASC
-)WITH (
-    PAD_INDEX = OFF,
-    STATISTICS_NORECOMPUTE = OFF,
-    IGNORE_DUP_KEY = OFF,
-    ALLOW_ROW_LOCKS = ON,
-    ALLOW_PAGE_LOCKS = ON,
-    OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF
-) ON [PRIMARY]
+	[I_SHIP_INST] ASC,
+	[INTERNAL_NO] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO

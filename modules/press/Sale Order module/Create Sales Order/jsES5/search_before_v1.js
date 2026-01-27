@@ -19,9 +19,9 @@ if (!searchData.I_SONO) {
         "   GETDATE() AS [I_SODATE], " +
         "   '" + searchData.I_QT_NO + "' AS [I_QT_NO], " +
         "   '" + userId + "' AS [I_PIC]" +
-        "FROM [T_PR_QT_H] " +
+        "FROM [T_PR_QT_H] [H] " +
         "LEFT JOIN [MS_CS] AS [MC] ON [MC].[I_NAME] = '"+searchData['I_NAME']+"'" +
-        " [H] WHERE [H].[I_QT_NO] =  '" + searchData.I_QT_NO + "'"
+        "WHERE [H].[I_QT_NO] =  '" + searchData.I_QT_NO + "'"
 
 
     var headerResult = TalonDbUtil.select(TALON.getDbConfig(), headerSql);

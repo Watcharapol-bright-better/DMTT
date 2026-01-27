@@ -1,3 +1,5 @@
+let isProcessing = false; 
+
 function createScanButton() {
   setScanButton("Scan", "1_I_SHIP_INST", "QR", 640, 480);
   setScanButton("Scan", "1_I_PALLET_NO", "QR", 640, 480);
@@ -10,6 +12,7 @@ function addLine() {
 }
 
 function addRow() {
+  console.log("Adding row");    
   document.getElementById("TLN_1_Button_CALL_JAVASCRIPT").click();
 }
 
@@ -43,27 +46,33 @@ function bindScanEvents() {
   }
 
   watchInputFilled(ship_id, (v) => {
-    console.log("✅ ship_id:", v);
+    //console.log("✅ ship_id:", v);
     scanningBox();
   });
 
   watchInputFilled(ship_mask, (v) => {
-    console.log("✅ ship_mask:", v);
+    //console.log("✅ ship_mask:", v);
     scanningBox();
   });
 
   watchInputFilled(pallet_tag, (v) => {
-    console.log("✅ pallet_tag:", v);
+    //console.log("✅ pallet_tag:", v);
     scanningBox();
   });
 
   watchInputFilled(sample_tag, (v) => {
-    console.log("✅ sample_tag:", v);
+    //console.log("✅ sample_tag:", v);
     scanningBox();
   });
 }
 
 function scanningBox() {
+  // ป้องกันการรันซ้ำ
+  if (isProcessing) {
+    //console.log("⚠️ Already processing, skipping...");
+    return;
+  }
+
   const ship_id = document.getElementById("TLN_1_I_SHIP_INST");
   const ship_mask = document.getElementById("TLN_1_I_PALLET_NO");
   const pallet_tag = document.getElementById("TLN_1_I_PLTNO");
@@ -84,28 +93,31 @@ function scanningBox() {
     return;
   }
 
+  // ตั้งค่า flag ว่ากำลังทำงาน
+  isProcessing = true;
+  console.log("🔒 Processing started");
+
   setTimeout(() => {
     const pallet_row = document.querySelectorAll("input[id^='TLN_2_I_PALLET_NO_']");
-    if (!pallet_row.length) return;
+    if (!pallet_row.length) {
+      isProcessing = false; // ปลดล็อค
+      return;
+    }
 
     const last_index = pallet_row.length - 1;
 
     const target_mask = document.getElementById("TLN_2_I_PALLET_NO_" + last_index);
-    
     const target_plt = document.getElementById("TLN_2_I_PLTNO_" + last_index);
     const target_ship = document.getElementById("TLN_2_I_SHIP_INST_" + last_index);
 
-    if (!target_mask || !target_plt) return;
+    if (!target_mask || !target_plt) {
+      isProcessing = false; // ปลดล็อค
+      return;
+    }
 
     target_ship.value = ship_id.value;
     target_mask.value = ship_mask.value;
     target_plt.value = pallet_tag.value;
-    
-
-    // console.log("✅ write row index:", last_index);
-    // console.log("   ship_id:", ship_id.value);
-    // console.log("   ship_mask:", ship_mask.value);
-    // console.log("   pallet_tag:", pallet_tag.value);
 
     addRow();
 
@@ -114,12 +126,15 @@ function scanningBox() {
     pallet_tag.value = "";
     sample_tag.value = "";
 
-  },500);
+    setTimeout(() => {
+      isProcessing = false;
+      //console.log("🔓 Processing completed");
+    }, 1000); 
+
+  }, 500);
 }
 
-
 function hiddenField() { 
- 
   document.querySelectorAll(".button.CALL_JAVASCRIPT_BTN").forEach((el) => {
     el.style.visibility = "hidden";
     el.style.border = "none";
@@ -134,7 +149,6 @@ function hiddenField() {
       td.style.display = "none";
     }
   });
-
 }
 
 function updateBoxHeight() {
@@ -145,7 +159,6 @@ function updateBoxHeight() {
     }
   }
 
-  // Box Card 0
   removeHeight("BASE:0:block");
 
   const baseCard = document.getElementById("BASE:0:CARD");
@@ -160,14 +173,11 @@ function updateBoxHeight() {
   }
 }
 
-
 function resizeContents_end() {
-  
   document
     .querySelectorAll(".blockSubHeader")
     .forEach((el) => (el.style.display = "none"));
   hiddenField();
   updateBoxHeight();
   bindScanEvents();
-  
 }

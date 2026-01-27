@@ -16,7 +16,7 @@ FROM (
           ,[H].[I_SODATE]           -- SO Date 
 
           ,NULL AS [I_AMOUNT]       -- Amount
-          ,NULL AS [I_UNTPRI]       -- Unit Price
+          ,NULL AS [I_UNITPRICE]       -- Unit Price
           ,NULL AS [I_QTY]          -- SO Qty
           ,NULL AS [I_DLY_PLACE]    -- Delivery Place
           ,[H].[I_ENDUSER]          -- P.I.C
@@ -54,7 +54,7 @@ FROM (
           ,ISNULL([H].[I_SODATE],GETDATE()) AS [I_SODATE]
       
           ,[D].[I_AMOUNT]
-          ,[D].[I_UNTPRI]
+          ,[D].[I_UNITPRICE]
           ,[D].[I_QTY]
           ,[D].[I_DLY_PLACE]
           ,ISNULL([H].[I_ENDUSER],'') AS [I_ENDUSER]

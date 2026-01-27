@@ -6,7 +6,7 @@ CREATE TABLE [dbo].[T_PR_SORD_D](
     [INTERNAL_NO]       NVARCHAR(20) NOT NULL,   -- Internal No (Detail Key)
     [I_LNNO]            NUMERIC(3,0) NULL,        -- Line No
     [I_ITEMCODE]        NVARCHAR(25) NULL,        -- Part No
-    [I_UNTPRI]          NUMERIC(18,3) NULL,       -- Unit Price
+    [I_UNITPRICE]       NUMERIC(18,3) NULL,       -- Unit Price
     [I_QTY]             NUMERIC(14,6) NULL,       -- Order QTY
     [I_AMOUNT]          NUMERIC(18,3) NULL,       -- Amount
     [I_DLY_PLACE]       NVARCHAR(15) NULL,        -- Delivery Place

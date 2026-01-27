@@ -1,0 +1,1 @@
+SELECT '' AS [I_ASSIGNTO]
