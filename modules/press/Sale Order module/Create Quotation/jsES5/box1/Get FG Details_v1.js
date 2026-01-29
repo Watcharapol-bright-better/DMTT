@@ -1,7 +1,4 @@
-
-
 var data = TALON.getTargetData();
-
 
 var csCode = data['I_CSCODE']; // Customer Code
 var qtPattern = data['I_TYPE']; // Pattern
@@ -13,11 +10,14 @@ var qtPattern = data['I_TYPE']; // Pattern
 if (!csCode || !qtPattern) {
 
     if (!csCode && !qtPattern) {
-        TALON.addErrorMsg("Customer Code and Pattern are required fields.");
+      TALON.addErrorMsg("⚠️ Customer Code and Pattern are required fields.");
+      TALON.setIsSuccess(false);
     } else if (!csCode) {
-        TALON.addErrorMsg("Customer Code is a required field.");
+      TALON.addErrorMsg("⚠️ Customer Code is a required field.");
+      TALON.setIsSuccess(false);
     } else if (!qtPattern) {
-        TALON.addErrorMsg("Pattern is a required field.");
+      TALON.addErrorMsg("⚠️ Pattern is a required field.");
+      TALON.setIsSuccess(false);
     }
 
 } else {
@@ -31,6 +31,7 @@ if (!csCode || !qtPattern) {
         + "     '"+qtID+"' AS [I_QT_NO] "
         + "    ,[Q].[I_QTPATTERN] "
         + "    ,[Q].[I_CSCODE] "
+        + "    ,'0' AS [I_QT_STATUS] "
         + "    ,[Q].[I_ITEMCODE] "
         + "    ,[Q].[I_DESC] "
         + "    ,[Q].[I_COMMODITY] "
@@ -50,7 +51,7 @@ if (!csCode || !qtPattern) {
         + "    ,[Q].[I_FEE_EXPENSE] "
         + "    ,[Q].[I_FEE_DLY] "
         + "    ,[Q].[MANAGEMENT_EXPENSE] "
-        + "    ,[Q].[TOTAL_PRICE] "
+        + "    ,[Q].[I_SELLING_PRICE] "
         + "FROM ( "
         + "    SELECT "
         + "         [MP].[I_QTPATTERN] "
@@ -76,7 +77,7 @@ if (!csCode || !qtPattern) {
         + "       + COALESCE([MP].[I_FEE_PACK], 0) "
         + "       + COALESCE([MP].[I_FEE_EXPENSE], 0) "
         + "       + COALESCE([MP].[I_FEE_DLY], 0) AS [MANAGEMENT_EXPENSE] "
-        + "        ,ROUND(RAND(CHECKSUM(NEWID())) * 1350 + 150, 2) AS [TOTAL_PRICE] "
+        + "        ,ROUND(RAND(CHECKSUM(NEWID())) * (1350 + 150), 2) AS [I_SELLING_PRICE] " // Unit Price
         + "    FROM [MS_PRFG] [MP] "
         + "WHERE [MP].[I_CSCODE] = '" + csCode + "' "
         + "  AND [MP].[I_QTPATTERN] = '" + qtPattern + "' "
@@ -87,8 +88,15 @@ if (!csCode || !qtPattern) {
     // "  AND [MP].[I_QTPATTERN] = '1' ";
 
     // TALON.addMsg(sql);
-    var data = TalonDbUtil.select(TALON.getDbConfig(), sql);
+  var data = TalonDbUtil.select(TALON.getDbConfig(), sql);
+  
+  
+  if (data.length > 0) {
     TALON.setSearchedDisplayList(2, data);
+  } else {
+    TALON.setIsSuccess(false);
+    TALON.addErrorMsg("⚠️ Material price not found");
+  }  
 
 }
 

@@ -8,7 +8,7 @@
 
 
 
-var x = 'T_PR_SORD_H/I_REM1/T_PR_SORD_H_I_REM1_SOP2025120032.png//Screenshot 2025-08-31 184129.png'
+var x = 'Pro.Assy Khumfah 2'
 print(x.length)
 
 

@@ -23,7 +23,8 @@ SELECT DISTINCT
        NULL                AS [I_WIDTH],
        NULL                AS [I_PROD_WGT],
        [QH].[I_CURRENCY],
-       NULL AS [I_UNIT_PRICE]
+       NULL AS [I_UNIT_PRICE],
+       [QH].[I_SO_FLG]
        
 FROM [T_PR_QT_H] AS [QH]
     LEFT JOIN [T_PR_QT_D] AS [QD] ON [QH].[I_QT_NO] = [QD].[I_QT_NO]
@@ -52,7 +53,8 @@ SELECT
        [QD].[I_WIDTH],
        [QD].[I_PROD_WGT],
        [QH].[I_CURRENCY],
-       NULL AS [I_UNIT_PRICE]
+       NULL AS [I_UNIT_PRICE],
+       NULL AS [I_SO_FLG]
        
 FROM [T_PR_QT_D] AS [QD]
     LEFT JOIN [T_PR_QT_H] AS [QH] ON [QH].[I_QT_NO] = [QD].[I_QT_NO]

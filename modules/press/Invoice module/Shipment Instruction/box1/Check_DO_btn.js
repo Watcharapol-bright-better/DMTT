@@ -19,6 +19,7 @@ if (searchData.I_SHIP_INST === "") {
   var shipID = RunningNo.genId("DMTT_N_SI", "SIyymmddxxxx", true);
 
   var sql =
+    "" +
     "SELECT " +
     "    NULL AS [I_SHIP_LNNO], " +
     "    NULL AS [I_SHIP_INST], " +
@@ -34,6 +35,7 @@ if (searchData.I_SHIP_INST === "") {
     "    [ST].[MAX_LOTNO] AS [I_LOTNO_TO], " +
     "    [WO].[I_WODATE], " +
     "    '0' AS [I_SHP_PCK_STATUS], " +
+    "    '0' AS [I_QA_STATUS]" +
     "    NULL AS [CREATED_DATE], " +
     "    NULL AS [CREATED_BY], " +
     "    NULL AS [CREATED_PRG_NM], " +
@@ -82,11 +84,12 @@ if (searchData.I_SHIP_INST === "") {
       I_LOTNO_TO: item["I_LOTNO_TO"],
       I_WODATE: item["I_WODATE"],
       I_SHP_PCK_STATUS: item["I_SHP_PCK_STATUS"],
+      I_QA_STATUS: item["I_QA_STATUS"],
 
-      CREATED_DATE: now,
+      CREATED_DATE: DateFmt.formatDateTime(now.toString()),
       CREATED_BY: UserId,
       CREATED_PRG_NM: ProgramNM,
-      UPDATED_DATE: now,
+      UPDATED_DATE: DateFmt.formatDateTime(now.toString()),
       UPDATED_BY: UserId,
       UPDATED_PRG_NM: ProgramNM,
       MODIFY_COUNT: 0,
