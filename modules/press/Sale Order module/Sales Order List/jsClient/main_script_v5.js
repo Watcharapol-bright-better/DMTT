@@ -1,120 +1,140 @@
-// เก็บสถานะของ checkbox ที่ถูกคลิก (Lvlline เป็น null)
-const nullLnnoClickedGroups = new Set();
-
+const clickedGroups = new Set();
 
 function onCheckboxClick(checkbox, blockNo) {
-    const keySono = "I_SONO";
-    const keyLvl = "Lvl_$TLN_LEAF_DISP";
-    const rowNo = "I_LNNO";
+    if (!checkbox.name) return;
 
-    if (!checkbox || !checkbox.name) return;
-
-    const index = checkbox.name.split('_').pop();
-
-    // #TLN_2_I_SONO_1
-    let craftSO = `#TLN_${blockNo}_${keySono}_${index}`;
-    const sonoField = document.querySelector(craftSO);
-
-    // TLN_2_Lvl_$TLN_LEAF_DISP_1
-    let craftId = `TLN_${blockNo}_${keyLvl}_${index}`;
-    const Lvlline = document.getElementById(craftId);
+    const idx = checkbox.name.split('_').pop();
+    const idField = document.querySelector(`#TLN_${blockNo}_I_SONO_${idx}`);
+    const lvlField = document.getElementById(`TLN_${blockNo}_Lvl_$TLN_LEAF_DISP_${idx}`);
     const holdVal = document.getElementsByName('CNDTN_SELECTED')[0];
 
-    if (!sonoField || !holdVal) return;
+    if (!idField || !holdVal) return;
 
-    // ถ้า Lvlline ไม่มี ให้คลิก checkbox ที่มี title เดียวกัน (ยกเว้นอันแรก)
-    if (!Lvlline) {
-        const currentSonoTitle = sonoField.getAttribute('title');
-        
-        if (!currentSonoTitle) return;
-      
-        const groupKey = `${blockNo}_${currentSonoTitle}_${index}`;
-        
-        // ถ้ากดยกเลิก
-        if (!checkbox.checked) {
-            nullLnnoClickedGroups.delete(groupKey);
-            
-            const allMatchingSono = document.querySelectorAll(`[id^="TLN_${blockNo}_${keySono}_"][title="${currentSonoTitle}"]`);
-            let isFirst = true;
-            
-            allMatchingSono.forEach(field => {
-                // ข้ามแถวอันแรก
-                if (isFirst) {
-                    isFirst = false;
-                    return;
-                }
-                
-                const fieldIndex = field.id.split('_').pop();
-                const relatedCheckbox = document.querySelector(`input[type="checkbox"][id^="TLN_${blockNo}_CHK_${fieldIndex}"]`);
-                
-                if (relatedCheckbox && relatedCheckbox !== checkbox && relatedCheckbox.checked) {
-                    relatedCheckbox.click();
-                }
-            });
-            
-            return;
-        }
-        
-        if (nullLnnoClickedGroups.has(groupKey)) {
-            return;
-        }
-
-        nullLnnoClickedGroups.add(groupKey);
-        
-        const allMatchingSono = document.querySelectorAll(`[id^="TLN_${blockNo}_${keySono}_"][title="${currentSonoTitle}"]`);
-        let isFirst = true;
-        
-        allMatchingSono.forEach(field => {
-            if (isFirst) {
-                isFirst = false;
-                return;
-            }
-            
-            const fieldIndex = field.id.split('_').pop();
-            const relatedCheckbox = document.querySelector(`input[type="checkbox"][id^="TLN_${blockNo}_CHK_${fieldIndex}"]`);
-            
-            if (relatedCheckbox && relatedCheckbox !== checkbox && !relatedCheckbox.checked) {
-                relatedCheckbox.click();
-            }
-        });
-        
+    // lvlField ไม่มีแสดงว่าเป็น header (Level 1)
+    if (!lvlField) {
+        // คลิก checkbox กลุ่มเดียวกันในรายการ details ด้วยทั้งหมด
+        handleGroupClick(checkbox, blockNo, idx, idField);
         return;
     }
 
-    const sono = sonoField.value;
-    const rowno = document.querySelector(`#TLN_${blockNo}_${rowNo}_${index}`);;
+    // คลิก checkbox เฉพาะที่ต้องการใน details (Level 2)
+    updateSelection(checkbox, idx, idField, blockNo, holdVal);
+}
 
-    const selectedMap = {};
-    const entries = holdVal.value.split(',').filter(v => v.trim() !== '');
+function handleGroupClick(checkbox, blockNo, idx, idField) {
+    const title = idField.getAttribute('title');
+    if (!title) return;
 
-    entries.forEach(entry => {
-        const [idx, val] = entry.split(':');
-        if (idx && val) {
-            selectedMap[idx] = val;
-        }
-    });
+    const groupKey = `${blockNo}_${title}_${idx}`;
+    const matchingId = document.querySelectorAll(`[id^="TLN_${blockNo}_I_SONO_"][title="${title}"]`);
 
-    if (checkbox.checked && sono.trim() !== '') {
-        // ประกอบเป็น I_SONO|I_LNNO
-        selectedMap[index] = `${sono}|${rowno.value}`;
-        // selectedMap[index] = sono;
-    } else {
-        delete selectedMap[index];
+    if (!checkbox.checked) {
+        clickedGroups.delete(groupKey);
+        uncheckGroup(matchingId, blockNo, checkbox);
+        return;
     }
 
-    const newSelected = Object.entries(selectedMap)
-        .map(([idx, val]) => `${idx}:${val}`)
-        .join(',') + (Object.keys(selectedMap).length ? ',' : '');
+    if (clickedGroups.has(groupKey)) return;
 
-    holdVal.value = newSelected;
+    clickedGroups.add(groupKey);
+    checkGroup(matchingId, blockNo, checkbox);
+}
+
+function checkGroup(fields, blockNo, excludeCheckbox) {
+    toggleGroup(fields, blockNo, excludeCheckbox, false);
+}
+
+function uncheckGroup(fields, blockNo, excludeCheckbox) {
+    toggleGroup(fields, blockNo, excludeCheckbox, true);
+}
+
+function toggleGroup(fields, blockNo, excludeCheckbox, shouldUncheck) {
+    let isFirst = true;
+
+    fields.forEach(field => {
+        if (isFirst) {
+            isFirst = false;
+            return;
+        }
+
+        const fieldIdx = field.id.split('_').pop();
+        const chk = document.querySelector(`input[type="checkbox"][id^="TLN_${blockNo}_CHK_${fieldIdx}"]`);
+
+        if (chk && chk !== excludeCheckbox) {
+            const shouldClick = shouldUncheck ? chk.checked : !chk.checked;
+            if (shouldClick) chk.click();
+        }
+    });
+}
+
+function updateSelection(checkbox, idx, idField, blockNo, holdVal) {
+    const id = idField.value;
+    const lnField = document.querySelector(`#TLN_${blockNo}_I_LNNO_${idx}`);
+
+    const selected = parseSelection(holdVal.value);
+
+    if (checkbox.checked && id.trim()) {
+        selected[idx] = `${id}|${lnField.value}`;
+    } else {
+        delete selected[idx];
+    }
+
+    holdVal.value = formatSelection(selected);
+}
+
+function parseSelection(value) {
+    const result = {};
+    value.split(',')
+        .filter(v => v.trim())
+        .forEach(entry => {
+            const [idx, val] = entry.split(':');
+            if (idx && val) result[idx] = val;
+        });
+    return result;
+}
+
+function formatSelection(selected) {
+    const entries = Object.entries(selected).map(([idx, val]) => `${idx}:${val}`);
+    return entries.length ? entries.join(',') + ',' : '';
+}
+
+function clearStore() {
+    clickedGroups.clear();
+}
+
+function resizeContents_end() {
+    const checkboxes = document.getElementsByClassName("selectionTableRow");
+    Array.from(checkboxes).forEach(chk => {
+        chk.addEventListener("change", onCheckboxClick);
+    });
+    //conidle.log(clickedGroups);
+
+    //let stack = document.getElementsByName('CNDTN_SELECTED')[0].value;
+    //conidle.log(`current stack : ${stack}`);
+
+    let event = document.getElementById('EVENT_STATUS').value;
+    if (event === 'JAVASCRIPT_BTN') {
+        clearStore();
+        //conidle.log('Store cleared');
+    }
 }
 
 
-function resizeContents_end() {
-  var chkList = document.getElementsByClassName("selectionTableRow");
-  for (i = 0; i < chkList.length; i++) {
-    chkList[i].addEventListener("change", onCheckboxClick);
-  }
+// ========================
+// Box List : focusout
+var checkbox = %2_CHK%;
+
+if (checkbox) {
+    checkbox.addEventListener('focusout', function() {
+        onCheckboxClick(this, 2);
+        
+    });
+    
+    const event = new FocusEvent("focusout", {
+        bubbles: true,
+        cancelable: true
+    });
+    checkbox.dispatchEvent(event);
 }
 
 

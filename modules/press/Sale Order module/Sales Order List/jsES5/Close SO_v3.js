@@ -147,3 +147,4 @@ soList.forEach(function (sono) {
 //            ", I_LNNO: " + item.I_LNNO + "\n";    
 // });
 // TALON.addMsg(msg);
+I_SONO

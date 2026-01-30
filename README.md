@@ -33,7 +33,7 @@
 
 ✅ `DMTT_T_PRESS_SALES_ORDER_EDIT` : Sales Order Edit (Press) 
 
-✅ `DMTT_T_PRESS_SALES_ORDER_LIST` : Sales Order List (Press) 
+✅ `DMTT_T_PRESS_SALES_ORDER_LIST` : Sales Order List (Press) ^
 
 ✅ `DMTT_T_PRESS_CONF_DELIIVERY_ORDER` : Confirm Delivery Order (Press)
 
