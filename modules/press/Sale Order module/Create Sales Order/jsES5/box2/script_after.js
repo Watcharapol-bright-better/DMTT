@@ -1,4 +1,3 @@
-
 var searchData = TALON.getConditionData();
 var UserInfo = TALON.getUserInfoMap();
 var UserId = UserInfo["USER_ID"];
@@ -11,7 +10,7 @@ var sql =
   "SELECT IIF(EXISTS (SELECT 1 FROM [T_PR_SORD] WHERE [I_SONO] = '" +
   searchData.I_SONO +
   "'), 1, 0) AS [Result]";
-var isReadySO = TalonDbUtil.select(TALON.getDbConfig(), sql )[0]['Result'];
+var isReadySO = TalonDbUtil.select(TALON.getDbConfig(), sql)[0]["Result"];
 
 // TALON.addErrorMsg("TEST : " + searchData.I_SONO);
 
@@ -31,15 +30,16 @@ if (isReadySO === isSO.noexists) {
 
     var detailCol = [
       "I_SONO", // ^
-      "I_LNNO",  // ^
+      "I_LNNO", // ^
       "I_ITEMCODE",
-      "I_UNITPRICE",
+      "I_UNTPRI",
       "I_QTY",
       "I_AMOUNT",
       "I_DLY_PLACE",
-      "INTERNAL_NO",  // ^
+      "INTERNAL_NO", // ^
       "I_DLYDATE",
-      
+      "I_CONFIRM_STATUS",
+
       "CREATED_DATE",
       "CREATED_BY",
       "CREATED_PRG_NM",
@@ -50,8 +50,8 @@ if (isReadySO === isSO.noexists) {
     ];
 
     var internalNo = RunningNo.genId("DMTT_N_SO_IN", "yyyymmddxxxxxx", true);
-    var _I_DLYDATE = TALON.getBindValue('I_DLYDATE');
-    
+    var _I_DLYDATE = TALON.getBindValue("I_DLYDATE");
+
     Box2["I_SONO"] = _I_SONO;
     Box2["INTERNAL_NO"] = internalNo;
 
@@ -67,6 +67,7 @@ if (isReadySO === isSO.noexists) {
     Box2["MODIFY_COUNT"] = 0;
 
     TalonDbUtil.insertByMap(TALON.getDbConfig(), TABLE_NAME, Box2, detailCol);
-    TALON.addMsg(Box2);
   }
+} else {
+  TALON.addErrorMsg("⚠️ Sales Order already exists.");
 }

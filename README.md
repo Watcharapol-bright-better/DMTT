@@ -25,15 +25,15 @@
 ### [Sale Order Modules]
 ✅ `DMTT_PRESS_QT_DOWNLOAD` : Print Quotation (Press)
 
-✅ `DMTT_T_PRESS_QT` : Create Quotation (Press) ^
+✅ `DMTT_T_PRESS_QT` : Create Quotation (Press) 
 
-✅ `DMTT_T_PRESS_QT_LIST` : Quotation List (Press) *
+✅ `DMTT_T_PRESS_QT_LIST` : Quotation List (Press) 
 
-✅ `DMTT_T_PRESS_SALES_ORDER` : Create Sales Order (Press) ^
+✅ `DMTT_T_PRESS_SALES_ORDER` : Create Sales Order (Press) 
 
-✅ `DMTT_T_PRESS_SALES_ORDER_EDIT` : Sales Order Edit (Press) ^
+✅ `DMTT_T_PRESS_SALES_ORDER_EDIT` : Sales Order Edit (Press) 
 
-✅ `DMTT_T_PRESS_SALES_ORDER_LIST` : Sales Order List (Press) ^
+✅ `DMTT_T_PRESS_SALES_ORDER_LIST` : Sales Order List (Press) 
 
 ✅ `DMTT_T_PRESS_CONF_DELIIVERY_ORDER` : Confirm Delivery Order (Press)
 
@@ -41,23 +41,23 @@
 Fixed conditional expression
 
 ### [Invoice Modules] 
-✅ `DMTT_T_PRESS_SHIPMENT_INST` : Create Shipment Instruction (Press) *
+✅ `DMTT_T_PRESS_SHIPMENT_INST` : Create Shipment Instruction (Press) 
 
-✅ `DMTT_T_PRESS_SHIPMENT_INST_DETAIL` : Shipment Instruction Detail (Press) * 
+✅ `DMTT_T_PRESS_SHIPMENT_INST_DETAIL` : Shipment Instruction Detail (Press) 
 
-✅ `DMTT_T_PRESS_SHIPMENT_INST_LIST` : Shipment Instruction List (Press) *
+✅ `DMTT_T_PRESS_SHIPMENT_INST_LIST` : Shipment Instruction List (Press) 
 
-✅ `DMTT_T_PRESS_ASSIGN_SHIP_JOB` : Assign Shipment Job (Press) *
+✅ `DMTT_T_PRESS_ASSIGN_SHIP_JOB` : Assign Shipment Job (Press) 
 
-✅ `DMTT_T_PRESS_SHIPMENT_JOB_LIST` : Shipment Job List (Press) *
+✅ `DMTT_T_PRESS_SHIPMENT_JOB_LIST` : Shipment Job List (Press) 
 
-✅ `DMTT_T_PRESS_SHIPMENT_JOB_DETAILS` : Shipment Job Details (Press) *
+✅ `DMTT_T_PRESS_SHIPMENT_JOB_DETAILS` : Shipment Job Details (Press) 
 
 ✅ `DMTT_T_PRESS_CREATE_INVOICE` : Create Invoice (Press)
 
 ✅ `DMTT_T_PRESS_INVOICE_DETAIL` : Invoice Detail (Press) 
 
-✅ `DMTT_T_PRESS_INVOICE_LIST` : Invoice List (Press) *
+✅ `DMTT_T_PRESS_INVOICE_LIST` : Invoice List (Press) 
 
 ✅ `DMTT_T_PRESS_DELIVERY_ORDER_DOWNLOAD` : Print Delivery Order (Press)
 
@@ -67,7 +67,7 @@ Fixed conditional expression
 
 ✅ `DMTT_T_PRESS_SHIPPING_MARKS_DOWNLOAD` : Print Shipping Marks (Press)
 
-✅ `DMTT_T_PRESS_CREATE_DNCN` : Create Debit/Credit Note (Press) *
+✅ `DMTT_T_PRESS_CREATE_DNCN` : Create Debit/Credit Note (Press) 
 
 ✅ `DMTT_T_PRESS_DNCN_DETAIL` : Debit/Credit Note Detail (Press) 
 

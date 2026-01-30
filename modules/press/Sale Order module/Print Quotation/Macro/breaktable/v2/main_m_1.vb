@@ -3,7 +3,7 @@ Private Sub Workbook_Open()
     ' === Settings & sheet names ===
     Dim mainWS As String: mainWS = "Quotation"
     Dim dataWS As String: dataWS = "data"
-    
+
     ' === Local variables ===
     Dim sh As Worksheet
     Dim mainExists As Boolean: mainExists = False
@@ -34,7 +34,7 @@ Private Sub Workbook_Open()
             dataExists = True
         End If
     Next sh
-    
+
     If Not (mainExists And dataExists) Then Exit Sub
 
     ' get last row of data sheet
@@ -53,17 +53,17 @@ Private Sub Workbook_Open()
 
     ' ===== Loop through each data row =====
     For index = 2 To lastRow
-    
+
         ' read item group value
         currGroup = Worksheets(dataWS).Cells(index, "E").Value
-        
+
         ' check item group change to draw line
         If currGroup <> prevGroup Then
             lineFlg = 1
         Else
             lineFlg = 0
         End If
-        
+
         ' read table type
         currTBLType = Worksheets(dataWS).Cells(index, "Y").Value
 
@@ -89,13 +89,13 @@ Private Sub Workbook_Open()
             ' === When table type changes start a new table ==============
             ' ===============================================================
             If currTBLType <> prevTBLType Then
-            
+
                 ' close previous table bottom border
                 BottomBorderComponent Worksheets(mainWS), rowStart
-                
+
                 ' add 2 empty rows
                 addEmptyRowBlock Worksheets(mainWS), rowStart + 1
-                
+
                 ' write table type title
                 With Worksheets(mainWS).Cells(rowStart + 2, "B")
                     .Value = "Part " & currTBLType
@@ -105,10 +105,10 @@ Private Sub Workbook_Open()
                     .HorizontalAlignment = xlLeft
                     .VerticalAlignment = xlCenter
                 End With
-                
+
                 ' add table header (2 rows)
                 AddTableHeader rowStart + 3
-                
+
                 ' move start down 4 rows
                 rowStart = rowStart + 4
             End If
@@ -120,11 +120,11 @@ Private Sub Workbook_Open()
         ' ===========================================================
         copyRowDetail rowConfig, rowStart + 1, lineFlg
         tranferData index, rowStart + 1
-        
+
         ' update trackers
         prevGroup = currGroup
         prevTBLType = currTBLType
-        
+
         rowStart = rowStart + 1
 
 
@@ -140,4 +140,3 @@ Private Sub Workbook_Open()
     Next index
 
 End Sub
-
