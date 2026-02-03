@@ -35,7 +35,7 @@ if (searchData.I_SHIP_INST === "") {
     "    [ST].[MAX_LOTNO] AS [I_LOTNO_TO], " +
     "    [WO].[I_WODATE], " +
     "    '0' AS [I_SHP_PCK_STATUS], " +
-    "    '0' AS [I_QA_STATUS]" +
+    "    '0' AS [I_QA_STATUS]," +
     "    NULL AS [CREATED_DATE], " +
     "    NULL AS [CREATED_BY], " +
     "    NULL AS [CREATED_PRG_NM], " +

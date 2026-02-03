@@ -1,0 +1,113 @@
+<html xmlns="http://www.w3c.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Cache-Control" content="no-cache">
+<script type="text/javascript">
+
+function getUrlVars(){
+    var vars = [], max = 0, hash = "", array = "";
+    var url = window.location.search;
+
+    hash  = url.slice(1).split('&');    
+    max = hash.length;
+    for (var i = 0; i < max; i++) {
+        array = hash[i].split('=');
+        vars.push(array[0]);
+        vars[array[0]] = array[1];
+    }
+   return vars;
+}
+
+async function logInGa(){
+    var pm = getUrlVars();
+    console.log(pm["app_url"])
+	loginTalon(pm);
+	
+}
+
+function loginTalon(pm){
+	console.log(pm);
+	var url = 'Talon/faces/TALON/APPLICATION/GENERALFREE/GENERALFREE.xhtml?PARAM_FUNC_ID=PPLI_T_IMS_ACCRUED_LIST&FUNC_ID=PPLI_T_IMS_ACCRUED_LIST&CALL_AUTH=1';
+	url += "&COLUMN_5=OTP&&COLUMN_4=GAUSERCODE&&COLUMN_6=COMPANY";
+	url += "&VALUE_5=" + pm["onetimepass"] + "&VALUE_4=" + pm["usercode"];
+	url += "&VALUE_6=" + pm["company"] + "&INIT_SEARCH=true";
+	setTimeout(function() {
+        location.href = url;
+    }, 2000);
+}
+
+</script>
+
+<style>
+    .dot-spin {
+        position: relative;
+        width: 10px;
+        height: 10px;
+        border-radius: 5px;
+        background-color: transparent;
+        color: transparent;
+        box-shadow: 0 -18px 0 0 #9880ff, 12.727926px -12.727926px 0 0 #9880ff, 18px 0 0 0 #9880ff, 12.727926px 12.727926px 0 0 rgba(152, 128, 255, 0), 0 18px 0 0 rgba(152, 128, 255, 0), -12.727926px 12.727926px 0 0 rgba(152, 128, 255, 0), -18px 0 0 0 rgba(152, 128, 255, 0), -12.727926px -12.727926px 0 0 rgba(152, 128, 255, 0);
+        animation: dot-spin 1.5s infinite linear;
+    }
+    .stage {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        padding: 32px 0;
+        margin: 0 -5%;
+        overflow: hidden;
+    }
+
+    @keyframes dot-spin {
+    0%, 100% {
+        box-shadow: 0 -18px 0 0 #9880ff, 12.727926px -12.727926px 0 0 #9880ff, 18px 0 0 0 #9880ff, 12.727926px 12.727926px 0 -5px rgba(152, 128, 255, 0), 0 18px 0 -5px rgba(152, 128, 255, 0), -12.727926px 12.727926px 0 -5px rgba(152, 128, 255, 0), -18px 0 0 -5px rgba(152, 128, 255, 0), -12.727926px -12.727926px 0 -5px rgba(152, 128, 255, 0);
+    }
+    12.5% {
+        box-shadow: 0 -18px 0 -5px rgba(152, 128, 255, 0), 12.727926px -12.727926px 0 0 #9880ff, 18px 0 0 0 #9880ff, 12.727926px 12.727926px 0 0 #9880ff, 0 18px 0 -5px rgba(152, 128, 255, 0), -12.727926px 12.727926px 0 -5px rgba(152, 128, 255, 0), -18px 0 0 -5px rgba(152, 128, 255, 0), -12.727926px -12.727926px 0 -5px rgba(152, 128, 255, 0);
+    }
+    25% {
+        box-shadow: 0 -18px 0 -5px rgba(152, 128, 255, 0), 12.727926px -12.727926px 0 -5px rgba(152, 128, 255, 0), 18px 0 0 0 #9880ff, 12.727926px 12.727926px 0 0 #9880ff, 0 18px 0 0 #9880ff, -12.727926px 12.727926px 0 -5px rgba(152, 128, 255, 0), -18px 0 0 -5px rgba(152, 128, 255, 0), -12.727926px -12.727926px 0 -5px rgba(152, 128, 255, 0);
+    }
+    37.5% {
+        box-shadow: 0 -18px 0 -5px rgba(152, 128, 255, 0), 12.727926px -12.727926px 0 -5px rgba(152, 128, 255, 0), 18px 0 0 -5px rgba(152, 128, 255, 0), 12.727926px 12.727926px 0 0 #9880ff, 0 18px 0 0 #9880ff, -12.727926px 12.727926px 0 0 #9880ff, -18px 0 0 -5px rgba(152, 128, 255, 0), -12.727926px -12.727926px 0 -5px rgba(152, 128, 255, 0);
+    }
+    50% {
+        box-shadow: 0 -18px 0 -5px rgba(152, 128, 255, 0), 12.727926px -12.727926px 0 -5px rgba(152, 128, 255, 0), 18px 0 0 -5px rgba(152, 128, 255, 0), 12.727926px 12.727926px 0 -5px rgba(152, 128, 255, 0), 0 18px 0 0 #9880ff, -12.727926px 12.727926px 0 0 #9880ff, -18px 0 0 0 #9880ff, -12.727926px -12.727926px 0 -5px rgba(152, 128, 255, 0);
+    }
+    62.5% {
+        box-shadow: 0 -18px 0 -5px rgba(152, 128, 255, 0), 12.727926px -12.727926px 0 -5px rgba(152, 128, 255, 0), 18px 0 0 -5px rgba(152, 128, 255, 0), 12.727926px 12.727926px 0 -5px rgba(152, 128, 255, 0), 0 18px 0 -5px rgba(152, 128, 255, 0), -12.727926px 12.727926px 0 0 #9880ff, -18px 0 0 0 #9880ff, -12.727926px -12.727926px 0 0 #9880ff;
+    }
+    75% {
+        box-shadow: 0 -18px 0 0 #9880ff, 12.727926px -12.727926px 0 -5px rgba(152, 128, 255, 0), 18px 0 0 -5px rgba(152, 128, 255, 0), 12.727926px 12.727926px 0 -5px rgba(152, 128, 255, 0), 0 18px 0 -5px rgba(152, 128, 255, 0), -12.727926px 12.727926px 0 -5px rgba(152, 128, 255, 0), -18px 0 0 0 #9880ff, -12.727926px -12.727926px 0 0 #9880ff;
+    }
+    87.5% {
+        box-shadow: 0 -18px 0 0 #9880ff, 12.727926px -12.727926px 0 0 #9880ff, 18px 0 0 -5px rgba(152, 128, 255, 0), 12.727926px 12.727926px 0 -5px rgba(152, 128, 255, 0), 0 18px 0 -5px rgba(152, 128, 255, 0), -12.727926px 12.727926px 0 -5px rgba(152, 128, 255, 0), -18px 0 0 -5px rgba(152, 128, 255, 0), -12.727926px -12.727926px 0 0 #9880ff;
+    }
+    }
+
+
+</style>
+
+</head>
+<body onload="logInGa();">
+
+
+<div class="snippet" style="margin-top: 200px;">
+    <div class="stage">
+        <div class="dot-spin"></div>
+    </div>
+</div>
+
+<div style="text-align:center; font-family:sans-serif; font-size:16px; color:#555; margin-top: 30px;">
+ Please wait a moment
+</div>
+
+</div>
+
+</form>
+</body>
+</html>
+
+

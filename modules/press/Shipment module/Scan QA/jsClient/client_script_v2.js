@@ -93,9 +93,9 @@ function scanningBox() {
     return;
   }
 
-  // ตั้งค่า flag ว่ากำลังทำงาน
+  // flag ว่ากำลังทำงาน
   isProcessing = true;
-  console.log("🔒 Processing started");
+  // console.log("🔒 Processing started");
 
   setTimeout(() => {
     const pallet_row = document.querySelectorAll("input[id^='TLN_2_I_PALLET_NO_']");
@@ -109,6 +109,7 @@ function scanningBox() {
     const target_mask = document.getElementById("TLN_2_I_PALLET_NO_" + last_index);
     const target_plt = document.getElementById("TLN_2_I_PLTNO_" + last_index);
     const target_ship = document.getElementById("TLN_2_I_SHIP_INST_" + last_index);
+    const target_sample = document.getElementById("TLN_2_SAMPLE_LABEL_TAG_" + last_index);
 
     if (!target_mask || !target_plt) {
       isProcessing = false; // ปลดล็อค
@@ -118,6 +119,7 @@ function scanningBox() {
     target_ship.value = ship_id.value;
     target_mask.value = ship_mask.value;
     target_plt.value = pallet_tag.value;
+    target_sample.value = sample_tag.value;
 
     addRow();
 
