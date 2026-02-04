@@ -56,14 +56,10 @@ function applyButtonStyle() {
 function boxQRcode() {
     if (!window.QRCode) {
         console.warn('QRCode library is not loaded');
-        return;
     }
 
     const container = document.getElementById('search_condition');
-    if (!container) return;
-
     const inputEl = document.getElementsByName('CNDTN_I_SHIP_INST')[0];
-    if (!inputEl || !inputEl.value) return;
 
     let qrBox = document.getElementById('QR_BOX');
     if (qrBox) {
