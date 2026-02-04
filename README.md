@@ -3,12 +3,12 @@
 ## function group master 
 `PR_SALE_ORDER` : Sale Order (Press)
 `PR_INVOICE` : Invoice (Press)
-`PR_SHIP_INST` : Shipment (Press) +
+`PR_SHIP_INST` : Shipment (Press)
 
 ## group config
 `system` : PR_SALE_ORDER
 `system` : PR_INVOICE
-`system` : PR_SHIP_INST +
+`system` : PR_SHIP_INST
 
 ## function group
 `PR_SALE_ORDER` : <Func_ID>-<Func_Name> | TALON/APPLICATION/GENERALFREE/GENERALFREE.xhtml?PARAM_FUNC_ID=<Func_ID>&INIT_SEARCH=true
@@ -19,6 +19,7 @@
 ## Function List
 
 ✅ = Completed
+
 ⚠️ = In Progress
 
 

@@ -52,7 +52,6 @@ function setRowNumbers(selectorPrefix) {
 
 function lookup() {
   let _I_CSCODE = document.getElementById("TLN_1_I_CSCODE").value;
-
   document.getElementById("TLN_1_I_SHIPTO").value = _I_CSCODE;
   document.getElementById("TLN_1_I_BILLTO").value = _I_CSCODE;
 }

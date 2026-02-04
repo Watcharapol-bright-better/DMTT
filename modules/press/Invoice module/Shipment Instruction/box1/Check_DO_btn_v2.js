@@ -1,5 +1,3 @@
-var SimpleDateFormat = Java.type("java.text.SimpleDateFormat");
-var sdfDisplay = new SimpleDateFormat("yyyy-MM-dd");
 
 var searchData = TALON.getConditionData();
 var UserInfo = TALON.getUserInfoMap();
@@ -14,7 +12,7 @@ if (searchData.I_SHIP_INST === "") {
   var dlyData = data["I_SHIP_DLY_DATE"];
   var custData = data["I_CSCODE"];
   var shipToData = data["I_SHIPTO"];
-  var fmt = sdfDisplay.format(dlyData);
+  var fmtDate = DateFmt.formatDate(dlyData.toString());
 
   var shipID = RunningNo.genId("DMTT_N_SI", "SIyymmddxxxx", true);
 
@@ -66,12 +64,11 @@ if (searchData.I_SHIP_INST === "") {
       "            GROUP BY [I_ITEMCODE] " +
       "        ) AS [STK] " +
       "            ON [STK].[I_ITEMCODE] = [SD].[I_ITEMCODE] " +
-      "    WHERE [SD].[I_DLYDATE] = '"+sdfDisplay.format(dlyData)+"' " +
+      "    WHERE [SD].[I_DLYDATE] = '"+fmtDate+"' " +
       ") AS [MAIN] " +
       "WHERE [I_BALANCE_QTY] > 0";
 
-  //TALON.addMsg(sql);
-
+  
   var data = TalonDbUtil.select(TALON.getDbConfig(), sql);
   var rows = [];
 
@@ -104,8 +101,9 @@ if (searchData.I_SHIP_INST === "") {
 
     rows.push(lineData);
   });
+  //TALON.addMsg(sql);
+  TALON.addMsg(JSON.stringify(rows));
 
-  // TALON.addMsg(JSON.stringify(rows));
   TALON.setSearchedDisplayList(2, rows);
   TALON.setSearchConditionData("I_SHIP_INST", shipID, "");
 }

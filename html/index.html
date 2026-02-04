@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>WASM Test</title>
+</head>
+<body>
+
+<script src="https://cdn.jsdelivr.net/npm/pako@2.1.0/dist/pako.min.js"></script>
+<script src="./js/nostr_sdk_js_bg.wasm.js"></script>
+
+<script>
+  const nostrWasm = loadWasmSync();
+  console.log(nostrWasm);
+</script>
+
+
+</body>
+</html>

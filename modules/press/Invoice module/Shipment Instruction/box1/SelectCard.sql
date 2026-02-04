@@ -1,13 +1,12 @@
 SELECT
-         [SI].[I_SHIP_INST]        -- Shipment Instruction No
-        ,[SI].[I_SHIP_INST_DATE]   -- Shipment Instruction Date
-        ,'' AS [I_SHIP_CFM]         -- Shipment Status
+         [SI].[I_SHIP_INST_DATE]   -- Shipment Instruction Date
+        ,[SI].[I_SHIP_CFM]         -- Shipment Status
         ,[SI].[I_CSCODE]           -- Customer Code
         ,[CS].[I_NAME]             -- Customer Name
         ,[SI].[I_SHIP_DLY_DATE]    -- Shipment Delivery Date
         ,[SI].[I_SHIPTO]           -- Ship To
-        ,[SI].[I_ENDUSER]          -- P.I.C
-
+        ,[SI].[I_PIC]              -- P.I.C
+        ,[SI].[I_SHIP_INST]        -- Shipment Instruction No.
         ,[SI].[CREATED_DATE]
         ,[SI].[CREATED_BY]
         ,[SI].[CREATED_PRG_NM]

@@ -5,8 +5,7 @@ function loadQRCodeLib(callback) {
     }
 
     const script = document.createElement('script');
-    script.src =
-        'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';
+    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';
     script.onload = callback;
 
     document.head.appendChild(script);
@@ -73,8 +72,7 @@ function boxQRcode() {
     const container = document.getElementById('search_condition');
     if (!container) return;
 
-    const inputEl =
-        document.getElementsByName('CNDTN_I_SHIP_INST')[0];
+    const inputEl = document.getElementsByName('CNDTN_I_SHIP_INST')[0];
     if (!inputEl || !inputEl.value) return;
 
     let qrBox = document.getElementById('QR_BOX');

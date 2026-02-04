@@ -1,32 +1,5 @@
--- Sample data for MS_CS table with realistic enum codes
 
--- I_TYPE: '1'=Customer, '2'=Vendor, '3'=Both
--- I_GROUP: '1'=Domestic, '2'=International, '3'=Group Company
--- I_CURRENCY: 'THB'=Thai Baht, 'USD'=US Dollar, 'EUR'=Euro, 'JPY'=Japanese Yen
--- I_ACTIVE: '1'=Active, '0'=Inactive
--- I_TAX_DUTY: '0'=No VAT, '7'=VAT 7%, 'EX'=Exempt
 
-INSERT INTO [dbo].[MS_CS] VALUES
-('CUST001', '1', '1', 'RETAIL', 'Bangkok Trading Co., Ltd.', '123 Sukhumvit Road, Klongtoey', 'Wattana District', '10110', 'HQ', '0105558001234', '7', 'Monthly', 'BKK Trading', 'THB', '+66-2-123-4567', '+66-2-123-4568', 'PIC001', 'SHIP001', 'John Smith', 'john.smith@bkktrading.com', '+66-81-234-5678', 'NET30', '123 Sukhumvit Road, Bangkok 10110', 'SITE01', '1', 'VIP Customer', '1', NULL, NULL, '2024-01-15 08:30:00', 'admin', 'DMTT_M_CS_CREATE', '2024-01-15 08:30:00', 'admin', 'DMTT_M_CS_CREATE', 0, NULL, NULL),
+docker cp /path/on/host/myfile.txt <container_name_or_id>:/path/in/container/
 
-('VEND001', '2', '1', 'MATERIAL', 'Siam Parts Manufacturing Ltd.', '456 Rama IV Road, Pathumwan', NULL, '10330', 'BR01', '0105559002345', '7', 'End of Month', 'Siam Parts', 'THB', '+66-2-234-5678', '+66-2-234-5679', 'PIC002', 'VEND001', 'Somchai Patel', 'somchai@siamparts.co.th', '+66-89-345-6789', 'NET60', '456 Rama IV Road, Bangkok', 'SITE02', '1', 'Preferred Vendor', '1', 'V001', 'EXW', '2024-02-20 09:15:00', 'admin', 'DMTT_M_CS_CREATE', '2024-03-10 14:20:00', 'manager1', 'DMTT_M_CS_UPDATE', 1, 'V001', 'EXW'),
-
-('CUST002', '1', '2', 'WHOLESA', 'Global Electronics Singapore Pte Ltd', '50 Raffles Place, #32-01', 'Singapore Land Tower', '048623', NULL, 'SG199012345A', 'EX', NULL, 'Global SG', 'USD', '+65-6123-4567', '+65-6123-4568', 'PIC003', 'SHIP002', 'Michael Tan', 'michael.tan@globalelec.sg', '+65-9234-5678', 'NET45', '50 Raffles Place, Singapore', 'SITE03', '1', 'Export Customer', '1', NULL, NULL, '2024-03-05 10:45:00', 'sales01', 'DMTT_M_CS_CREATE', '2024-03-05 10:45:00', 'sales01', 'DMTT_M_CS_CREATE', 0, NULL, NULL),
-
-('VEND002', '2', '2', 'MATERIAL', 'Tokyo Components Corp.', '1-2-3 Shibuya, Shibuya-ku', 'Tokyo', '150-0002', NULL, 'JP1234567890', '0', NULL, 'Tokyo Comp', 'JPY', '+81-3-5678-1234', '+81-3-5678-1235', 'PIC004', 'VEND002', 'Takeshi Yamamoto', 'yamamoto@tokyocomp.jp', '+81-90-1234-5678', 'NET90', '1-2-3 Shibuya, Tokyo, Japan', 'SITE04', '1', 'Key Supplier', '1', 'V002', 'FOB', '2024-01-10 11:00:00', 'purchase1', 'DMTT_M_CS_CREATE', '2024-04-15 16:30:00', 'purchase1', 'DMTT_M_CS_UPDATE', 2, 'V002', 'FOB'),
-
-('CUST003', '3', '3', 'INTERCO', 'ABC Group (Thailand) Co., Ltd.', '789 Petchburi Road, Ratchathewi', NULL, '10400', 'TH01', '0105557003456', '7', 'Monthly', 'ABC TH', 'THB', '+66-2-345-6789', '+66-2-345-6780', 'PIC005', 'SHIP003', 'Sarah Johnson', 'sarah.j@abcgroup.com', '+66-92-456-7890', 'NET15', '789 Petchburi Road, Bangkok', 'SITE05', '1', 'Group Company', '1', 'V003', 'DDP', '2024-02-01 13:20:00', 'admin', 'DMTT_M_CS_CREATE', '2024-02-01 13:20:00', 'admin', 'DMTT_M_CS_CREATE', 0, 'V003', 'DDP'),
-
-('VEND003', '2', '1', 'SERVICE', 'Quality Logistics Thailand Ltd.', '321 Bangna-Trad Road, Bangna', 'Bangkok', '10260', NULL, '0105558004567', '7', 'Bi-weekly', 'QL Thai', 'THB', '+66-2-456-7890', NULL, 'PIC006', 'VEND003', 'Pranee Wong', 'pranee@qualitylog.co.th', '+66-87-567-8901', 'NET30', '321 Bangna-Trad Road, Bangkok', 'SITE06', '15', 'Logistics Partner', '1', 'V004', 'CIF', '2024-03-12 14:00:00', 'purchase2', 'DMTT_M_CS_CREATE', '2024-03-12 14:00:00', 'purchase2', 'DMTT_M_CS_CREATE', 0, 'V004', 'CIF'),
-
-('CUST004', '1', '1', 'RETAIL', 'Metro Bangkok Stores Co., Ltd.', '555 Silom Road, Bangrak', NULL, '10500', 'BR02', '0105559005678', '7', 'Monthly', 'Metro BKK', 'THB', '+66-2-567-8901', '+66-2-567-8902', 'PIC007', 'SHIP004', 'David Lee', 'david.lee@metrobkk.com', '+66-88-678-9012', 'NET30', '555 Silom Road, Bangkok', 'SITE07', '1', 'Chain Store', '1', NULL, NULL, '2024-01-25 15:30:00', 'sales02', 'DMTT_M_CS_CREATE', '2024-03-20 09:45:00', 'sales02', 'DMTT_M_CS_UPDATE', 1, NULL, NULL),
-
-('VEND004', '2', '2', 'MATERIAL', 'Euro Supplies GmbH', 'Hauptstrasse 100', 'Munich, Bavaria', '80331', NULL, 'DE123456789', '0', 'Quarterly', 'Euro Sup', 'EUR', '+49-89-1234567', '+49-89-1234568', 'PIC008', 'VEND004', 'Hans Mueller', 'hans.mueller@eurosup.de', '+49-172-3456789', 'NET120', 'Hauptstrasse 100, Munich, Germany', 'SITE08', '1', 'European Supplier', '1', 'V005', 'CFR', '2024-02-28 10:15:00', 'purchase1', 'DMTT_M_CS_CREATE', '2024-02-28 10:15:00', 'purchase1', 'DMTT_M_CS_CREATE', 0, 'V005', 'CFR'),
-
-('CUST005', '1', '2', 'WHOLESA', 'Pacific Distributors Inc.', '1000 Market Street, Suite 500', 'San Francisco, CA', '94102', NULL, 'US987654321', 'EX', NULL, 'Pacific Dist', 'USD', '+1-415-123-4567', '+1-415-123-4568', 'PIC009', 'SHIP005', 'Jennifer Wilson', 'j.wilson@pacificdist.com', '+1-415-987-6543', 'NET60', '1000 Market Street, San Francisco', 'SITE09', '1', 'US Distributor', '1', NULL, NULL, '2024-03-18 11:30:00', 'export01', 'DMTT_M_CS_CREATE', '2024-03-18 11:30:00', 'export01', 'DMTT_M_CS_CREATE', 0, NULL, NULL),
-
-('CUST006', '1', '1', 'RETAIL', 'Sunshine Department Store Ltd.', '88 Lat Phrao Road, Chatuchak', NULL, '10900', NULL, '0105550006789', '7', 'Monthly', 'Sunshine', 'THB', '+66-2-678-9012', NULL, 'PIC010', 'SHIP006', 'Apinya Sriprasert', 'apinya@sunshine.co.th', '+66-91-789-0123', 'NET30', '88 Lat Phrao Road, Bangkok', NULL, '1', 'Regular Customer', '1', NULL, NULL, '2024-04-01 08:00:00', 'sales01', 'DMTT_M_CS_CREATE', '2024-04-01 08:00:00', 'sales01', 'DMTT_M_CS_CREATE', 0, NULL, NULL),
-
-('VEND005', '2', '1', 'SERVICE', 'Tech Support Solutions Co., Ltd.', '999 Ratchadapisek Road', 'Huai Khwang, Bangkok', '10310', NULL, '0105557007890', '7', 'Monthly', 'Tech Sup', 'THB', '+66-2-789-0123', '+66-2-789-0124', 'PIC011', 'VEND005', 'Robert Chen', 'robert@techsupport.co.th', '+66-86-890-1234', 'NET45', '999 Ratchadapisek Road, Bangkok', 'SITE10', '1', 'IT Support', '1', 'V006', NULL, '2024-01-20 09:30:00', 'admin', 'DMTT_M_CS_CREATE', '2024-02-15 14:00:00', 'admin', 'DMTT_M_CS_UPDATE', 1, 'V006', NULL),
-
-('CUST007', '1', '1', 'WHOLESA', 'Mega Wholesale Trading Ltd.', '200 Charansanitwong Road', 'Bangkok Noi, Bangkok', '10700', 'BR03', '0105558008901', '7', 'End of Month', 'Mega Trade', 'THB', '+66-2-890-1234', '+66-2-890-1235', 'PIC012', 'SHIP007', 'Nattapong Kumar', 'nattapong@megatrade.com', '+66-93-901-2345', 'NET45', '200 Charansanitwong Road, Bangkok', 'SITE11', '15', 'Wholesale Partner', '1', NULL, NULL, '2024-02-10 10:00:00', 'sales03', 'DMTT_M_CS_CREATE', '2024-02-10 10:00:00', 'sales03', 'DMTT_M_CS_CREATE', 0, NULL, NULL);
+docker cp C:\talon\if\REPOSITORY\STI_PR_FUNC_2025-11-18  d9ec5c:/usr/local/talon/if/REPOSITORY
