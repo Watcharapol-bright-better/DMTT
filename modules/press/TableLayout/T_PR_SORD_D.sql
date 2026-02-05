@@ -12,7 +12,7 @@ CREATE TABLE [dbo].[T_PR_SORD_D](
     [I_DLY_PLACE]       NVARCHAR(15) NULL,        -- Delivery Place
     [I_COMPCLS]         NVARCHAR(2) NULL,        -- SO Status
     [I_DLYDATE]         DATETIME NULL,           -- Delivery Date
-    [I_CONFIRM_STATUS] [nvarchar](1) NULL,
+    [I_CONFIRM_STATUS]  NVARCHAR(1) NULL,
 
     [CREATED_DATE]      DATETIME NULL,
     [CREATED_BY]        NVARCHAR(10) NULL,

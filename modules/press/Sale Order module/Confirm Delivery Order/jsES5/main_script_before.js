@@ -9,6 +9,7 @@
  * Case 2: Total Delivery Qty not equals SO Qty
  *         - "Delivery Qty does not equal to SO Qty"
  *************************************************/
+
 var data = TALON.getBlockData_List(2);
 
 var isAllMatched = true;
@@ -19,14 +20,14 @@ function onQtyChk(item) {
     var sqlChk =
         "SELECT " +
         " [SD].[I_SONO], " +
-        " [SD].[I_LNNO], " +
+        " [SD].[INTERNAL_NO], " +
         " [SD].[I_QTY], " +
         " ISNULL(NULL, 0) AS [I_DELIVERED] " +
         "FROM [T_PR_SORD_D] [SD] " +
         "LEFT JOIN [T_PR_SHIP_INST_D] [SI] " +
         " ON [SI].[I_SONO] = [SD].[I_SONO] " +
         "WHERE [SD].[I_SONO] = '" + item.I_SONO + "' " +
-        "AND [SD].[I_LNNO] = " + item.I_LNNO;
+        "AND [SD].[INTERNAL_NO] = " + item.INTERNAL_NO;
 
     var checkData = TalonDbUtil.select(TALON.getDbConfig(), sqlChk);
 
@@ -48,38 +49,33 @@ function onQtyChk(item) {
                 "UPDATE [T_PR_SORD_D] " +
                 "SET [I_CONFIRM_STATUS] = '1' " +
                 "WHERE [I_SONO] = '" + item.I_SONO + "' " +
-                "AND [I_LNNO] = " + item.I_LNNO;
+                "AND [INTERNAL_NO] = " + item.INTERNAL_NO;
 
-            TalonDbUtil.update(TALON.getDbConfig(), sqlUpd);
+            //TalonDbUtil.update(TALON.getDbConfig(), sqlUpd);
         }
     }
 }
 
-/**
- * Main
- * - Start logic only when CHK = 1 and Lvl = 2
- */
+// Start logic only when CHK = 1 and Lvl = 2
 data.forEach(function(item) {
 
     if (item['CHK'] === "1" && item['Lvl'] == 2) {
         hasProcess = true;
+        TALON.addMsg(item);
 
         onQtyChk({
             I_SONO: item.I_SONO,
-            I_LNNO: item.I_LNNO
+            INTERNAL_NO: item.INTERNAL_NO
         });
     }
 });
 
-/**
- * Final result message
- * - Show main message only
- */
+
 if (hasProcess && isAllMatched) {
-    TALON.addMsg("Confirmed Successfully");
+    TALON.addMsg("✅ Confirmed Successfully");
     TALON.setIsSuccess(true);
 }
 else if (hasProcess && !isAllMatched) {
-    TALON.addErrorMsg("Delivery Qty does not equal to SO Qty");
+    TALON.addErrorMsg("⚠️ Delivery Qty does not equal to SO Qty");
     TALON.setIsSuccess(false);
 }
