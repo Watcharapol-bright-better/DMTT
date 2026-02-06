@@ -1,5 +1,5 @@
 
-function executeExcelImport(spName, number) {
+function runSP(spName, number) {
     var params = [];
     params['N']   = number;
     params['Result']       = ''; // Output parameter
@@ -14,7 +14,7 @@ function executeExcelImport(spName, number) {
     return JSON.parse(result[0]);
 }
 
-var result = executeExcelImport(
+var result = runSP(
     'SP_CalcFibonacci', 
     20
 );

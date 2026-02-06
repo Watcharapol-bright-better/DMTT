@@ -110,7 +110,7 @@ Fixed conditional expression
 - `DMTT_G_APPROVE`
 - `DMTT_G_PR_PATTERN`
 - `DMTT_G_OS_COMFIRM`
-- `DMTT_G_SHIP_INT_STATUS` I_SHIP_CFM,  : Shipment Status 
+- `DMTT_G_SHIP_INT_STATUS` (I_SHIP_CFM) Shipment Status | '0': Pending, '1': Picking, '2': Completed, '3': Confirmed 
 - `DMTT_G_EMAIL_CFT`
 - `DMTT_G_QA_STATUS` QA Status | '0': Not QA | '1': Passed | '2': Failed
 
