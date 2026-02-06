@@ -25,28 +25,14 @@ function setDisplay() {
     + "  '" + _I_SHIP_INST + "' AS [I_SHIP_INST]"
     + " ,'" + _I_PALLET_NO + "' AS [I_PALLET_NO]"
     + " ,'" + _SAMPLE_LABEL_TAG + "' AS [SAMPLE_LABEL_TAG]"
-    + " ,'" + _I_PLTNO + "' AS [I_PLTNO]";
+    + " ,'" + _I_PLTNO + "' AS [I_PLTNO]"
+    + " ,'1' AS [Active]";
   
   var result = TalonDbUtil.select(TALON.getDbConfig(), sql);
   TALON.setSearchedDisplayList(1, result);
 }
 
-if (_I_SHIP_INST !== '') { 
+if (_I_PLTNO !== '') { 
   setDisplay();
   showIfNotEmpty('Ship Instruction', _I_SHIP_INST);
-} else if (_I_PALLET_NO !== '') {
-  setDisplay();
-  showIfNotEmpty('Pallet No', _I_PALLET_NO);
-} else if (_SAMPLE_LABEL_TAG !== '') {
-  setDisplay();
-  showIfNotEmpty('Sample Label Tag', _SAMPLE_LABEL_TAG);
-} else if (_I_PLTNO !== '') {
-  setDisplay();
-  showIfNotEmpty('PLT No', _I_PLTNO);
-  TALON.setSearchConditionData("Active", "", "1");
-} else {
-  isErr = true;
-}
-
-
-
+} 

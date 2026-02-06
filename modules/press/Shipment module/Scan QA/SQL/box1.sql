@@ -4,3 +4,5 @@ SELECT
 	,'' AS [SAMPLE_LABEL_TAG] -- Sample Label Tag
 	,'' AS [I_PLTNO] -- Pallet No.
     ,'' AS [Button]
+    ,'' AS [Search]
+    ,'' AS [Active]

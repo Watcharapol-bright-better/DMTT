@@ -1,4 +1,5 @@
-let isProcessing = false; 
+let isProcessing = false;
+
 
 function createScanButton() {
   setScanButton("Scan", "1_I_SHIP_INST", "QR", 640, 480);
@@ -15,10 +16,17 @@ function addRow() {
   document.getElementById("TLN_1_Button_CALL_JAVASCRIPT").click();
 }
 
-function onClickSearch() {
-  console.log("Search button clicked");
+function search() {
   document.getElementById("TLN_1_Search_CALL_JAVASCRIPT").click();
 }
+
+
+function isActive() {
+  const el = document.getElementById("TLN_1_Active");
+  if (!el) return false;
+  return String(el.value).trim() === "1";
+}
+
 
 function focusNext(el) {
   if (!el) return;
@@ -43,29 +51,46 @@ function focusFirstEmpty() {
   }
 }
 
+
 function watchInputFilled(el, callback) {
   if (!el) return;
-  let prevValue = "";
+
+  let prev = el.value.trim();
 
   const handler = () => {
-    const current = el.value.trim();
-    if (prevValue === "" && current !== "") {
-      callback(current);
+    const cur = el.value.trim();
+    if (prev === "" && cur !== "") {
+      search();
+      callback();
     }
-    prevValue = current;
+    prev = cur;
   };
+
   el.addEventListener("input", handler);
   el.addEventListener("change", handler);
 }
 
+
+function watchActiveField() {
+  const el = document.getElementById("TLN_1_Active");
+  if (!el) return;
+
+  const fire = () => scanningBox();
+
+  el.addEventListener("input", fire);
+  el.addEventListener("change", fire);
+}
+
+
 function bindScanEvents() {
-  const ship_id = document.getElementById("TLN_1_I_SHIP_INST");
-  const ship_mask = document.getElementById("TLN_1_I_PALLET_NO");
+  const ship_id    = document.getElementById("TLN_1_I_SHIP_INST");
+  const ship_mask  = document.getElementById("TLN_1_I_PALLET_NO");
   const sample_tag = document.getElementById("TLN_1_SAMPLE_LABEL_TAG");
   const pallet_tag = document.getElementById("TLN_1_I_PLTNO");
 
   if (!ship_id || !ship_mask || !sample_tag || !pallet_tag) return;
 
+  //setTimeout(focusFirstEmpty, 0);
   setTimeout(() => focusFirstEmpty(), 0);
 
   watchInputFilled(ship_id, () => {
@@ -83,14 +108,13 @@ function bindScanEvents() {
     scanningBox();
   });
 
-  watchInputFilled(pallet_tag, () => {
-    scanningBox();
-  });
-  
+  watchInputFilled(pallet_tag, scanningBox);
 }
+
 
 function scanningBox() {
   if (isProcessing) return;
+  //if (!isActive()) return;
 
   const ship_id = document.getElementById("TLN_1_I_SHIP_INST");
   const ship_mask = document.getElementById("TLN_1_I_PALLET_NO");
@@ -98,42 +122,25 @@ function scanningBox() {
   const sample_tag = document.getElementById("TLN_1_SAMPLE_LABEL_TAG");
 
   if (!ship_id || !ship_mask || !pallet_tag || !sample_tag) return;
+  if (!pallet_tag.value.trim()) return;
+  if (!ship_id.value.trim() || !ship_mask.value.trim()) return;
 
-  const has_ship_id = ship_id.value.trim() !== "";
-  const has_ship_mask = ship_mask.value.trim() !== "";
-  const has_pallet_tag = pallet_tag.value.trim() !== "";
-  const has_sample_tag = sample_tag.value.trim() !== "";
-
-  if (!has_pallet_tag) return;
-  if (!has_ship_id || !has_ship_mask) return;
-
-  
-  
   isProcessing = true;
 
   setTimeout(() => {
-    const pallet_row = document.querySelectorAll("input[id^='TLN_2_I_PALLET_NO_']");
-    if (!pallet_row.length) {
+    const rows = document.querySelectorAll("input[id^='TLN_2_I_PALLET_NO_']");
+    if (!rows.length) {
       isProcessing = false;
       return;
     }
 
-    const last_index = pallet_row.length - 1;
+    const last_index = rows.length - 1;
+    console.log(`row : ${last_index}`);
 
-    const target_mask = document.getElementById("TLN_2_I_PALLET_NO_" + last_index);
-    const target_plt = document.getElementById("TLN_2_I_PLTNO_" + last_index);
-    const target_ship = document.getElementById("TLN_2_I_SHIP_INST_" + last_index);
-    const target_sample = document.getElementById("TLN_2_SAMPLE_LABEL_TAG_" + last_index);
-
-    if (!target_mask || !target_plt) {
-      isProcessing = false;
-      return;
-    }
-
-    target_ship.value = ship_id.value;
-    target_mask.value = ship_mask.value;
-    target_plt.value = pallet_tag.value;
-    target_sample.value = sample_tag.value;
+    document.getElementById("TLN_2_I_SHIP_INST_" + last_index).value       = ship_id.value;
+    document.getElementById("TLN_2_I_PALLET_NO_" + last_index).value       = ship_mask.value;
+    document.getElementById("TLN_2_I_PLTNO_" + last_index).value           = pallet_tag.value;
+    document.getElementById("TLN_2_SAMPLE_LABEL_TAG_" + last_index).value  = sample_tag.value;
 
     addRow();
 
@@ -145,24 +152,21 @@ function scanningBox() {
     setTimeout(() => {
       isProcessing = false;
       focusFirstEmpty();
-    }, 500);
-  }, 500);
+    }, 300);
+  }, 300);
 }
 
-function hiddenField() { 
-  document.querySelectorAll(".button.CALL_JAVASCRIPT_BTN").forEach((el) => {
-    el.style.visibility = "hidden";
-    el.style.border = "none";
-    el.style.outline = "none";
-    el.style.boxShadow = "none";
-    el.style.background = "transparent";
-  });
 
-  document.querySelectorAll("td.tbody.card").forEach((td) => {
-    const btn = td.querySelector(".button.CALL_JAVASCRIPT_BTN");
-    if (btn) td.style.display = "none";
+function hiddenField() {
+  document
+    .querySelectorAll(".button.CALL_JAVASCRIPT_BTN,.Search.CALL_JAVASCRIPT_BTN")
+    .forEach(el => el.style.display = "none");
+
+  document.querySelectorAll("td.tbody.card").forEach(td => {
+    if (td.querySelector(".CALL_JAVASCRIPT_BTN")) td.style.display = "none";
   });
 }
+
 
 function updateBoxHeight() {
   function removeHeight(id) {
@@ -171,7 +175,6 @@ function updateBoxHeight() {
   }
 
   removeHeight("BASE:0:block");
-
   const baseCard = document.getElementById("BASE:0:CARD");
   if (baseCard) baseCard.setAttribute("style", "overflow: auto;");
 
@@ -183,11 +186,9 @@ function updateBoxHeight() {
 }
 
 function resizeContents_end() {
-  document.querySelectorAll(".blockSubHeader").forEach((el) => {
-    el.style.display = "none";
-  });
-  
+  document.querySelectorAll(".blockSubHeader").forEach(el => el.style.display = "none");
   hiddenField();
   updateBoxHeight();
   bindScanEvents();
+  watchActiveField();
 }
