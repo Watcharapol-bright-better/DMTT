@@ -1,7 +1,7 @@
 
 function runSP(spName, number) {
     var params = [];
-    params['N']   = number;
+    params['InputNumber']  = number;
     params['Result']       = ''; // Output parameter
 
     var outputParams = ['Result'];
@@ -14,14 +14,14 @@ function runSP(spName, number) {
     return JSON.parse(result[0]);
 }
 
-var result = runSP(
-    'SP_CalcFibonacci', 
-    20
-);
+var result = runSP('SP_CalcFibonacci', 20);
 
-if (result.status) { 
+if (result.status) {
   var x = result.data;
   TALON.addMsg(x);
+} else {
+  var y = result.msg;
+  TALON.addErrorMsg(y);
 }
 
 

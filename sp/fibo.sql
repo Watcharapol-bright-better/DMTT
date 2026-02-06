@@ -1,12 +1,12 @@
 CREATE PROC dbo.SP_CalcFibonacci
-    @N INT,
+    @InputNumber INT,
     @Result NVARCHAR(1000) OUTPUT
 AS
 BEGIN
     SET NOCOUNT ON;
 
     -- ===== Validate =====
-    IF (@N < 0)
+    IF (@InputNumber < 0)
     BEGIN
         SET @Result = N'{"status": false, "msg": "number must not be negative"}';
         RETURN;
@@ -19,13 +19,13 @@ BEGIN
         @b BIGINT = 1,   -- F(1)
         @temp BIGINT;
 
-    IF (@N = 0)
+    IF (@InputNumber = 0)
     BEGIN
         SET @Result = N'{"status": true, "data": 0}';
         RETURN;
     END
 
-    WHILE (@i < @N - 1)
+    WHILE (@i < @InputNumber - 1)
     BEGIN
         SET @temp = @a + @b;
         SET @a = @b;
