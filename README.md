@@ -39,6 +39,7 @@
 ✅ `DMTT_T_PRESS_CONF_DELIIVERY_ORDER` : Confirm Delivery Order (Press)
 
 
+
 Fixed conditional expression
 
 ### [Invoice Modules] 
@@ -61,6 +62,8 @@ Fixed conditional expression
 ✅ `DMTT_T_PRESS_INVOICE_LIST` : Invoice List (Press) 
 
 ✅ `DMTT_T_PRESS_DELIVERY_ORDER_DOWNLOAD` : Print Delivery Order (Press)
+
+✅ `DMTT_T_PRESS_INVOICE_DOWNLOAD` : Print Invoice (Press)
 
 ✅ `DMTT_T_PRESS_SHIPMENT_ORDER_DOWNLOAD` : Print Shipping Order (Press)
 

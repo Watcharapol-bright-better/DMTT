@@ -96,7 +96,7 @@ FROM (
         FROM [T_PR_SHIP_INST_D] [SD]
         INNER JOIN [T_PR_SHIP_INST_H] [SH]
             ON [SH].[I_SHIP_INST] = [SD].[I_SHIP_INST]
-            AND [SH].[I_SHIP_CFM] != '4'  -- ไม่ใช่ Confirmed (เช่น '0','1','2','3')
+            AND [SH].[I_SHIP_CFM] != '3'  -- ไม่ใช่ Confirmed (เช่น '0','1','2','3')
         GROUP BY [SD].[I_SONO], [SD].[I_ITEMCODE]
     ) [SHIP]
         ON [SHIP].[I_SONO] = [D].[I_SONO]
@@ -111,7 +111,7 @@ FROM (
         FROM [T_PR_SHIP_INST_D] [SD]
         INNER JOIN [T_PR_SHIP_INST_H] [SH]
             ON [SH].[I_SHIP_INST] = [SD].[I_SHIP_INST]
-            AND [SH].[I_SHIP_CFM] = '4'  -- Confirmed
+            AND [SH].[I_SHIP_CFM] = '3'  -- Confirmed
         GROUP BY [SD].[I_SONO], [SD].[I_ITEMCODE]
     ) [DELIVERED]
         ON [DELIVERED].[I_SONO] = [D].[I_SONO]

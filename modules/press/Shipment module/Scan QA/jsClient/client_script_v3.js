@@ -1,3 +1,4 @@
+
 let isProcessing = false; 
 
 function createScanButton() {
