@@ -13,7 +13,7 @@ function extractValues(input) {
                 result.push({
                     index: newIndex,
                     I_SONO: values[0] || '',
-                    I_LNNO: values[1] || ''
+                    INTERNAL_NO: values[1] || ''
                 });
 
                 newIndex++;
@@ -38,11 +38,11 @@ function onCancelSOChk(item) {
     var sqlChk = "SELECT " +
     " ISNULL([SI].[I_SHIP_CFM], 0) AS [I_SHIP_CFM], " + // Delivered Qty
     " [SD].[I_COMPCLS] " +                           // SO Status
-    "FROM [T_PR_SORD] [SD] " +
+    "FROM [T_PR_SORD_D] [SD] " +
     "LEFT JOIN [T_MT_SHIP_INST] [SI] " +
     "  ON [SI].[I_SONO] = [SD].[I_SONO] " +
     "WHERE [SD].[I_SONO] = '" + item.I_SONO + "' " +
-    "AND [SD].[I_LNNO] = " + item.I_LNNO + "";
+    "AND [SD].[INTERNAL_NO] = " + item.INTERNAL_NO + "";
 
 
     var checkData = TalonDbUtil.select(TALON.getDbConfig(), sqlChk);
@@ -58,10 +58,10 @@ function onCancelSOChk(item) {
     // Case 1: Open & Delivered Qty = 0
     if (status === OSStatus.Open && deliveredQty === 0) {
 
-        var sqlUpdate = "UPDATE [T_PR_SORD] " +
+        var sqlUpdate = "UPDATE [T_PR_SORD_D] " +
             "SET [I_COMPCLS] = '" + OSStatus.Cancelled + "' " +
             "WHERE I_SONO = '" + item.I_SONO + "' " +
-            "AND I_LNNO = '" + item.I_LNNO + "'";
+            "AND INTERNAL_NO = '" + item.INTERNAL_NO + "'";
 
         TalonDbUtil.update(TALON.getDbConfig(), sqlUpdate);
 
@@ -99,3 +99,7 @@ var valStr = extractValues(searchData.SELECTED);
 valStr.forEach(function(item) {
     onCancelSOChk(item);
 });
+
+
+// clear stack
+TALON.setSearchConditionData('SELECTED', '', '');
