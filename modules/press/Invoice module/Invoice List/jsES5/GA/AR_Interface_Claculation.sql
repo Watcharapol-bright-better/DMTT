@@ -1,6 +1,7 @@
 
 SELECT 
      [IVD].[I_INVOICE_NO] AS [VOUCHERNO]
+    ,[IVD].[I_INVOICE_NO] AS [INVOICENO]     
     ,[IVD].[I_SONO]
     ,[SD].[I_QT_NO]
     ,[QTH].[I_EXG_RATE_TYPE] AS [RATETYPE]
@@ -33,6 +34,11 @@ SELECT
         ISNULL([QTD].[I_FEE_DLY], 0) + 
         ISNULL([QTD].[I_FEE_MGM], 0)
     , 2) AS [TOTAL_PRICE]
+    ,'0' AS [TAXAMOUNT_FC]
+    ,'0' AS [TAXAMOUNT_SC]
+    ,'0' AS [JOURNALTYPE]
+    ,'' AS [POSTPADCOLOR]
+    ,'' AS [POSTPADTEXT]
 
 FROM [dbo].[T_PR_INVOICE_D] [IVD]
     LEFT JOIN [T_PR_INVOICE_H] [IVH]
@@ -46,9 +52,10 @@ FROM [dbo].[T_PR_INVOICE_D] [IVD]
 
     LEFT JOIN [T_PR_QT_H] [QTH]
         ON [QTH].[I_QT_NO] = [SD].[I_QT_NO]
-
     LEFT JOIN (
         SELECT [QD].[I_QT_NO]
+              ,[QD].[INTERNAL_NO]
+              ,[QD].[I_ITEMCODE]
               ,[QD].[I_RM_AMT]       -- Material amount
               ,[QD].[I_LOSS_AMT]     -- Scrap amount
               ,[QD].[I_FEE_PROCESS]  -- Press Processing
@@ -57,8 +64,6 @@ FROM [dbo].[T_PR_INVOICE_D] [IVD]
               ,[QD].[I_FEE_EXPENSE]  -- Maintenance Expense
               ,[MP].[I_FEE_DLY]      -- Delivery Fee
               ,[QD].[I_FEE_MGM]      -- Management Expenses
-              ,[QD].[INTERNAL_NO]
-              ,[QD].[I_ITEMCODE]
         FROM [T_PR_QT_D] [QD]
             LEFT JOIN [MS_PRFG] AS [MP]
                 ON [MP].[I_ITEMCODE] = [QD].[I_ITEMCODE]
