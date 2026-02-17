@@ -59,9 +59,13 @@ function onCancelSOChk(item) {
     if (status === OSStatus.Open && deliveredQty === 0) {
 
         var sqlUpdate = "UPDATE [T_PR_SORD_D] " +
-            "SET [I_COMPCLS] = '" + OSStatus.Cancelled + "' " +
-            "WHERE I_SONO = '" + item.I_SONO + "' " +
-            "AND INTERNAL_NO = '" + item.INTERNAL_NO + "'";
+          "SET [I_COMPCLS] = '" + OSStatus.Cancelled + "', " +
+          "    [MODIFY_COUNT]  = ISNULL([MODIFY_COUNT], 0) + 1, " +
+          "    [UPDATED_DATE]  = GETDATE(), " +
+          "    [UPDATED_PRG_NM]= '" + ProgramNM + "', " +
+          "    [UPDATED_BY]    = '" + UserId + "' " +
+          "WHERE I_SONO = '" + item.I_SONO + "' " +
+          "AND INTERNAL_NO = '" + item.INTERNAL_NO + "'";
 
         TalonDbUtil.update(TALON.getDbConfig(), sqlUpdate);
 
@@ -95,10 +99,14 @@ function onCancelSOChk(item) {
 var searchData = TALON.getConditionData();
 var valStr = extractValues(searchData.SELECTED);
 
+if (valStr == '') {
+    TALON.addErrorMsg('⚠️ No SO selected');
+} else {
+    valStr.forEach(function(item) {
+        onCancelSOChk(item);
+    });
+}
 
-valStr.forEach(function(item) {
-    onCancelSOChk(item);
-});
 
 
 // clear stack

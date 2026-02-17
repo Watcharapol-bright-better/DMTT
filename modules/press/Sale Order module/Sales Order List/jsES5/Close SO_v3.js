@@ -1,3 +1,7 @@
+var UserInfo  = TALON.getUserInfoMap();
+var UserId    = UserInfo['USER_ID'];
+var ProgramNM = UserInfo['FUNC_ID'];
+
 function extractValues(input) {
     var result = [];
     var newIndex = 1; // เริ่มนับจาก 1
@@ -58,9 +62,13 @@ function onCloseSOChk(item) {
     if (status === OSStatus.Open && deliveredQty > 0) {
 
         var sqlupdate = "UPDATE [T_PR_SORD_D]" +
-        "SET [I_COMPCLS] = '" +OSStatus.Closed+"'" +
-        "WHERE I_SONO = '" + item.I_SONO + "' " +
-        "AND INTERNAL_NO = '" + item.INTERNAL_NO + "'";
+          "SET [I_COMPCLS] = '" + OSStatus.Closed + "', " +
+          "    [MODIFY_COUNT]  = ISNULL([MODIFY_COUNT], 0) + 1, " +
+          "    [UPDATED_DATE]  = GETDATE(), " +
+          "    [UPDATED_PRG_NM]= '" + ProgramNM + "', " +
+          "    [UPDATED_BY]    = '" + UserId + "' " +
+        "WHERE [I_SONO] = '" + item.I_SONO + "' " +
+        "AND [INTERNAL_NO] = '" + item.INTERNAL_NO + "'";
 
         TalonDbUtil.update(TALON.getDbConfig(), sqlupdate );
         TALON.addMsg("✅ Closed SO Detail Successfully");
@@ -94,10 +102,14 @@ function onCloseSOChk(item) {
 var searchData = TALON.getConditionData();
 var valStr = extractValues(searchData.SELECTED);
 
+if (valStr == '') {
+    TALON.addErrorMsg('⚠️ No SO selected');
+} else {
+    valStr.forEach(function(item) {
+        onCloseSOChk(item);
+    });
+}
 
-valStr.forEach(function(item) {
-    onCloseSOChk(item);
-});
 
 
 // clear stack
