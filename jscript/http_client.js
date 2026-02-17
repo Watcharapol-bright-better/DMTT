@@ -1,5 +1,6 @@
 
-// jrunscript -f file.js
+// jrunscript -f jscript/http_client.js
+// js --jvm ./jscript/http_client.js
 
 var URI = Java.type('java.net.URI');
 var Duration = Java.type("java.time.Duration");

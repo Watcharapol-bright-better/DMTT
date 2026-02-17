@@ -1,0 +1,874 @@
+{
+  "company": "D148",
+  "userId": "P1452",
+  "accesstoken": "QTR:0{k_?NosJS@CzBn-",
+  "lang": "en-US",
+  "userkey": "rgaerhioaggaierjgj",
+  "data": [
+    {
+      "LineNo": 1,
+      "Values": [
+        {
+          "FieldName": "INPDATE",
+          "Header": "INPDATE",
+          "Value": "2025/09/18",
+          "Col": 1
+        },
+        {
+          "FieldName": "INVOICENO",
+          "Header": "INVOICENO",
+          "Value": "IV250000020",
+          "Col": 2
+        },
+        {
+          "FieldName": "VOUCHERNO",
+          "Header": "VOUCHERNO",
+          "Value": "IV250000020",
+          "Col": 3
+        },
+        {
+          "FieldName": "DUEDATE",
+          "Header": "DUEDATE",
+          "Value": "2025/09/18",
+          "Col": 4
+        },
+        {
+          "FieldName": "CORRESPCODE",
+          "Header": "CORRESPCODE",
+          "Value": "1863",
+          "Col": 5
+        },
+        {
+          "FieldName": "CORRESPTYPE",
+          "Header": "CORRESPTYPE",
+          "Value": 1,
+          "Col": 5
+        },
+        {
+          "FieldName": "ACCODE",
+          "Header": "ACCODE",
+          "Value": "40100000",
+          "Col": 6
+        },
+        {
+          "FieldName": "HEADER_TAXABLECODE",
+          "Header": "HEADER_TAXABLECODE",
+          "Value": "S11-1",
+          "Col": 7
+        },
+        {
+          "FieldName": "DETAIL_FLEXMASTER",
+          "Header": "DETAIL_FLEXMASTER",
+          "Value": "W200-D",
+          "Col": 9
+        },
+        {
+          "FieldName": "DRCRTYPE",
+          "Header": "DRCRTYPE",
+          "Value": "0",
+          "Col": 10
+        },
+        {
+          "FieldName": "HEADER_TAXTYPE",
+          "Header": "HEADER_TAXTYPE",
+          "Value": "1",
+          "Col": 11
+        },
+        {
+          "FieldName": "DETAIL_TAXTYPE",
+          "Header": "DETAIL_TAXTYPE",
+          "Value": "2",
+          "Col": 12
+        },
+        {
+          "FieldName": "DETAIL_DESCRIPTNAME",
+          "Header": "DETAIL_DESCRIPTNAME",
+          "Value": null,
+          "Col": 13
+        },
+        {
+          "FieldName": "HEADER_DEPTCODE",
+          "Header": "HEADER_DEPTCODE",
+          "Value": "General05",
+          "Col": 14
+        },
+        {
+          "FieldName": "RATETYPE",
+          "Header": "RATETYPE",
+          "Value": null,
+          "Col": 15
+        },
+        {
+          "FieldName": "DEPTCODE",
+          "Header": "DEPTCODE",
+          "Value": "TR01",
+          "Col": 16
+        },
+        {
+          "FieldName": "RATE",
+          "Header": "RATE",
+          "Value": 1,
+          "Col": 17
+        },
+        {
+          "FieldName": "CURRENCYCODE",
+          "Header": "CURRENCYCODE",
+          "Value": "IDR",
+          "Col": 18
+        },
+        {
+          "FieldName": "TAXABLEAMOUNT_FC",
+          "Header": "TAXABLEAMOUNT_FC",
+          "Value": 5148000,
+          "Col": 19
+        },
+        {
+          "FieldName": "TAXABLEAMOUNT_SC",
+          "Header": "TAXABLEAMOUNT_SC",
+          "Value": 5148000,
+          "Col": 20
+        },
+        {
+          "FieldName": "TAXAMOUNT_FC",
+          "Header": "TAXAMOUNT_FC",
+          "Value": 566280,
+          "Col": 21
+        },
+        {
+          "FieldName": "TAXAMOUNT_SC",
+          "Header": "TAXAMOUNT_SC",
+          "Value": 566280,
+          "Col": 22
+        },
+        {
+          "FieldName": "INPAMOUNT_FC",
+          "Header": "INPAMOUNT_FC",
+          "Value": 5714280,
+          "Col": 24
+        },
+        {
+          "FieldName": "INPAMOUNT_SC",
+          "Header": "INPAMOUNT_SC",
+          "Value": 5714280,
+          "Col": 25
+        },
+        {
+          "FieldName": "inchargecode",
+          "Header": "INCHARGECODE",
+          "Value": "P1452",
+          "Col": 26
+        },
+        {
+          "FieldName": "POSTPADCOLOR",
+          "Header": "POSTPADCOLOR",
+          "Value": "",
+          "Col": 27
+        },
+        {
+          "FieldName": "POSTPADTEXT",
+          "Header": "POSTPADTEXT",
+          "Value": "",
+          "Col": 28
+        },
+        {
+          "FieldName": "JOURNALTYPE",
+          "Header": "JOURNALTYPE",
+          "Value": "0",
+          "Col": 29
+        }
+      ]
+    },
+    {
+      "LineNo": 2,
+      "Values": [
+        {
+          "FieldName": "INPDATE",
+          "Header": "INPDATE",
+          "Value": "2025/09/18",
+          "Col": 1
+        },
+        {
+          "FieldName": "INVOICENO",
+          "Header": "INVOICENO",
+          "Value": "IV250000020",
+          "Col": 2
+        },
+        {
+          "FieldName": "VOUCHERNO",
+          "Header": "VOUCHERNO",
+          "Value": "IV250000020",
+          "Col": 3
+        },
+        {
+          "FieldName": "DUEDATE",
+          "Header": "DUEDATE",
+          "Value": "2025/09/18",
+          "Col": 4
+        },
+        {
+          "FieldName": "CORRESPCODE",
+          "Header": "CORRESPCODE",
+          "Value": "1863",
+          "Col": 5
+        },
+        {
+          "FieldName": "CORRESPTYPE",
+          "Header": "CORRESPTYPE",
+          "Value": 1,
+          "Col": 5
+        },
+        {
+          "FieldName": "ACCODE",
+          "Header": "ACCODE",
+          "Value": "40100000",
+          "Col": 6
+        },
+        {
+          "FieldName": "HEADER_TAXABLECODE",
+          "Header": "HEADER_TAXABLECODE",
+          "Value": "S11-1",
+          "Col": 7
+        },
+        {
+          "FieldName": "DETAIL_FLEXMASTER",
+          "Header": "DETAIL_FLEXMASTER",
+          "Value": "W200-D",
+          "Col": 9
+        },
+        {
+          "FieldName": "DRCRTYPE",
+          "Header": "DRCRTYPE",
+          "Value": "0",
+          "Col": 10
+        },
+        {
+          "FieldName": "HEADER_TAXTYPE",
+          "Header": "HEADER_TAXTYPE",
+          "Value": "1",
+          "Col": 11
+        },
+        {
+          "FieldName": "DETAIL_TAXTYPE",
+          "Header": "DETAIL_TAXTYPE",
+          "Value": "2",
+          "Col": 12
+        },
+        {
+          "FieldName": "DETAIL_DESCRIPTNAME",
+          "Header": "DETAIL_DESCRIPTNAME",
+          "Value": "1070802",
+          "Col": 13
+        },
+        {
+          "FieldName": "HEADER_DEPTCODE",
+          "Header": "HEADER_DEPTCODE",
+          "Value": "General05",
+          "Col": 14
+        },
+        {
+          "FieldName": "RATETYPE",
+          "Header": "RATETYPE",
+          "Value": null,
+          "Col": 15
+        },
+        {
+          "FieldName": "DEPTCODE",
+          "Header": "DEPTCODE",
+          "Value": "BO53",
+          "Col": 16
+        },
+        {
+          "FieldName": "RATE",
+          "Header": "RATE",
+          "Value": 1,
+          "Col": 17
+        },
+        {
+          "FieldName": "CURRENCYCODE",
+          "Header": "CURRENCYCODE",
+          "Value": "IDR",
+          "Col": 18
+        },
+        {
+          "FieldName": "TAXABLEAMOUNT_FC",
+          "Header": "TAXABLEAMOUNT_FC",
+          "Value": 5627700,
+          "Col": 19
+        },
+        {
+          "FieldName": "TAXABLEAMOUNT_SC",
+          "Header": "TAXABLEAMOUNT_SC",
+          "Value": 5627700,
+          "Col": 20
+        },
+        {
+          "FieldName": "TAXAMOUNT_FC",
+          "Header": "TAXAMOUNT_FC",
+          "Value": 619047,
+          "Col": 21
+        },
+        {
+          "FieldName": "TAXAMOUNT_SC",
+          "Header": "TAXAMOUNT_SC",
+          "Value": 619047,
+          "Col": 22
+        },
+        {
+          "FieldName": "INPAMOUNT_FC",
+          "Header": "INPAMOUNT_FC",
+          "Value": 6246747,
+          "Col": 24
+        },
+        {
+          "FieldName": "INPAMOUNT_SC",
+          "Header": "INPAMOUNT_SC",
+          "Value": 6246747,
+          "Col": 25
+        },
+        {
+          "FieldName": "inchargecode",
+          "Header": "INCHARGECODE",
+          "Value": "P1452",
+          "Col": 26
+        },
+        {
+          "FieldName": "POSTPADCOLOR",
+          "Header": "POSTPADCOLOR",
+          "Value": "",
+          "Col": 27
+        },
+        {
+          "FieldName": "POSTPADTEXT",
+          "Header": "POSTPADTEXT",
+          "Value": "",
+          "Col": 28
+        },
+        {
+          "FieldName": "JOURNALTYPE",
+          "Header": "JOURNALTYPE",
+          "Value": "0",
+          "Col": 29
+        }
+      ]
+    },
+    {
+      "LineNo": 3,
+      "Values": [
+        {
+          "FieldName": "INPDATE",
+          "Header": "INPDATE",
+          "Value": "2025/09/18",
+          "Col": 1
+        },
+        {
+          "FieldName": "INVOICENO",
+          "Header": "INVOICENO",
+          "Value": "IV250000020",
+          "Col": 2
+        },
+        {
+          "FieldName": "VOUCHERNO",
+          "Header": "VOUCHERNO",
+          "Value": "IV250000020",
+          "Col": 3
+        },
+        {
+          "FieldName": "DUEDATE",
+          "Header": "DUEDATE",
+          "Value": "2025/09/18",
+          "Col": 4
+        },
+        {
+          "FieldName": "CORRESPCODE",
+          "Header": "CORRESPCODE",
+          "Value": "1863",
+          "Col": 5
+        },
+        {
+          "FieldName": "CORRESPTYPE",
+          "Header": "CORRESPTYPE",
+          "Value": 1,
+          "Col": 5
+        },
+        {
+          "FieldName": "ACCODE",
+          "Header": "ACCODE",
+          "Value": "40100000",
+          "Col": 6
+        },
+        {
+          "FieldName": "HEADER_TAXABLECODE",
+          "Header": "HEADER_TAXABLECODE",
+          "Value": "S11-1",
+          "Col": 7
+        },
+        {
+          "FieldName": "DETAIL_FLEXMASTER",
+          "Header": "DETAIL_FLEXMASTER",
+          "Value": "W200-D",
+          "Col": 9
+        },
+        {
+          "FieldName": "DRCRTYPE",
+          "Header": "DRCRTYPE",
+          "Value": "0",
+          "Col": 10
+        },
+        {
+          "FieldName": "HEADER_TAXTYPE",
+          "Header": "HEADER_TAXTYPE",
+          "Value": "1",
+          "Col": 11
+        },
+        {
+          "FieldName": "DETAIL_TAXTYPE",
+          "Header": "DETAIL_TAXTYPE",
+          "Value": "2",
+          "Col": 12
+        },
+        {
+          "FieldName": "DETAIL_DESCRIPTNAME",
+          "Header": "DETAIL_DESCRIPTNAME",
+          "Value": "1071380",
+          "Col": 13
+        },
+        {
+          "FieldName": "HEADER_DEPTCODE",
+          "Header": "HEADER_DEPTCODE",
+          "Value": "General05",
+          "Col": 14
+        },
+        {
+          "FieldName": "RATETYPE",
+          "Header": "RATETYPE",
+          "Value": null,
+          "Col": 15
+        },
+        {
+          "FieldName": "DEPTCODE",
+          "Header": "DEPTCODE",
+          "Value": "BO53",
+          "Col": 16
+        },
+        {
+          "FieldName": "RATE",
+          "Header": "RATE",
+          "Value": 1,
+          "Col": 17
+        },
+        {
+          "FieldName": "CURRENCYCODE",
+          "Header": "CURRENCYCODE",
+          "Value": "IDR",
+          "Col": 18
+        },
+        {
+          "FieldName": "TAXABLEAMOUNT_FC",
+          "Header": "TAXABLEAMOUNT_FC",
+          "Value": 23400000,
+          "Col": 19
+        },
+        {
+          "FieldName": "TAXABLEAMOUNT_SC",
+          "Header": "TAXABLEAMOUNT_SC",
+          "Value": 23400000,
+          "Col": 20
+        },
+        {
+          "FieldName": "TAXAMOUNT_FC",
+          "Header": "TAXAMOUNT_FC",
+          "Value": 2574000,
+          "Col": 21
+        },
+        {
+          "FieldName": "TAXAMOUNT_SC",
+          "Header": "TAXAMOUNT_SC",
+          "Value": 2574000,
+          "Col": 22
+        },
+        {
+          "FieldName": "INPAMOUNT_FC",
+          "Header": "INPAMOUNT_FC",
+          "Value": 25974000,
+          "Col": 24
+        },
+        {
+          "FieldName": "INPAMOUNT_SC",
+          "Header": "INPAMOUNT_SC",
+          "Value": 25974000,
+          "Col": 25
+        },
+        {
+          "FieldName": "inchargecode",
+          "Header": "INCHARGECODE",
+          "Value": "P1452",
+          "Col": 26
+        },
+        {
+          "FieldName": "POSTPADCOLOR",
+          "Header": "POSTPADCOLOR",
+          "Value": "",
+          "Col": 27
+        },
+        {
+          "FieldName": "POSTPADTEXT",
+          "Header": "POSTPADTEXT",
+          "Value": "",
+          "Col": 28
+        },
+        {
+          "FieldName": "JOURNALTYPE",
+          "Header": "JOURNALTYPE",
+          "Value": "0",
+          "Col": 29
+        }
+      ]
+    },
+    {
+      "LineNo": 4,
+      "Values": [
+        {
+          "FieldName": "INPDATE",
+          "Header": "INPDATE",
+          "Value": "2025/09/18",
+          "Col": 1
+        },
+        {
+          "FieldName": "INVOICENO",
+          "Header": "INVOICENO",
+          "Value": "IV250000020",
+          "Col": 2
+        },
+        {
+          "FieldName": "VOUCHERNO",
+          "Header": "VOUCHERNO",
+          "Value": "IV250000020",
+          "Col": 3
+        },
+        {
+          "FieldName": "DUEDATE",
+          "Header": "DUEDATE",
+          "Value": "2025/09/18",
+          "Col": 4
+        },
+        {
+          "FieldName": "CORRESPCODE",
+          "Header": "CORRESPCODE",
+          "Value": "1863",
+          "Col": 5
+        },
+        {
+          "FieldName": "CORRESPTYPE",
+          "Header": "CORRESPTYPE",
+          "Value": 1,
+          "Col": 5
+        },
+        {
+          "FieldName": "ACCODE",
+          "Header": "ACCODE",
+          "Value": "40100000",
+          "Col": 6
+        },
+        {
+          "FieldName": "HEADER_TAXABLECODE",
+          "Header": "HEADER_TAXABLECODE",
+          "Value": "S11-1",
+          "Col": 7
+        },
+        {
+          "FieldName": "DETAIL_FLEXMASTER",
+          "Header": "DETAIL_FLEXMASTER",
+          "Value": "W200-D",
+          "Col": 9
+        },
+        {
+          "FieldName": "DRCRTYPE",
+          "Header": "DRCRTYPE",
+          "Value": "0",
+          "Col": 10
+        },
+        {
+          "FieldName": "HEADER_TAXTYPE",
+          "Header": "HEADER_TAXTYPE",
+          "Value": "1",
+          "Col": 11
+        },
+        {
+          "FieldName": "DETAIL_TAXTYPE",
+          "Header": "DETAIL_TAXTYPE",
+          "Value": "2",
+          "Col": 12
+        },
+        {
+          "FieldName": "DETAIL_DESCRIPTNAME",
+          "Header": "DETAIL_DESCRIPTNAME",
+          "Value": "1071538",
+          "Col": 13
+        },
+        {
+          "FieldName": "HEADER_DEPTCODE",
+          "Header": "HEADER_DEPTCODE",
+          "Value": "General05",
+          "Col": 14
+        },
+        {
+          "FieldName": "RATETYPE",
+          "Header": "RATETYPE",
+          "Value": null,
+          "Col": 15
+        },
+        {
+          "FieldName": "DEPTCODE",
+          "Header": "DEPTCODE",
+          "Value": "BO53",
+          "Col": 16
+        },
+        {
+          "FieldName": "RATE",
+          "Header": "RATE",
+          "Value": 1,
+          "Col": 17
+        },
+        {
+          "FieldName": "CURRENCYCODE",
+          "Header": "CURRENCYCODE",
+          "Value": "IDR",
+          "Col": 18
+        },
+        {
+          "FieldName": "TAXABLEAMOUNT_FC",
+          "Header": "TAXABLEAMOUNT_FC",
+          "Value": 7172100,
+          "Col": 19
+        },
+        {
+          "FieldName": "TAXABLEAMOUNT_SC",
+          "Header": "TAXABLEAMOUNT_SC",
+          "Value": 7172100,
+          "Col": 20
+        },
+        {
+          "FieldName": "TAXAMOUNT_FC",
+          "Header": "TAXAMOUNT_FC",
+          "Value": 788931,
+          "Col": 21
+        },
+        {
+          "FieldName": "TAXAMOUNT_SC",
+          "Header": "TAXAMOUNT_SC",
+          "Value": 788931,
+          "Col": 22
+        },
+        {
+          "FieldName": "INPAMOUNT_FC",
+          "Header": "INPAMOUNT_FC",
+          "Value": 7961031,
+          "Col": 24
+        },
+        {
+          "FieldName": "INPAMOUNT_SC",
+          "Header": "INPAMOUNT_SC",
+          "Value": 7961031,
+          "Col": 25
+        },
+        {
+          "FieldName": "inchargecode",
+          "Header": "INCHARGECODE",
+          "Value": "P1452",
+          "Col": 26
+        },
+        {
+          "FieldName": "POSTPADCOLOR",
+          "Header": "POSTPADCOLOR",
+          "Value": "",
+          "Col": 27
+        },
+        {
+          "FieldName": "POSTPADTEXT",
+          "Header": "POSTPADTEXT",
+          "Value": "",
+          "Col": 28
+        },
+        {
+          "FieldName": "JOURNALTYPE",
+          "Header": "JOURNALTYPE",
+          "Value": "0",
+          "Col": 29
+        }
+      ]
+    },
+    {
+      "LineNo": 5,
+      "Values": [
+        {
+          "FieldName": "INPDATE",
+          "Header": "INPDATE",
+          "Value": "2025/09/18",
+          "Col": 1
+        },
+        {
+          "FieldName": "INVOICENO",
+          "Header": "INVOICENO",
+          "Value": "IV250000020",
+          "Col": 2
+        },
+        {
+          "FieldName": "VOUCHERNO",
+          "Header": "VOUCHERNO",
+          "Value": "IV250000020",
+          "Col": 3
+        },
+        {
+          "FieldName": "DUEDATE",
+          "Header": "DUEDATE",
+          "Value": "2025/09/18",
+          "Col": 4
+        },
+        {
+          "FieldName": "CORRESPCODE",
+          "Header": "CORRESPCODE",
+          "Value": "1863",
+          "Col": 5
+        },
+        {
+          "FieldName": "CORRESPTYPE",
+          "Header": "CORRESPTYPE",
+          "Value": 1,
+          "Col": 5
+        },
+        {
+          "FieldName": "ACCODE",
+          "Header": "ACCODE",
+          "Value": "40100000",
+          "Col": 6
+        },
+        {
+          "FieldName": "HEADER_TAXABLECODE",
+          "Header": "HEADER_TAXABLECODE",
+          "Value": "S11-1",
+          "Col": 7
+        },
+        {
+          "FieldName": "DETAIL_FLEXMASTER",
+          "Header": "DETAIL_FLEXMASTER",
+          "Value": "W200-D",
+          "Col": 9
+        },
+        {
+          "FieldName": "DRCRTYPE",
+          "Header": "DRCRTYPE",
+          "Value": "0",
+          "Col": 10
+        },
+        {
+          "FieldName": "HEADER_TAXTYPE",
+          "Header": "HEADER_TAXTYPE",
+          "Value": "1",
+          "Col": 11
+        },
+        {
+          "FieldName": "DETAIL_TAXTYPE",
+          "Header": "DETAIL_TAXTYPE",
+          "Value": "2",
+          "Col": 12
+        },
+        {
+          "FieldName": "DETAIL_DESCRIPTNAME",
+          "Header": "DETAIL_DESCRIPTNAME",
+          "Value": null,
+          "Col": 13
+        },
+        {
+          "FieldName": "HEADER_DEPTCODE",
+          "Header": "HEADER_DEPTCODE",
+          "Value": "General05",
+          "Col": 14
+        },
+        {
+          "FieldName": "RATETYPE",
+          "Header": "RATETYPE",
+          "Value": null,
+          "Col": 15
+        },
+        {
+          "FieldName": "DEPTCODE",
+          "Header": "DEPTCODE",
+          "Value": "TR01",
+          "Col": 16
+        },
+        {
+          "FieldName": "RATE",
+          "Header": "RATE",
+          "Value": 1,
+          "Col": 17
+        },
+        {
+          "FieldName": "CURRENCYCODE",
+          "Header": "CURRENCYCODE",
+          "Value": "IDR",
+          "Col": 18
+        },
+        {
+          "FieldName": "TAXABLEAMOUNT_FC",
+          "Header": "TAXABLEAMOUNT_FC",
+          "Value": 12246000,
+          "Col": 19
+        },
+        {
+          "FieldName": "TAXABLEAMOUNT_SC",
+          "Header": "TAXABLEAMOUNT_SC",
+          "Value": 12246000,
+          "Col": 20
+        },
+        {
+          "FieldName": "TAXAMOUNT_FC",
+          "Header": "TAXAMOUNT_FC",
+          "Value": 1347060,
+          "Col": 21
+        },
+        {
+          "FieldName": "TAXAMOUNT_SC",
+          "Header": "TAXAMOUNT_SC",
+          "Value": 1347060,
+          "Col": 22
+        },
+        {
+          "FieldName": "INPAMOUNT_FC",
+          "Header": "INPAMOUNT_FC",
+          "Value": 13593060,
+          "Col": 24
+        },
+        {
+          "FieldName": "INPAMOUNT_SC",
+          "Header": "INPAMOUNT_SC",
+          "Value": 13593060,
+          "Col": 25
+        },
+        {
+          "FieldName": "inchargecode",
+          "Header": "INCHARGECODE",
+          "Value": "P1452",
+          "Col": 26
+        },
+        {
+          "FieldName": "POSTPADCOLOR",
+          "Header": "POSTPADCOLOR",
+          "Value": "",
+          "Col": 27
+        },
+        {
+          "FieldName": "POSTPADTEXT",
+          "Header": "POSTPADTEXT",
+          "Value": "",
+          "Col": 28
+        },
+        {
+          "FieldName": "JOURNALTYPE",
+          "Header": "JOURNALTYPE",
+          "Value": "0",
+          "Col": 29
+        }
+      ]
+    }
+  ]
+}

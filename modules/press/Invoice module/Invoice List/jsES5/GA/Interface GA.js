@@ -12,9 +12,6 @@ var IOException = Java.type('java.io.IOException');
 var InterruptedException = Java.type('java.lang.InterruptedException');
 
 
-var SimpleDateFormat = Java.type('java.text.SimpleDateFormat');
-var Date = Java.type('java.util.Date');
-
 /**
  * ตัวแปรที่ดึงค่าจาก Cache ของ TALON 
  * - ใช้สำหรับดึงค่าที่ระบบ TALON เคยเก็บไว้ชั่วคราว 
@@ -23,12 +20,12 @@ var _COMPANY = TALON.getBindValue('COMPANY');
 var _USERKEY = TALON.getBindValue('USERKEY');
 var _DOMAIN_GA = TALON.getBindValue('DOMAIN_GA');
 var _GAUSERCODE = TALON.getBindValue('GAUSERCODE');
-var _FECH_TOKEN = TALON.getBindValue('ACCRUED_FECH_TOKEN');
+var _FECH_TOKEN = TALON.getBindValue('FECH_TOKEN');
 
 var client = HttpClient.newHttpClient();
 
 var search = TALON.getConditionData();
-var journalSelected = search['SELECTED'];
+var invoiceSelected = search['SELECTED'];
 
 
 /* ====================================================== */
@@ -42,11 +39,10 @@ var journalSelected = search['SELECTED'];
 if (_FECH_TOKEN == null || _FECH_TOKEN.trim() === "") {
     TALON.setSearchConditionData("DISPLAY", '1', "");
     TALON.addErrorMsg("⌛ Token expire, please Click 'Authorize GA' button. ");
-} else if (journalSelected == null || journalSelected.trim() === "") {
-    TALON.addErrorMsg('❌ Journal No. is not selected. ');
+} else if (invoiceSelected == null || invoiceSelected.trim() === "") {
+    TALON.addErrorMsg('❌ Invoice No. is not selected. ');
 } else {
 
-    // เตรียมข้อมูลสำหรับขอ access token
     var authGA = JSON.stringify({
         company: _COMPANY,
         usercode: _GAUSERCODE,
@@ -79,11 +75,11 @@ if (_FECH_TOKEN == null || _FECH_TOKEN.trim() === "") {
 /* ====================================================== */
 
 /**
- * ฟังก์ชันหลักที่ใช้สำหรับส่งข้อมูล Journal ไปยังระบบ mcframeGA
+ * ฟังก์ชันหลักที่ใช้สำหรับส่งข้อมูล Invoice ไปยังระบบ mcframeGA
  *
  * - รับ access token จากขั้นตอนก่อนหน้า
- * - อ่าน Journal No. ที่ผู้ใช้เลือก
- * - Loop ข้อมูลแต่ละ Journal No:
+ * - อ่าน Invoice No. ที่ผู้ใช้เลือก
+ * - Loop ข้อมูลแต่ละ Invoice No:
  *   - ดึงข้อมูลจาก DB (findById)
  *   - จัดเรียงข้อมูลให้อยู่ในรูปแบบที่ API ของระบบ GA ต้องการ
  *   - สร้าง Payload และส่งไปยัง API ของ mcframeGA
@@ -94,18 +90,18 @@ if (_FECH_TOKEN == null || _FECH_TOKEN.trim() === "") {
  */
 function interfaceGA(taken) {
 
-    var journalNoList = extractValues(journalSelected);
+    var invoiceNoList = extractValues(invoiceSelected);
     var index = 0;
     var mainID = {};
     var DATA_LIST = [];
 
-    journalNoList.forEach(function(id) {
+    invoiceNoList.forEach(function(id) {
         var dataList = findById(id);
         dataList.forEach(function(row) {
             var mapData = {
                 "lineNo": index + 1, // RecordKey : Row = number 
                 "values": [
-                    { "fieldName": "VOUCHERNO", "value": row['JOURNAL_NO'] },
+                    { "fieldName": "VOUCHERNO", "value": row['I_INVOICE_NO'] },
                     { "fieldName": "ROWNO", "value": row['ROW_NO'] },
                     { "fieldName": "DEPTCODE", "value": row['DEPTCODE'] },
 
@@ -135,7 +131,7 @@ function interfaceGA(taken) {
                 ]
             };
             index++;
-            mainID[index] = row['JOURNAL_NO'];
+            mainID[index] = row['I_INVOICE_NO'];
             DATA_LIST.push(mapData);
         });
 
@@ -149,7 +145,7 @@ function interfaceGA(taken) {
         });
         //TALON.addMsg(payload);
 
-        var url = _DOMAIN_GA + "/api/publish/journal/transfervoucher/save";
+        var url = _DOMAIN_GA + "/api/publish/debtcollectionrequest/save";
 
         try {
             var requestGA = HttpRequest.newBuilder()
@@ -161,20 +157,13 @@ function interfaceGA(taken) {
 
             var responseGA = client.send(requestGA, HttpResponse.BodyHandlers.ofString());
             var resData = JSON.parse(responseGA.body());
-            
-            var getNumbering =
-                "DECLARE @LogId NVARCHAR(MAX) " +
-                "EXEC [SP_RUN_NUMBERING_V1] " +
-                "    @CodeType = 'PPLI_N_INTERFACE_ACCRUED_GA_LOG', " +
-                "    @Format = N'IFyyyymmddxxxxxxxxxx', " +
-                "    @GeneratedNo = @LogId OUTPUT " +
-                "SELECT @LogId AS [NUMBERING] ";
-            var interfaceLogID = TalonDbUtil.select(TALON.getDbConfig(), getNumbering)[0]['NUMBERING'];
+
+            var interfaceLogID = RunningNo.genId("DMTT_N_AR_LOG", "IFyyyymmddxxxxxx", true);
 
             if (resData.Status !== 0) {
-                TALON.addErrorMsg("❌ Journal No. "+id+" : Interfaced to mcframeGA failed! ")
+                TALON.addErrorMsg("❌ Invoice No. "+id+" : send to mcframeGA failed! ")
                 //TALON.addErrorMsg(responseGA.body());
-                setInterfaceStatus(interfaceLogID, id, '2')
+                //setInterfaceStatus(interfaceLogID, id, '2')
 
                 var errorList = resData.SaveStatusDetail.map(function (it) {
                     var rowKey = it.RecordKey.replace("Row = ", "");
@@ -192,13 +181,12 @@ function interfaceGA(taken) {
                 });
                 
             } else {
-                TALON.addMsg("✅ Journal No. "+id+" : Interfaced to mcframeGA Successfully!");
-                setInterfaceStatus(interfaceLogID, id, '1')
+                TALON.addMsg("✅ Invoice No. "+id+" : send to mcframeGA Successfully!");
+                // setInterfaceStatus(interfaceLogID, id, '1')
             }
 
-            var sendDataClear = payload.replace(/'/g, '_SINGLEQUOTE_');
-            var resDataClear = JSON.stringify(responseGA.body()).replace(/'/g, '_SINGLEQUOTE_');
-            setInterfaceAPILog(interfaceLogID, sendDataClear, resDataClear);
+            var resData = JSON.stringify(responseGA.body());
+            setInterfaceAPILog(interfaceLogID, payload, resData);
             
             index = 0;
             DATA_LIST = [];
@@ -206,9 +194,9 @@ function interfaceGA(taken) {
             if (e instanceof HttpTimeoutException) {
                 TALON.addErrorMsg("🌐 Request to mcframeGA timed out after 120 seconds. ");
             } else if (e instanceof ConnectException) {
-                TALON.addErrorMsg("🌐 Unable to connect to the server. Please check your internet connection. ");
+                TALON.addErrorMsg("🌐 Unable connect to the server. Please check your internet connection. ");
             } else if (e instanceof IOException) {
-                TALON.addErrorMsg("⚠️ An I/O error occurred: " + e.getMessage());
+                TALON.addErrorMsg("⚠️ An I/O error: " + e.getMessage());
             } else if (e instanceof InterruptedException) {
                 TALON.addErrorMsg("🔁 Request was interrupted. ");
             } else {
@@ -230,74 +218,81 @@ function interfaceGA(taken) {
  * - เก็บข้อมูลที่ส่ง (SEND) และข้อมูลผลลัพธ์ที่ได้รับ (RESPONSE)
  * - แทนที่ single quote เพื่อป้องกันปัญหาการ insert SQL
  */
-function setInterfaceAPILog(interfaceLogID, sendDataClear, resDataClear) {
-    var logInsert = "INSERT INTO [PPLI_IF_API_JOURNAL_LOG] ([INTERFACED_LOG_ID], [SEND], [RESPONSE]) " +
-          "VALUES ( " +
-          "'"+interfaceLogID+"', " +
-          "'"+sendDataClear+"', " +
-          "'"+resDataClear+"') "; 
-    TalonDbUtil.insert(TALON.getDbConfig(), logInsert);
-    TalonDbUtil.update(TALON.getDbConfig(), 
-       "UPDATE [PPLI_IF_API_JOURNAL_LOG] " +
-       "SET [SEND] = REPLACE([SEND], '_SINGLEQUOTE_', ''''), " +
-       "    [RESPONSE] = REPLACE([RESPONSE], '_SINGLEQUOTE_', '''') " +
-       "WHERE [INTERFACED_LOG_ID] = '" +interfaceLogID+ "' "
+function setInterfaceAPILog(interfaceLogID, sendData, resData) {
+
+    var detailCol = [
+        'I_INTERFACED_LOG_ID',
+        'I_SEND',
+        'I_RESPONSE'
+    ];
+
+    var Data = {};
+    Data['I_INTERFACED_LOG_ID'] = interfaceLogID;
+    Data['I_SEND'] = sendData;
+    Data['I_RESPONSE'] = resData;
+
+    TalonDbUtil.insertByMap(
+        TALON.getDbConfig(),
+        'IF_API_AR_LOG', // TABLE_NAME
+        Data,
+        detailCol
     );
 
 }
 
 /**
- * ฟังก์ชันบันทึก Error ที่เกิดจากการส่งข้อมูล Journal ไปยัง GA
+ * ฟังก์ชันบันทึก Error ที่เกิดจากการส่งข้อมูล Invoice ไปยัง GA
  * - รับ error detail จาก API response
  * - สร้าง Error Log ID ใหม่ (ผ่าน SP_RUN_NUMBERING)
- * - เก็บข้อมูล error เช่น JOURNAL_NO, ROW_NO, FIELD ที่ Error, รายละเอียด error
+ * - เก็บข้อมูล error เช่น I_INVOICE_NO, ROW_NO, FIELD ที่ Error, รายละเอียด error
  * - บันทึกผู้สร้าง log, และวันเวลาที่เกิด error
  */
-function setErrorLog(interfaceLogID, rowErr) {    
-    var cleanErr = rowErr.ErrorDetail.replace(/'/g, '_SINGLEQUOTE_');
+function setErrorLog(interfaceLogID, rowErr) {
+    if (!rowErr) return;
 
-    var userData = TALON.getUserInfoMap();
-    var UserId = userData['USER_ID'];
-    var getErrNumbering =
-        "DECLARE @LogId NVARCHAR(MAX) " +
-        "EXEC [SP_RUN_NUMBERING_V1] " +
-        "    @CodeType = 'PPLI_N_INTERFACE_ACCRUED_ERR_LOG', " +
-        "    @Format = N'ELyyyymmddxxxxxxxxxx', " +
-        "    @GeneratedNo = @LogId OUTPUT " +
-        "SELECT @LogId AS [NUMBERING] ";
-    var logErrId = TalonDbUtil.select(TALON.getDbConfig(), getErrNumbering)[0]['NUMBERING'];
+    var now        = new java.util.Date();
+    var userData   = TALON.getUserInfoMap();
+    var userId     = userData['USER_ID'];
 
-    var sqlInsert = "INSERT INTO [PPLI_IF_ACCRUED_ERR] ( " +
-        "[ERROR_LOG_ID], " +
-        "[INTERFACED_LOG_ID], " +
-        "[JOURNAL_NO], " +
-        "[ROW_NO], " +
-        "[TARGET_FIELD], " +
-        "[ERROR_DETAILS], " +
-        "[CREATED_DATE], " +
-        "[CREATED_BY] " +
-    ") VALUES ( " +
-        "'"+logErrId+"' , " +                    // ERROR_LOG_ID
-        "'"+interfaceLogID+"' , " +              // INTERFACED_LOG_ID
-        "'"+rowErr.ID+"' , " +                   // JOURNAL_NO
-        " "+rowErr.RowNo+" , " +                 // ROW_NO
-        "'"+rowErr.ItemName+"' , " +             // TARGET_FIELD
-        "'"+cleanErr+ "' , " +                   // ERROR_DETAILS
-        "GETDATE(), " +                          // CREATED_DATE
-        "'"+UserId+"') ";                        // CREATED_BY
-   
+    var logErrId = RunningNo.genId(
+        "DMTT_N_AR_ERR_LOG",
+        "ELyyyymmddxxxxxx",
+        true
+    );
 
-    TalonDbUtil.insert(TALON.getDbConfig(), sqlInsert);
+    var detailCol = [
+        'I_ERROR_LOG_ID',
+        'I_INTERFACED_LOG_ID',
+        'I_INVOICE_NO',
+        'I_ROW_NO',
+        'I_TARGET_FIELD',
+        'I_ERROR_DETAILS',
+        'I_CREATED_DATE',
+        'I_CREATED_BY'
+    ];
 
-    TalonDbUtil.update(TALON.getDbConfig(), 
-       "UPDATE [PPLI_IF_ACCRUED_ERR] SET [ERROR_DETAILS] = REPLACE([ERROR_DETAILS], '_SINGLEQUOTE_', '''')" +
-       "WHERE [ERROR_LOG_ID] = '" +logErrId+ "' "
+    var data = {};
+
+    data['I_ERROR_LOG_ID']       = logErrId;
+    data['I_INTERFACED_LOG_ID']  = interfaceLogID;
+    data['I_INVOICE_NO']         = rowErr.ID;
+    data['I_ROW_NO']             = rowErr.RowNo;
+    data['I_TARGET_FIELD']       = rowErr.ItemName;
+    data['I_ERROR_DETAILS']      = rowErr.ErrorDetail;
+    data['I_CREATED_DATE']       = DateFmt.formatDateTime(now.toString());
+    data['I_CREATED_BY']         = userId;
+
+    TalonDbUtil.insertByMap(
+        TALON.getDbConfig(),
+        'IF_API_AR_ERR',
+        data,
+        detailCol
     );
 }
 
 
 /**
- * อัปเดตสถานะการ Interface ของ Journal
+ * อัปเดตสถานะการ Interface ของ Invoice
  * - status = '1' → สำเร็จ
  * - status = '2' → ล้มเหลว
  * - บันทึก INTERFACED_LOG_ID, INTERFACED_STATUS และ ACCRUAL_STATUS (ถ้าสำเร็จ)
@@ -309,26 +304,26 @@ function setInterfaceStatus(interfaceLogID, idTarget, status) {
             "SET [INTERFACED_LOG_ID] = '" + interfaceLogID + "', " +
             "    [INTERFACED_STATUS] = '1', " +
             "    [ACCRURAL_STATUS] = '1' " +
-            "WHERE [JOURNAL_NO] = '" + idTarget + "' ";
+            "WHERE [I_INVOICE_NO] = '" + idTarget + "' ";
         TalonDbUtil.update(TALON.getDbConfig(), sqlUpdate);
     } else if (status === '2') {
         var sqlUpdate =
             "UPDATE [PPLI_T_ACCRUEDH] " +
             "SET [INTERFACED_LOG_ID] = '" + interfaceLogID + "', " +
             "[INTERFACED_STATUS] = '2' " +
-            "WHERE [JOURNAL_NO] = '" + idTarget + "' ";
+            "WHERE [I_INVOICE_NO] = '" + idTarget + "' ";
         TalonDbUtil.update(TALON.getDbConfig(), sqlUpdate);
     }
 
 }
 
 /**
- * ดึงข้อมูล Journal แบบ Row Detail ตามหมายเลข JOURNAL_NO
+ * ดึงข้อมูล Invoice แบบ Row Detail ตามหมายเลข I_INVOICE_NO
  * - ใช้สำหรับนำไปจัดรูปแบบข้อมูลเพื่อส่งออกไปยังระบบ GA
  */
-function findById(journalNo) {
+function findById(invoiceNo) {
     var query = "SELECT " +
-        "    [JOURNAL_NO], " +
+        "    [I_INVOICE_NO], " +
         "    [ROW_NO], " +
         "    [DEPTCODE], " +
         "    [INPDATE], " +
@@ -348,21 +343,11 @@ function findById(journalNo) {
         "    [INPAMOUNT_SC], " +
         "    [DETAIL_DESCRIPTNAME] " +
         "FROM [PPLI_T_ACCRUED_JOURNAL] " +
-        "WHERE [JOURNAL_NO] = '" + journalNo + "' AND [INPAMOUNT_SC] <> 0";
+        "WHERE [I_INVOICE_NO] = '" + invoiceNo + "' AND [INPAMOUNT_SC] <> 0";
 
     return TalonDbUtil.select(TALON.getDbConfig(), query);
 }
 
-function formatDate(dateStr) {
-    try {
-        var inputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
-        var outputFormat = new SimpleDateFormat("yyyy/MM/dd");
-        var date = inputFormat.parse(dateStr);
-        return outputFormat.format(date);
-    } catch (e) {
-        return dateStr;
-    }
-}
 
 function extractValues(input) {
     return input.split(',').map(function(pair) {

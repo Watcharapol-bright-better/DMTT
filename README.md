@@ -53,13 +53,13 @@ Fixed conditional expression
 
 ✅ `DMTT_T_PRESS_SHIPMENT_JOB_LIST` : Shipment Job List (Press) 
 
-✅ `DMTT_T_PRESS_SHIPMENT_JOB_DETAILS` : Shipment Job Details (Press) 
+⚠️ `DMTT_T_PRESS_SHIPMENT_JOB_DETAILS` : Shipment Job Details (Press)
 
 ✅ `DMTT_T_PRESS_CREATE_INVOICE` : Create Invoice (Press)
 
 ✅ `DMTT_T_PRESS_INVOICE_DETAIL` : Invoice Detail (Press) 
 
-✅ `DMTT_T_PRESS_INVOICE_LIST` : Invoice List (Press) 
+⚠️ `DMTT_T_PRESS_INVOICE_LIST` : Invoice List (Press)
 
 ✅ `DMTT_T_PRESS_DELIVERY_ORDER_DOWNLOAD` : Print Delivery Order (Press)
 
@@ -79,6 +79,7 @@ Fixed conditional expression
 
 ✅ `DMTT_R_PRESS_SALES` : Sales Report (Press)
 
+✅ `TLN_MST0600` : 汎用コードマスタメンテナンス +
 
 <br/>
 
@@ -116,6 +117,7 @@ Fixed conditional expression
 - `DMTT_G_SHIP_INT_STATUS` (I_SHIP_CFM) Shipment Status | '0': Pending, '1': Picking, '2': Completed, '3': Confirmed 
 - `DMTT_G_EMAIL_CFT`
 - `DMTT_G_QA_STATUS` QA Status | '0': Not QA | '1': Passed | '2': Failed
+- `DMTT_G_GA_TLN_API`
 
 ### [Search Subform]
 - `DMTT_T_SHP010_CS` : Ship To, I_SHIPTO | Bill To, I_BILLTO

@@ -1,6 +1,7 @@
-document.addEventListener("DOMContentLoaded", function () {
-    setTimeout(function () {
-        let status = document.getElementById('CNDTN_STD:2:_TEXT').value; // OTP
+document.addEventListener("DOMContentLoaded", function() {
+    setTimeout(function() {
+        // document.getElementsByName('CNDTN_DISPLAY')[0]
+        let status = document.getElementsByName('CNDTN_OTP')[0].value; // OTP
         if (status !== '') {
             // Get Fech Token button
             /*console.log('on Fech Token button');*/
@@ -13,15 +14,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Receive OTP : id="BUTTON_BTM_L:2:BAT"
 function onLoginGA() {
-    const DOMAIN_TALON = document.getElementsByName('CNDTN_DOMAIN_TLN')[0].value; 
-    const DOMAIN_GA = document.getElementsByName('CNDTN_DOMAIN_GA')[0].value; 
+    const DOMAIN_TALON = document.getElementsByName('CNDTN_DOMAIN_TLN')[0].value;
+    const DOMAIN_GA = document.getElementsByName('CNDTN_DOMAIN_GA')[0].value;
     const redirectToGA = `${DOMAIN_GA}/Authentication?re_url=${DOMAIN_TALON}/PRESSLogin.html`;
 
     // console.log("Redirecting to GA:", redirectToGA);
-    setTimeout( () => {
+    setTimeout(() => {
         window.location.href = redirectToGA;
     }, 200);
-    
+
 }
 
 // Authorize GA : id="BUTTON_BTM_L:0:BAT"
@@ -48,37 +49,51 @@ function resizeContents_end() {
     }
 
 
-  // document.getElementById('BUTTON_MDL_L:1:BAT').style.display = 'none'; // Receive OTP
-  // document.getElementById('BUTTON_MDL_L:2:BAT').style.display = 'none'; // Get Fech Token
-  
+    document.getElementById('BUTTON_MDL_L:1:BAT').style.display = 'none'; // Receive OTP
+    document.getElementById('BUTTON_MDL_L:2:BAT').style.display = 'none'; // Get Fech Token
 
-  const status = document.getElementsByName('CNDTN_DISPLAY')[0]; 
-  const authorizeGA = document.getElementById('BUTTON_MDL_L:0:BAT'); // Authorize GA
-  const interfaceGA = document.getElementById('BUTTON_MDL_L:3:BAT'); // Interface to GA
-  const cancel = document.getElementById('BUTTON_MDL_L:4:BAT');      // Cancel Interface
 
-  const otp = document.getElementsByName('CNDTN_OTP')[0];
-  console.log(otp.value);    
+    const status = document.getElementsByName('CNDTN_DISPLAY')[0];
+    const authorizeGA = document.getElementById('BUTTON_MDL_L:0:BAT'); // Authorize GA
+    const interfaceGA = document.getElementById('BUTTON_MDL_L:3:BAT'); // Interface to GA
+    const cancel = document.getElementById('BUTTON_MDL_L:4:BAT'); // Cancel Interface
 
-  function updateBTNDisplay() {
-    if (!status) return;
+    const otp = document.getElementsByName('CNDTN_OTP')[0];
+    // console.log(otp.value);    
 
-    if (status.value == '1') {
-        authorizeGA.style.display = 'block';
-        interfaceGA.style.display = 'none';
-        cancel.style.display = 'none';
-    } else if (status.value == '0') {
-        authorizeGA.style.display = 'none';
-        interfaceGA.style.display = 'block';
-        cancel.style.display = 'block';
-    } else {
-        authorizeGA.style.display = 'none';
-        interfaceGA.style.display = 'none';
-        cancel.style.display = 'none';
+    if (authorizeGA) {
+        authorizeGA.style.backgroundColor = '#51B8C6';
+        authorizeGA.style.borderColor = '#51B8C6';
+        authorizeGA.style.color = '#ffffff';
     }
 
-  }
+    const container = document.querySelector('.button_area_top_left');
+    if (container) {
+        container.style.display = 'flex';
+        container.style.gap = '8px';
+        container.style.alignItems = 'center';
+    }
 
-  // updateBTNDisplay();
+
+    function updateBTNDisplay() {
+        if (!status) return;
+
+        if (status.value == '1') {
+            authorizeGA.style.display = 'block';
+            interfaceGA.style.display = 'none';
+            cancel.style.display = 'none';
+        } else if (status.value == '0') {
+            authorizeGA.style.display = 'none';
+            interfaceGA.style.display = 'block';
+            cancel.style.display = 'block';
+        } else {
+            authorizeGA.style.display = 'none';
+            interfaceGA.style.display = 'none';
+            cancel.style.display = 'none';
+        }
+
+    }
+
+    updateBTNDisplay();
 
 }
