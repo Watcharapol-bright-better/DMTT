@@ -126,6 +126,7 @@ Fixed conditional expression
 - `DMTT_S_INVOICE_TYPE` : Allowed Invoice Type Subform
 - `DMTT_S_CS` : Customer Subform +
 - `DMTT_S_USER_LIST` : DMTT User List Subform ^
+- `DMTT_M_EXCHANGE` : Exchange Rate Master
 
 ### [Table List]
 

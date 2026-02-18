@@ -206,8 +206,6 @@ function interfaceGA(taken) {
 
     });
 
- 
-
 }
 
 
