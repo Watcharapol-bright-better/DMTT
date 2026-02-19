@@ -34,7 +34,7 @@
 
 ✅ `DMTT_T_PRESS_SALES_ORDER_EDIT` : Sales Order Edit (Press) 
 
-✅ `DMTT_T_PRESS_SALES_ORDER_LIST` : Sales Order List (Press) ^
+✅ `DMTT_T_PRESS_SALES_ORDER_LIST` : Sales Order List (Press) 
 
 ✅ `DMTT_T_PRESS_CONF_DELIIVERY_ORDER` : Confirm Delivery Order (Press)
 
@@ -53,7 +53,7 @@ Fixed conditional expression
 
 ✅ `DMTT_T_PRESS_SHIPMENT_JOB_LIST` : Shipment Job List (Press) 
 
-⚠️ `DMTT_T_PRESS_SHIPMENT_JOB_DETAILS` : Shipment Job Details (Press)
+✅ `DMTT_T_PRESS_SHIPMENT_JOB_DETAILS` : Shipment Job Details (Press)
 
 ✅ `DMTT_T_PRESS_CREATE_INVOICE` : Create Invoice (Press)
 
