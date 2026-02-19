@@ -1,0 +1,116 @@
+{
+  "SaveStatusDetail": [
+    {
+      "RowNo": 1,
+      "RecordKey": "Row = 1",
+      "ItemName": "HEADER_TAXABLECODE",
+      "ErrorCode": "E001012",
+      "ErrorDetail": "The item is prohibited. (E001012)"
+    },
+    {
+      "RowNo": 2,
+      "RecordKey": "Row = 1",
+      "ItemName": "INPDATE",
+      "ErrorCode": "E001169",
+      "ErrorDetail": "Input Date is out of the current accounting year. (E001169)"
+    },
+    {
+      "RowNo": 3,
+      "RecordKey": "Row = 1",
+      "ItemName": "CORRESPCODE",
+      "ErrorCode": "E001007",
+      "ErrorDetail": "Input the required items. (E001007)"
+    },
+    {
+      "RowNo": 4,
+      "RecordKey": "Row = 1",
+      "ItemName": "PATTERNCODE",
+      "ErrorCode": "E001007",
+      "ErrorDetail": "Input the required items. (E001007)"
+    },
+    {
+      "RowNo": 5,
+      "RecordKey": "Row = 1",
+      "ItemName": "SETTLEMETHOD",
+      "ErrorCode": "E001007",
+      "ErrorDetail": "Input the required items. (E001007)"
+    },
+    {
+      "RowNo": 6,
+      "RecordKey": "Row = 1",
+      "ItemName": "DUEDATE",
+      "ErrorCode": "E001007",
+      "ErrorDetail": "Input the required items. (E001007)"
+    },
+    {
+      "RowNo": 7,
+      "RecordKey": "Row = 1",
+      "ItemName": "CURRENCYCODE",
+      "ErrorCode": "E001007",
+      "ErrorDetail": "Input the required items. (E001007)"
+    },
+    {
+      "RowNo": 8,
+      "RecordKey": "Row = 1",
+      "ItemName": "RATETYPE",
+      "ErrorCode": "E001007",
+      "ErrorDetail": "Input the required items. (E001007)"
+    },
+    {
+      "RowNo": 9,
+      "RecordKey": "Row = 1",
+      "ItemName": "TAXTYPE",
+      "ErrorCode": "E001555",
+      "ErrorDetail": "Included/Excluded type should be set \u00222: NONE\u0022, if Tax type is not set or Tax type is [Non taxable],  [Tax exempt] or  [Others(without Tax)]. (E001555)"
+    },
+    {
+      "RowNo": 10,
+      "RecordKey": "Row = 1",
+      "ItemName": "INPAMOUNT_SC",
+      "ErrorCode": "E001481",
+      "ErrorDetail": "Both Amt and Amt(SC) unable to be set as 0 at the same time. (E001481)"
+    },
+    {
+      "RowNo": 11,
+      "RecordKey": "Row = 1",
+      "ItemName": "DRCRTYPE",
+      "ErrorCode": "ES00332",
+      "ErrorDetail": "\u0022Dr/Cr type\u0022 should  be set within 0-1.(ES00332)"
+    },
+    {
+      "RowNo": 12,
+      "RecordKey": "Row = 2",
+      "ItemName": "TAXABLEAMOUNT_FC",
+      "ErrorCode": "E001012",
+      "ErrorDetail": "The item is prohibited. (E001012)"
+    },
+    {
+      "RowNo": 13,
+      "RecordKey": "Row = 2",
+      "ItemName": "TAXABLEAMOUNT_SC",
+      "ErrorCode": "E001012",
+      "ErrorDetail": "The item is prohibited. (E001012)"
+    },
+    {
+      "RowNo": 14,
+      "RecordKey": "Row = 2",
+      "ItemName": "TAXTYPE",
+      "ErrorCode": "E001555",
+      "ErrorDetail": "Included/Excluded type should be set \u00222: NONE\u0022, if Tax type is not set or Tax type is [Non taxable],  [Tax exempt] or  [Others(without Tax)]. (E001555)"
+    },
+    {
+      "RowNo": 15,
+      "RecordKey": "Row = 2",
+      "ItemName": "DRCRTYPE",
+      "ErrorCode": "ES00332",
+      "ErrorDetail": "\u0022Dr/Cr type\u0022 should  be set within 0-1.(ES00332)"
+    }
+  ],
+  "DispName": "Receivable request",
+  "CreateOperator": "ADMIN",
+  "CreateOperatorName": "Administrator",
+  "CreateDateTime": "2026/02/19 03:23:58:2070",
+  "Sequence": 436713.0,
+  "SaveStatus": "Save failed. Please check error in execution status.(E002562)",
+  "Status": -1
+}

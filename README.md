@@ -151,3 +151,16 @@ Fixed conditional expression
 
 
 https://sandbox-dev-talon.bright-better.com/Talon/;jsessionid=351a87ace63d0b101a7f40fdcd29
+
+### python
+
+## SQL → JS ES5
+```powershell
+python python/main.py sql2js "C:\Users\bb25004\items\dev\TALON\DMTT\python\sql\script.sql" "C:\Users\bb25004\items\dev\TALON\DMTT\python\sql\output.js"
+```
+
+## JS ES5 → SQL 
+```powershell
+
+```
+

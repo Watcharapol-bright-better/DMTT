@@ -96,8 +96,8 @@ FROM (
             ON [QTD].[I_QT_NO] = [SD].[I_QT_NO]
             AND [QTD].[I_ITEMCODE] = [IVD].[I_ITEMCODE]
             
-    WHERE [IVH].[I_INVOICE_NO] = 'IV2602100003'
-) AS [DETAIL_DATA]
+    WHERE [IVH].[I_INVOICE_NO] = 'IV2602180018'--'IV2602180001'
+) AS [MAIN]
 
 GROUP BY 
      [VOUCHERNO]

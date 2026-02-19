@@ -1,0 +1,219 @@
+{
+  "company": "D100",
+  "userid": "ADMIN",
+  "accesstoken": "nY/XM]Vev{{%2n($$5.O",
+  "lang": "en-US",
+  "userkey": "rgaerhioaggaierjgj",
+  "data": [
+    {
+      "lineNo": 1,
+      "values": [
+        {
+          "fieldName": "VOUCHERNO",
+          "value": "IV2602180001",
+          "Col": 1
+        },
+        {
+          "fieldName": "INVOICENO",
+          "value": "IV2602180001",
+          "Col": 2
+        },
+        {
+          "fieldName": "RATETYPE",
+          "value": null,
+          "Col": 3
+        },
+        {
+          "fieldName": "INPDATE",
+          "value": "2026-02-18",
+          "Col": 4
+        },
+        {
+          "fieldName": "HEADER_DEPTCODE",
+          "value": "AD",
+          "Col": 5
+        },
+        {
+          "fieldName": "DEPTCODE",
+          "value": "102011",
+          "Col": 6
+        },
+        {
+          "fieldName": "ACCODE",
+          "value": "40100050",
+          "Col": 7
+        },
+        {
+          "fieldName": "HEADER_TAXABLECODE",
+          "value": "S999",
+          "Col": 8
+        },
+        {
+          "fieldName": "TAXTYPE",
+          "value": "1",
+          "Col": 9
+        },
+        {
+          "fieldName": "CORRESPTYPE",
+          "value": "1",
+          "Col": 10
+        },
+        {
+          "fieldName": "INPAMOUNT_FC",
+          "value": 0.000,
+          "Col": 11
+        },
+        {
+          "fieldName": "INPAMOUNT_SC",
+          "value": 0.000,
+          "Col": 12
+        },
+        {
+          "fieldName": "TAXABLEAMOUNT_FC",
+          "value": 0.000,
+          "Col": 13
+        },
+        {
+          "fieldName": "TAXABLEAMOUNT_SC",
+          "value": 0.000,
+          "Col": 14
+        },
+        {
+          "fieldName": "TAXAMOUNT_FC",
+          "value": 0,
+          "Col": 15
+        },
+        {
+          "fieldName": "TAXAMOUNT_SC",
+          "value": 0,
+          "Col": 16
+        },
+        {
+          "fieldName": "JOURNALTYPE",
+          "value": "0",
+          "Col": 17
+        },
+        {
+          "fieldName": "POSTPADCOLOR",
+          "value": "",
+          "Col": 18
+        },
+        {
+          "fieldName": "POSTPADTEXT",
+          "value": "",
+          "Col": 19
+        },
+        {
+          "fieldName": "INCHARGECODE",
+          "value": "ADMIN",
+          "Col": 20
+        }
+      ]
+    },
+    {
+      "lineNo": 2,
+      "values": [
+        {
+          "fieldName": "VOUCHERNO",
+          "value": "IV2602180001",
+          "Col": 1
+        },
+        {
+          "fieldName": "INVOICENO",
+          "value": "IV2602180001",
+          "Col": 2
+        },
+        {
+          "fieldName": "RATETYPE",
+          "value": null,
+          "Col": 3
+        },
+        {
+          "fieldName": "INPDATE",
+          "value": "2026-02-18",
+          "Col": 4
+        },
+        {
+          "fieldName": "HEADER_DEPTCODE",
+          "value": "AD",
+          "Col": 5
+        },
+        {
+          "fieldName": "DEPTCODE",
+          "value": "102011",
+          "Col": 6
+        },
+        {
+          "fieldName": "ACCODE",
+          "value": "40100055",
+          "Col": 7
+        },
+        {
+          "fieldName": "HEADER_TAXABLECODE",
+          "value": "S999",
+          "Col": 8
+        },
+        {
+          "fieldName": "TAXTYPE",
+          "value": "1",
+          "Col": 9
+        },
+        {
+          "fieldName": "CORRESPTYPE",
+          "value": "1",
+          "Col": 10
+        },
+        {
+          "fieldName": "INPAMOUNT_FC",
+          "value": 744.800,
+          "Col": 11
+        },
+        {
+          "fieldName": "INPAMOUNT_SC",
+          "value": 744.800,
+          "Col": 12
+        },
+        {
+          "fieldName": "TAXABLEAMOUNT_FC",
+          "value": 744.800,
+          "Col": 13
+        },
+        {
+          "fieldName": "TAXABLEAMOUNT_SC",
+          "value": 744.800,
+          "Col": 14
+        },
+        {
+          "fieldName": "TAXAMOUNT_FC",
+          "value": 0,
+          "Col": 15
+        },
+        {
+          "fieldName": "TAXAMOUNT_SC",
+          "value": 0,
+          "Col": 16
+        },
+        {
+          "fieldName": "JOURNALTYPE",
+          "value": "0",
+          "Col": 17
+        },
+        {
+          "fieldName": "POSTPADCOLOR",
+          "value": "",
+          "Col": 18
+        },
+        {
+          "fieldName": "POSTPADTEXT",
+          "value": "",
+          "Col": 19
+        },
+        {
+          "fieldName": "INCHARGECODE",
+          "value": "ADMIN",
+          "Col": 20
+        }
+      ]
+    }
+  ]
+}
