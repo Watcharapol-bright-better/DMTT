@@ -103,9 +103,16 @@ function sendToGA(taken) {
                 { "fieldName": "DEPTCODE", "value": row['GA_DEPTCODE'] },
                 { "fieldName": "ACCODE", "value": row['GA_ACCODE'] },
                 { "fieldName": "HEADER_TAXABLECODE", "value": row['GA_HEADER_TAXABLECODE'] },
-                { "fieldName": "TAXTYPE", "value": row['GA_TAXTYPE'] },
+                
+                // { "fieldName": "TAXTYPE", "value": row['GA_TAXTYPE'] },
+                { "fieldName": "TAXTYPE", "value": "2" }, 
+                
+                { "fieldName": "DRCRTYPE", "value": "0" },
                 { "fieldName": "CORRESPTYPE", "value": row['GA_CORRESPTYPE'] },
-                { "fieldName": "INPAMOUNT_FC", "value": row['GA_INPAMOUNT_FC'] },
+                
+                //{ "fieldName": "INPAMOUNT_FC", "value": row['GA_INPAMOUNT_FC'] },
+                { "fieldName": "INPAMOUNT_FC", "value": 1112.1150 },
+
                 { "fieldName": "INPAMOUNT_SC", "value": row['GA_INPAMOUNT_SC'] },
                 { "fieldName": "TAXABLEAMOUNT_FC", "value": row['GA_TAXABLEAMOUNT_FC'] },
                 { "fieldName": "TAXABLEAMOUNT_SC", "value": row['GA_TAXABLEAMOUNT_SC'] },
@@ -119,7 +126,6 @@ function sendToGA(taken) {
                 { "fieldName": "CURRENCYCODE", "value": "THB" }
             ];
 
-            // เพิ่ม Col ให้อัตโนมัติ
             for (var i = 0; i < values.length; i++) {
                 values[i]["Col"] = i + 1;
             }

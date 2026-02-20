@@ -8,7 +8,7 @@
  */
 var searchData = TALON.getConditionData();
 var sql = "SELECT DSP1, DSP3, DSP4, DSP5 FROM [TLN_M_HANYO_CODE_MAIN] " +
-          "WHERE [SIKIBETU_CODE] = 'DMTT_G_GA_TLN_API' ";
+          "WHERE [SIKIBETU_CODE] = 'DMTT_G_GA_TLN_API_TEST' ";
 var config = TalonDbUtil.select(TALON.getDbConfig(), sql)[0];
 
 var _DOMAIN_GA_PRIVATE  = config["DSP4"];
