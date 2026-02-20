@@ -53,13 +53,15 @@ Fixed conditional expression
 
 ✅ `DMTT_T_PRESS_SHIPMENT_JOB_LIST` : Shipment Job List (Press) 
 
+⚠️ `DMTT_T_PRESS_SHIPMENT_LIST_ASSIGN_JOB` : Shipment List Assign Job  (Press) 
+
 ✅ `DMTT_T_PRESS_SHIPMENT_JOB_DETAILS` : Shipment Job Details (Press)
 
 ✅ `DMTT_T_PRESS_CREATE_INVOICE` : Create Invoice (Press)
 
 ✅ `DMTT_T_PRESS_INVOICE_DETAIL` : Invoice Detail (Press) 
 
-⚠️ `DMTT_T_PRESS_INVOICE_LIST` : Invoice List (Press)
+✅ `DMTT_T_PRESS_INVOICE_LIST` : Invoice List (Press)
 
 ✅ `DMTT_T_PRESS_DELIVERY_ORDER_DOWNLOAD` : Print Delivery Order (Press)
 

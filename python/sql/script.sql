@@ -281,7 +281,7 @@ SELECT
     ,[I_QT_NO]
     ,[GA_RATETYPE]
     ,[GA_INPDATE]
-    ,[GA_HEADER_DEPTCODE]
+    ,[GA_HEADER_DEPTCODE]d
     ,[I_TYPE]
     ,[GA_DEPTCODE]
     ,[GA_ACCODE]

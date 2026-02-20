@@ -1,6 +1,7 @@
 
 SELECT 
-     [SH].[I_SHIP_INST]              -- Shipment Instruction No
+     '' AS [SEL_CHK]
+    ,[SH].[I_SHIP_INST]              -- Shipment Instruction No
     ,[SH].[I_SHIP_CFM]         -- Picking Status
     ,[SH].[I_SHIP_DLY_DATE]          -- Delivery Date
 
@@ -20,3 +21,5 @@ FROM [T_PR_SHIP_INST_H] [SH]
 
     LEFT JOIN [T_PR_INVOICE_H] [H]
         ON [H].[I_INVOICE_NO] = [SH].[I_INVOICE_NO]
+
+WHERE [SH].[I_INVOICE_NO] IS NOT NULL

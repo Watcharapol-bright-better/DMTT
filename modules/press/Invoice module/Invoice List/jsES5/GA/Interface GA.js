@@ -97,7 +97,7 @@ function sendToGA(taken) {
             var values = [
                 { "fieldName": "VOUCHERNO", "value": row['GA_VOUCHERNO'] },
                 { "fieldName": "INVOICENO", "value": row['GA_INVOICENO'] },
-                //{ "fieldName": "RATETYPE", "value": row['GA_RATETYPE'] },
+                { "fieldName": "RATETYPE", "value": row['GA_RATETYPE'] },
                 { "fieldName": "INPDATE", "value": DateFmt.formatDate(row['GA_INPDATE'].toString()) },
                 { "fieldName": "HEADER_DEPTCODE", "value": row['GA_HEADER_DEPTCODE'] },
                 { "fieldName": "DEPTCODE", "value": row['GA_DEPTCODE'] },
@@ -110,8 +110,8 @@ function sendToGA(taken) {
                 { "fieldName": "DRCRTYPE", "value": "0" },
                 { "fieldName": "CORRESPTYPE", "value": row['GA_CORRESPTYPE'] },
                 
-                //{ "fieldName": "INPAMOUNT_FC", "value": row['GA_INPAMOUNT_FC'] },
-                { "fieldName": "INPAMOUNT_FC", "value": 1112.1150 },
+                { "fieldName": "INPAMOUNT_FC", "value": row['GA_INPAMOUNT_FC'] },
+                //{ "fieldName": "INPAMOUNT_FC", "value": 1112.1150 },
 
                 { "fieldName": "INPAMOUNT_SC", "value": row['GA_INPAMOUNT_SC'] },
                 { "fieldName": "TAXABLEAMOUNT_FC", "value": row['GA_TAXABLEAMOUNT_FC'] },
@@ -166,7 +166,8 @@ function sendToGA(taken) {
             var interfaceLogID = RunningNo.genId("DMTT_N_AR_LOG", "IFyyyymmddxxxxxx", true);
 
             if (resData.Status !== 0) {
-                TALON.addErrorMsg("❌ Invoice No. "+id+" : send to mcframeGA failed.  ")
+                TALON.addErrorMsg("❌ Invoice No. "+id+" : send to mcframeGA failed.  ");
+                setInterfaceStatus(id, 2);
 
                 var errorList = resData.SaveStatusDetail.map(function (it) {
                     var rowKey = it.RecordKey.replace("Row = ", "");
@@ -184,6 +185,7 @@ function sendToGA(taken) {
                 
             } else {
                 TALON.addMsg("✅ Invoice No. "+id+" : send to mcframeGA Successfully.  ");
+                setInterfaceStatus(id, 1);
             }
 
             saveARLog(interfaceLogID, payload, responseGA.body());
@@ -192,6 +194,7 @@ function sendToGA(taken) {
             DATA_LIST = [];
             TALON.setSearchConditionData("SELECTED", "", "");
         } catch (e) {
+            setInterfaceStatus(id, 2);
             if (e instanceof HttpTimeoutException) {
                 TALON.addErrorMsg("🌐 Request to mcframeGA timed out after 120 seconds. ");
             } else if (e instanceof ConnectException) {
@@ -210,6 +213,29 @@ function sendToGA(taken) {
 }
 
 /* ====================================================== */
+
+/**
+ * อัปเดตสถานะการ Interface ของ Invoice
+ * - status = '1' → สำเร็จ
+ * - status = '2' → ล้มเหลว
+ * - บันทึก INTERFACED_LOG_ID, INTERFACED_STATUS และ ACCRUAL_STATUS (ถ้าสำเร็จ)
+ */
+function setInterfaceStatus(id, status) {
+    if (status === '1') {
+        var sqlUpdate =
+            "UPDATE [T_PR_INVOICE_H] " +
+            "SET [I_INTERFACE_STATUS] = '0' " +
+            "WHERE [I_INVOICE_NO] = '"+id+"'";
+        TalonDbUtil.update(TALON.getDbConfig(), sqlUpdate);
+    } else if (status === '2') {
+        var sqlUpdate =
+            "UPDATE [T_PR_INVOICE_H] " +
+            "SET [I_INTERFACE_STATUS] = '1' " +
+            "WHERE [I_INVOICE_NO] = '"+id+"'";
+        TalonDbUtil.update(TALON.getDbConfig(), sqlUpdate);
+    }
+
+}
 
 /**
  * บันทึกข้อมูลที่ส่งไปยังระบบ mcframeGA ลงในฐานข้อมูล
@@ -287,32 +313,6 @@ function saveARError(interfaceLogID, rowErr) {
     );
 }
 
-
-/**
- * อัปเดตสถานะการ Interface ของ Invoice
- * - status = '1' → สำเร็จ
- * - status = '2' → ล้มเหลว
- * - บันทึก INTERFACED_LOG_ID, INTERFACED_STATUS และ ACCRUAL_STATUS (ถ้าสำเร็จ)
- */
-function setInterfaceStatus(interfaceLogID, idTarget, status) {
-    if (status === '1') {
-        var sqlUpdate =
-            "UPDATE [PPLI_T_ACCRUEDH] " +
-            "SET [INTERFACED_LOG_ID] = '" + interfaceLogID + "', " +
-            "    [INTERFACED_STATUS] = '1', " +
-            "    [ACCRURAL_STATUS] = '1' " +
-            "WHERE [I_INVOICE_NO] = '" + idTarget + "' ";
-        TalonDbUtil.update(TALON.getDbConfig(), sqlUpdate);
-    } else if (status === '2') {
-        var sqlUpdate =
-            "UPDATE [PPLI_T_ACCRUEDH] " +
-            "SET [INTERFACED_LOG_ID] = '" + interfaceLogID + "', " +
-            "[INTERFACED_STATUS] = '2' " +
-            "WHERE [I_INVOICE_NO] = '" + idTarget + "' ";
-        TalonDbUtil.update(TALON.getDbConfig(), sqlUpdate);
-    }
-
-}
 
 /**
  * ดึงข้อมูล Invoice แบบ Row Detail ตามหมายเลข I_INVOICE_NO
@@ -401,7 +401,7 @@ function findById(invoiceNo) {
         "        ) AS [QTD] " +
         "            ON [QTD].[I_QT_NO] = [SD].[I_QT_NO] " +
         "    WHERE [IVH].[I_INVOICE_NO] = '" + invoiceNo + "' " +
-        "      AND [FG].[I_TYPE] = 1 " +
+        "      AND [FG].[I_TYPE] = '1' " +
         ") AS [MAIN] " +
         "GROUP BY " +
         "     [GA_VOUCHERNO], [GA_INVOICENO], [I_SONO], [I_QT_NO], [GA_RATETYPE], [GA_INPDATE] " +
@@ -496,7 +496,7 @@ function findById(invoiceNo) {
         " " +
         " " +
         "    WHERE [IVH].[I_INVOICE_NO] = '" + invoiceNo + "' " +
-        "      AND [FG].[I_TYPE] = 1 " +
+        "      AND [FG].[I_TYPE] = '1' " +
         ") AS [MAIN] " +
         "GROUP BY " +
         "     [GA_VOUCHERNO], [GA_INVOICENO], [I_SONO], [I_QT_NO], [GA_RATETYPE], [GA_INPDATE] " +
@@ -583,7 +583,7 @@ function findById(invoiceNo) {
         "        ) AS [QTD] " +
         "            ON [QTD].[I_QT_NO] = [SD].[I_QT_NO] " +
         "    WHERE [IVH].[I_INVOICE_NO] = '" + invoiceNo + "' " +
-        "      AND ([FG].[I_TYPE] <> 1 OR [FG].[I_TYPE] IS NULL) " +
+        "      AND ([FG].[I_TYPE] <> '1' OR [FG].[I_TYPE] IS NULL) " +
         ") AS [MAIN] " +
         "GROUP BY " +
         "     [GA_VOUCHERNO], [GA_INVOICENO], [I_SONO], [I_QT_NO], [GA_RATETYPE], [GA_INPDATE] " +
@@ -675,7 +675,7 @@ function findById(invoiceNo) {
         "        ) AS [QTD] " +
         "            ON [QTD].[I_QT_NO] = [SD].[I_QT_NO] " +
         "    WHERE [IVH].[I_INVOICE_NO] = '" + invoiceNo + "' " +
-        "      AND ([FG].[I_TYPE] <> 1) " +
+        "      AND ([FG].[I_TYPE] <> '1') " +
         ") AS [MAIN] " +
         "GROUP BY " +
         "     [GA_VOUCHERNO], [GA_INVOICENO], [I_SONO], [I_QT_NO], [GA_RATETYPE], [GA_INPDATE] " +

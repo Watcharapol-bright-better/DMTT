@@ -1,102 +1,140 @@
-SELECT * 
+SELECT [MAIN].[I_QT_NO] ,
+[MAIN].[I_QTPATTERN] ,
+[MAIN].[I_CSCODE] ,
+[MAIN].[I_QT_STATUS] ,
+[MAIN].[I_ITEMCODE] ,
+[MAIN].[I_DESC] ,
+[MAIN].[I_COMMODITY] ,
+[MAIN].[I_THICK] ,
+[MAIN].[I_WIDTH] ,
+[MAIN].[I_PROD_WGT] ,
+[MAIN].[I_RM_WGT] ,
+[MAIN].[I_LOSS_WGT] ,
+[MAIN].[I_PITCH] ,
+[MAIN].[MAT_COST] ,
+[MAIN].[SCRAP_COST] ,
+[MAIN].[MAT_AMOUNT] ,
+[MAIN].[SCRAP_AMOUNT] ,
+[MAIN].[I_FEE_PROCESS] ,
+[MAIN].[I_FEE_CUSTOM] ,
+[MAIN].[I_FEE_PACK] ,
+[MAIN].[I_FEE_EXPENSE] ,
+[MAIN].[I_FEE_DLY] ,
+[MAIN].[MANAGEMENT_EXPENSE] ,
+ROUND(
+     ISNULL(
+        [MAIN].[MAT_AMOUNT],
+         0
+    ) + ISNULL(
+        [MAIN].[SCRAP_AMOUNT],
+         0
+    ) + ISNULL(
+        [MAIN].[I_FEE_PROCESS],
+         0
+    ) + ISNULL(
+        [MAIN].[I_FEE_CUSTOM],
+         0
+    ) + ISNULL(
+        [MAIN].[I_FEE_PACK],
+         0
+    ) + ISNULL(
+        [MAIN].[I_FEE_EXPENSE],
+         0
+    ) + ISNULL(
+        [MAIN].[I_FEE_DLY],
+         0
+    ) + ISNULL(
+        [MAIN].[MANAGEMENT_EXPENSE],
+         0
+    ) ,
+     2
+) AS [I_SELLING_PRICE] 
 FROM (
-SELECT NULL AS [I_SHIP_LNNO] ,
-    NULL AS [I_SHIP_INST] ,
-    NULL AS [INTERNAL_NO] ,
-    [SD].[I_DLYDATE] ,
-    [SD].[I_SONO] ,
-    [SD].[I_ITEMCODE] ,
-    [MP].[I_DESC] ,
+SELECT '' AS [I_QT_NO] ,
+    [Q].[I_QTPATTERN] ,
+    [Q].[I_CSCODE] ,
+    '0' AS [I_QT_STATUS] ,
+    [Q].[I_ITEMCODE] ,
+    [Q].[I_DESC] ,
+    [Q].[I_COMMODITY] ,
+    [Q].[I_THICK] ,
+    [Q].[I_WIDTH] ,
+    [Q].[I_PROD_WGT] ,
+    [Q].[I_RM_WGT] ,
+    [Q].[I_LOSS_WGT] ,
+    [Q].[I_PITCH] ,
+    [Q].[MAT_COST] ,
+    [Q].[SCRAP_COST] ,
     (
-        [MP].[I_PCS_BOX] / [MP].[I_BOX_PALLET]
-    ) AS [I_PALLET_QTY] ,
-    ISNULL(
-        [SD].[I_QTY],
-         [STK].[STK_BALANCE_QTY]
-    ) AS [I_SHIP_QTY] ,
-    ISNULL(
-        [STK].[STK_BALANCE_QTY],
-         IIF(
-            ISNULL(
-                [SD].[I_QTY],
-                0
-            ) = ISNULL(
-                [SHIP_SUM].[TOTAL_SHIP_QTY],
-                0
-            ),
-             ISNULL(
-                [SHIP_SUM].[TOTAL_SHIP_QTY],
-                0
-            ),
-             ISNULL(
-                [SD].[I_QTY],
-                0
-            ) - ISNULL(
-                [SHIP_SUM].[TOTAL_SHIP_QTY],
-                0
-            )
-        )
-    ) AS [I_BALANCE_QTY] ,
-    ISNULL(
-        [STK].[I_BOX_QTY],
-         (
-            [MP].[I_PCS_BOX] / ISNULL(
-                [SD].[I_QTY],
-                 [STK].[STK_BALANCE_QTY]
-            )
-        )
-    ) AS [I_BOX_QTY] ,
-    [STK].[MIN_LOTNO] AS [I_LOTNO_FR] ,
-    [STK].[MAX_LOTNO] AS [I_LOTNO_TO] ,
-    [WO].[I_WODATE] ,
-    '0' AS [I_SHP_PCK_STATUS] ,
-    '0' AS [I_QA_STATUS] ,
-    NULL AS [CREATED_DATE] ,
-    NULL AS [CREATED_BY] ,
-    NULL AS [CREATED_PRG_NM] ,
-    NULL AS [UPDATED_DATE] ,
-    NULL AS [UPDATED_BY] ,
-    NULL AS [UPDATED_PRG_NM] ,
-    NULL AS [MODIFY_COUNT] 
-FROM [T_PR_SORD_D] AS [SD] 
-INNER JOIN [MS_PRFG] AS [MP] 
-ON [MP].[I_ITEMCODE] = [SD].[I_ITEMCODE] 
-LEFT JOIN [T_PR_WOH] AS [WO] 
-ON [WO].[I_SONO] = [SD].[I_SONO] 
-LEFT JOIN [T_PR_SHIP_INST_D] AS [SHIPD] 
-ON [SHIPD].[I_ITEMCODE] = [SD].[I_ITEMCODE] 
-LEFT JOIN (
-SELECT [I_SONO],
-         [I_ITEMCODE],
-         SUM(
-            [I_SHIP_QTY]
-        ) AS [TOTAL_SHIP_QTY] 
-FROM [T_PR_SHIP_INST_D] 
-GROUP BY [I_SONO],
-         [I_ITEMCODE] 
-    ) AS [SHIP_SUM] 
-ON [SHIP_SUM].[I_SONO] = [SD].[I_SONO] AND [SHIP_SUM].[I_ITEMCODE] = [SD].[I_ITEMCODE] 
-LEFT JOIN (
-SELECT [I_ITEMCODE] ,
-        MIN(
-            [I_LOTNO]
-        ) AS [MIN_LOTNO] ,
-        MAX(
-            [I_LOTNO]
-        ) AS [MAX_LOTNO] ,
-        COUNT(
-            [I_LOTNO]
-        ) AS [I_BOX_QTY] ,
-        SUM(
-            [I_INQTY]
-        ) - SUM(
-            [I_OUTQTY]
-        ) AS [STK_BALANCE_QTY] 
-FROM [T_PR_STOCK] 
-WHERE [I_ASSET] = '01' AND [I_STATUS] = '11' 
-GROUP BY [I_ITEMCODE] 
-    ) AS [STK] 
-ON [STK].[I_ITEMCODE] = [SD].[I_ITEMCODE] 
-WHERE [SD].[I_DLYDATE] = '02-25-2026' 
-) AS [MAIN] 
-WHERE [I_BALANCE_QTY] > 0
+        [Q].[MAT_COST] * [Q].[I_RM_WGT]
+    ) AS [MAT_AMOUNT] ,
+    (
+        [Q].[SCRAP_COST] * [Q].[I_LOSS_WGT]
+    ) AS [SCRAP_AMOUNT] ,
+    [Q].[I_FEE_PROCESS] ,
+    [Q].[I_FEE_CUSTOM] ,
+    [Q].[I_FEE_PACK] ,
+    [Q].[I_FEE_EXPENSE] ,
+    [Q].[I_FEE_DLY] ,
+    [Q].[MANAGEMENT_EXPENSE] 
+FROM (
+SELECT [MP].[I_QTPATTERN] ,
+        [MP].[I_CSCODE] ,
+        [MP].[I_ITEMCODE] ,
+        [MP].[I_DESC] ,
+        [MP].[I_COMMODITY] ,
+        [MP].[I_THICK] ,
+        [MP].[I_WIDTH] ,
+        (
+            [MP].[I_PROD_WGT] / 100.0
+        ) * (
+            200.0 - [MP].[I_YIELD]
+        ) AS [I_PROD_WGT] ,
+        (
+            [MP].[I_RM_WGT] / 100.0
+        ) * (
+            200.0 - [MP].[I_YIELD]
+        ) AS [I_RM_WGT] ,
+        (
+            [MP].[I_LOSS_WGT] / 100.0
+        ) * (
+            200.0 - [MP].[I_YIELD]
+        ) AS [I_LOSS_WGT] ,
+        [MP].[I_PITCH] ,
+        ISNULL(
+            NULL,
+             1
+        ) AS [MAT_COST] ,
+        ISNULL(
+            NULL,
+             1
+        ) AS [SCRAP_COST] ,
+        [MP].[I_FEE_PROCESS] ,
+        [MP].[I_FEE_CUSTOM] ,
+        [MP].[I_FEE_PACK] ,
+        [MP].[I_FEE_EXPENSE] ,
+        [MP].[I_FEE_DLY] ,
+        COALESCE(
+            [MP].[I_FEE_PROCESS],
+             0
+        ) + COALESCE(
+            [MP].[I_FEE_CUSTOM],
+             0
+        ) + COALESCE(
+            [MP].[I_FEE_PACK],
+             0
+        ) + COALESCE(
+            [MP].[I_FEE_EXPENSE],
+             0
+        ) + COALESCE(
+            [MP].[I_FEE_DLY],
+             0
+        ) AS [MANAGEMENT_EXPENSE] ,
+        ROUND(
+            2500,
+             2
+        ) AS [I_SELLING_PRICE] 
+FROM [MS_PRFG] AS [MP] 
+WHERE [MP].[I_CSCODE] = '' AND [MP].[I_QTPATTERN] = '' 
+    ) AS [Q] 
+) AS [MAIN]

@@ -1,5 +1,5 @@
 -- Detail
-SELECT
+SELECT -- 
     [QD].[I_QT_NO],                 -- Quotation ID
     [QD].[INTERNAL_NO],        -- Internal No
 
@@ -14,10 +14,10 @@ SELECT
     ([MP].[I_LOSS_WGT] / 100.0) * (200.0 - [MP].[I_YIELD]) AS [I_LOSS_WGT],
 
     [MP].[I_PITCH],
-    '' AS [MAT_COST],
-    '' AS [SCRAP_COST],
-    '' AS [MAT_AMOUNT],
-    '' AS [SCRAP_AMOUNT],
+    12 AS [MAT_COST],
+    12 AS [SCRAP_COST],
+    12 AS [MAT_AMOUNT],
+    12 AS [SCRAP_AMOUNT],
 
     [MP].[I_FEE_PROCESS],
     [MP].[I_FEE_CUSTOM],
@@ -31,7 +31,7 @@ SELECT
   + COALESCE([MP].[I_FEE_EXPENSE], 0)
   + COALESCE([MP].[I_FEE_DLY], 0) AS [MANAGEMENT_EXPENSE],
 
-    ROUND(RAND(CHECKSUM(NEWID())) * 1350 + 150, 2) AS [I_SELLING_PRICE],
+    11500 AS [I_SELLING_PRICE],
 
     [MP].[I_QTPATTERN],
     [MP].[I_CSCODE],
@@ -43,6 +43,3 @@ LEFT JOIN [T_PR_QT_H] AS [QH]
     ON [QH].[I_QT_NO] = [QD].[I_QT_NO]
 
 WHERE [QD].[I_QT_NO] = /**%I_QT_NO%**/''
-
-
-SELECt * FROM T_PR_QT_D
