@@ -2,6 +2,7 @@ SELECT
      [I_TYPE] 
     ,[I_SHIP_ORDER_NO] 
     ,[I_INVOICE_NO] 
+    ,[I_REF_INVOICE_NO] 
     ,[I_SHIP_ORDER_DATE] 
     ,[I_INVOICE_DATE] 
     ,[I_CSCODE] 
@@ -13,6 +14,7 @@ FROM (
          '' AS [I_TYPE],
          [H].[I_SHIP_INST]        AS [I_SHIP_ORDER_NO],
          ''                       AS [I_INVOICE_NO],
+         '' AS [I_REF_INVOICE_NO],
          [H].[I_SHIP_INST_DATE]  AS [I_SHIP_ORDER_DATE],
          GETDATE()               AS [I_INVOICE_DATE],
          [H].[I_CSCODE],
@@ -31,6 +33,7 @@ FROM (
          [I_TYPE],
          [I_SHIP_ORDER_NO],
          [I_INVOICE_NO],
+         [I_INVOICE_NO] AS [I_REF_INVOICE_NO],
          [I_SHIP_ORDER_DATE],
          [I_INVOICE_DATE],
          [I_CSCODE],

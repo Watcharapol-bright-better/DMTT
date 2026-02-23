@@ -14,6 +14,8 @@
 `PR_SALE_ORDER` : <Func_ID>-<Func_Name> | TALON/APPLICATION/GENERALFREE/GENERALFREE.xhtml?PARAM_FUNC_ID=<Func_ID>&INIT_SEARCH=true
 `PR_INVOICE` : <Func_ID>-<Func_Name> | TALON/APPLICATION/GENERALFREE/GENERALFREE.xhtml?PARAM_FUNC_ID=<Func_ID>&INIT_SEARCH=true
 
+TALON/APPLICATION/GENERALFREE/GENERALFREE.xhtml?PARAM_FUNC_ID=DMTT_USER_AUTHORITY&INIT_SEARCH=true
+
 ### PR_SALE_ORDER,PR_INVOICE
 
 ## Function List
@@ -53,7 +55,7 @@ Fixed conditional expression
 
 ✅ `DMTT_T_PRESS_SHIPMENT_JOB_LIST` : Shipment Job List (Press) 
 
-⚠️ `DMTT_T_PRESS_SHIPMENT_LIST_ASSIGN_JOB` : Shipment List Assign Job  (Press) 
+✅ `DMTT_T_PRESS_SHIPMENT_LIST_ASSIGN_JOB` : Shipment List Assign Job  (Press) 
 
 ✅ `DMTT_T_PRESS_SHIPMENT_JOB_DETAILS` : Shipment Job Details (Press)
 
@@ -61,7 +63,7 @@ Fixed conditional expression
 
 ✅ `DMTT_T_PRESS_INVOICE_DETAIL` : Invoice Detail (Press) 
 
-✅ `DMTT_T_PRESS_INVOICE_LIST` : Invoice List (Press)
+✅ `DMTT_T_PRESS_INVOICE_LIST` : Invoice List (Press) *
 
 ✅ `DMTT_T_PRESS_DELIVERY_ORDER_DOWNLOAD` : Print Delivery Order (Press)
 
@@ -73,7 +75,7 @@ Fixed conditional expression
 
 ✅ `DMTT_T_PRESS_SHIPPING_MARKS_DOWNLOAD` : Print Shipping Marks (Press)
 
-✅ `DMTT_T_PRESS_CREATE_DNCN` : Create Debit/Credit Note (Press) 
+✅ `DMTT_T_PRESS_CREATE_DNCN` : Create Debit/Credit Note (Press) *
 
 ✅ `DMTT_T_PRESS_DNCN_DETAIL` : Debit/Credit Note Detail (Press) 
 
@@ -81,7 +83,9 @@ Fixed conditional expression
 
 ✅ `DMTT_R_PRESS_SALES` : Sales Report (Press)
 
-✅ `TLN_MST0600` : 汎用コードマスタメンテナンス +
+✅ `TLN_MST0600` : 汎用コードマスタメンテナンス 
+
+✅ `DMTT_USER_AUTHORITY` : User Authority *
 
 <br/>
 
@@ -97,12 +101,14 @@ Fixed conditional expression
 - `DMTT_N_SO_IN`
 - `DMTT_N_IV`
 - `DMTT_N_IV_IN`
+- `DMTT_N_AUTH` 
 
 
 ### [Hunyo Code]
 - `DMTT_G_INVOICE_TYPE` : Invoice Type
-- `DMTT_G_SO_STATUS` : SO Status, I_COMPCLS +
-
+- `DMTT_G_SO_STATUS` : SO Status, I_COMPCLS
+- `DMTT_G_USER_ROLES` : Department Group
+- `DMTT_G_GROUP`
 - `DMTT_G_CURRENCY` : Currency Code 
   - 'THB' : Thai Baht
   - 'USD' : US Dollar
@@ -131,6 +137,10 @@ Fixed conditional expression
 - `DMTT_M_EXCHANGE` : Exchange Rate Master
 
 ### [Table List]
+
+- ⚠️ `USER_AUTHORITY`
+- ⚠️ `WF_H`
+- ⚠️ `WF_D`
 
 - `MS_PRFG`
 - `MS_CS`
