@@ -34,8 +34,7 @@ if (!selectedItem) {
         var y = result.message;
         TALON.addErrorMsg(y);
       }
-
-
+      
     }
   });
 }
