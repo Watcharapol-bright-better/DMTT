@@ -105,6 +105,7 @@ Fixed conditional expression
 
 
 ### [Hunyo Code]
+- `DMTT_G_USER_LVL` : User Level | '0' : Level 0 | '1' : Level 1 | '2' : Level 2
 - `DMTT_G_INVOICE_TYPE` : Invoice Type
 - `DMTT_G_SO_STATUS` : SO Status, I_COMPCLS
 - `DMTT_G_USER_ROLES` : Department Group
@@ -135,6 +136,7 @@ Fixed conditional expression
 - `DMTT_S_CS` : Customer Subform +
 - `DMTT_S_USER_LIST` : DMTT User List Subform ^
 - `DMTT_M_EXCHANGE` : Exchange Rate Master
+
 
 ### [Table List]
 

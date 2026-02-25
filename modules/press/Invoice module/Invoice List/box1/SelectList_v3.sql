@@ -1,4 +1,4 @@
--- REQUESTER (ไม่เปลี่ยนแปลง)
+-- Requester 
 SELECT
      '' AS [SEL_CHK]
     ,[IH].[I_INVOICE_NO]
@@ -13,7 +13,7 @@ SELECT
     ,[IH].[I_SHIP_TO]
     ,[IH].[I_INTERFACE_STATUS]
     ,/**%TLN_LOGIN_USER%**/'' AS [USER_ID]
-    ,'REQUESTER' AS [USER_ROLE]
+    ,'Requester' AS [USER_ROLE]
     ,[WF].[I_STATUS]
     ,[IH].[CREATED_DATE]
 FROM [T_PR_INVOICE_H] [IH]
@@ -34,7 +34,7 @@ WHERE EXISTS (
 
 UNION ALL
 
--- APPROVER (แก้ไข - แสดงทุกอย่างยกเว้น REJECTED)
+-- Approver 
 SELECT
      '' AS [SEL_CHK]
     ,[IH].[I_INVOICE_NO]
@@ -49,7 +49,7 @@ SELECT
     ,[IH].[I_SHIP_TO]
     ,[IH].[I_INTERFACE_STATUS]
     ,/**%TLN_LOGIN_USER%**/'' AS [USER_ID]
-    ,'APPROVER' AS [USER_ROLE]
+    ,'Approver' AS [USER_ROLE]
     ,[WF_ALL].[I_STATUS]
     ,[IH].[CREATED_DATE]
 FROM [T_PR_INVOICE_H] [IH]
@@ -89,7 +89,7 @@ WHERE EXISTS (
       AND [I_KIND] = '1002'
       AND [I_ACTIVE_FLAG] = '1'
 )
--- ซ่อนเฉพาะ REJECTED (I_STATUS = '2')
+-- Rejected (I_STATUS = '2')
 AND ([WF_ALL].[I_STATUS] IS NULL OR [WF_ALL].[I_STATUS] <> '2')
 
 --ORDER BY [CREATED_DATE] DESC;

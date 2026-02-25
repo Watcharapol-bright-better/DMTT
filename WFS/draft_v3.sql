@@ -2,7 +2,7 @@
 CREATE TABLE [dbo].[USER_AUTHORITY](
 	[I_AUTH_ID] [nvarchar](20) NOT NULL,
 	[I_USER_ID] [nvarchar](50) NOT NULL,
-	[I_EMAIL] [nvarchar](100) NULL, -- อีเมลสำหรับแจ้งเตือน
+	[I_EMAIL] [nvarchar](100) NULL, 
 	[I_KIND] [nvarchar](5) NOT NULL,  -- 1001=Requester (ผู้ขออนุมัติ), 1002=Approver (ผู้อนุมัติ)
 	[I_GROUP] [nvarchar](50) NOT NULL, -- กลุ่มแผนก (IT, HR, Sales, etc..)
 	[I_LEVEL] [numeric](2, 0) NULL, -- ระดับการอนุมัติ: 0=Requester, 1=Manager, 2=Director, 3=CEO, ...
@@ -53,7 +53,7 @@ CREATE TABLE [dbo].[WF_D](
 	[I_KIND] [nvarchar](5) NOT NULL,
 	[I_LEVEL] [numeric](2, 0) NULL, 
 	[I_ACTION_DATE] [datetime] NULL,
-	[I_REMARK] [nvarchar](500) NULL,
+	[I_REMARK] [nvarchar](1000) NULL,
 	[CREATED_DATE] [datetime] NULL,
 	[CREATED_BY] [nvarchar](10) NULL,
 	[CREATED_PRG_NM] [nvarchar](50) NULL,
@@ -176,7 +176,7 @@ SELECT
     D.I_USER_ID,
     D.I_KIND,
     CASE D.I_KIND
-        WHEN '1000' THEN 'CANCEL'
+        WHEN '1000' THEN 'CANCEL' 
         WHEN '1001' THEN 'REQUEST'
         WHEN '1002' THEN 'APPROVE'
         WHEN '1003' THEN 'REJECT'
@@ -196,7 +196,7 @@ GO
 --     @I_REF_DOC_NO = 'QT202602',
 --     @I_GROUP = 'IT',
 --     @I_PRIORITY = 'N',
---     @I_REMARK = 'ขออนุมัติซื้อ Laptop',
+--     @I_REMARK = N'ขออนุมัติซื้อ Laptop',
 --     @O_RESULT = @data OUTPUT
 -- SELECT @data AS [Result]
 CREATE OR ALTER PROCEDURE SP_WF_REQUEST
@@ -225,7 +225,7 @@ BEGIN
               AND I_STATUS IN ('0','3')
         )
         BEGIN
-            SET @O_RESULT = '{ "status": false, "message": "Workflow already exists for this document." }';
+            SET @O_RESULT = '{ "status": false, "message": "Workflow already exists for this ['+@I_REF_DOC_NO+']" }';
             ROLLBACK TRAN;
             RETURN;
         END
@@ -245,7 +245,7 @@ BEGIN
 
         IF ISNULL(@I_REQUIRED_LEVEL,0) = 0
         BEGIN
-            SET @O_RESULT = '{ "status": false, "message": "No approver configured for this group." }';
+            SET @O_RESULT = '{ "status": false, "message": "No approver is assigned for this group. Please set it in User Authority." }';
             ROLLBACK TRAN;
             RETURN;
         END
@@ -385,21 +385,21 @@ GO
 
 
 
--- 3. SP_WF_APPROVE_REJECT - อนุมัติ/ปฏิเสธ (I_KIND = '1002', '1003')
+-- 3. SP_WF_APPROVAL_ACTION - อนุมัติ/ปฏิเสธ (I_KIND = '1002', '1003')
 -- อนุมัติ
--- EXEC SP_WF_APPROVE_REJECT
+-- EXEC SP_WF_APPROVAL_ACTION
 --     @I_USER_ID = 'MGR001',
 --     @I_REF_DOC_NO = 'QT202602',
 --     @I_KIND = '1002',
 --     @I_REMARK = 'อนุมัติ';
 
 -- ปฏิเสธ
--- EXEC SP_WF_APPROVE_REJECT
+-- EXEC SP_WF_APPROVAL_ACTION
 --     @I_USER_ID = 'MGR001',
 --     @I_REF_DOC_NO = 'QT202602',
 --     @I_KIND = '1003',
 --     @I_REMARK = N'งบประมาณเกิน';
-CREATE OR ALTER PROCEDURE SP_WF_APPROVE_REJECT
+CREATE OR ALTER PROCEDURE SP_WF_APPROVAL_ACTION
 (
     @I_USER_ID NVARCHAR(50),
     @I_REF_DOC_NO NVARCHAR(50),
@@ -480,7 +480,7 @@ BEGIN
             @I_CURRENT_LEVEL,
             N''+@I_REMARK,
             @I_USER_ID,
-            'SP_WF_APPROVE_REJECT'
+            'SP_WF_APPROVAL_ACTION'
         );
 
         IF @I_KIND = '1003'
@@ -502,7 +502,7 @@ BEGIN
                              END,
             UPDATED_BY=@I_USER_ID,
             UPDATED_DATE=GETDATE(),
-            UPDATED_PRG_NM='SP_WF_APPROVE_REJECT'
+            UPDATED_PRG_NM='SP_WF_APPROVAL_ACTION'
         WHERE I_WF_ID=@I_WF_ID;
 
         COMMIT TRAN;
@@ -512,7 +512,7 @@ BEGIN
     END TRY
     BEGIN CATCH
         IF @@TRANCOUNT > 0 ROLLBACK TRAN;
-        SET @O_RESULT = '{ "status": false, "message": "[SP_WF_APPROVE_REJECT] | ' 
+        SET @O_RESULT = '{ "status": false, "message": "[SP_WF_APPROVAL_ACTION] | ' 
                         + REPLACE(ERROR_MESSAGE(),'"','') + '" }';
     END CATCH
 END
