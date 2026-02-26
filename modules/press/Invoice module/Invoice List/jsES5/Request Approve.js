@@ -129,83 +129,92 @@ data.forEach(function(item) {
   }
 });
 
-if (!selectedItem) {
+if (selectedItem.length === 0) {
   TALON.addErrorMsg('⚠️ No Invoice selected');
 } else {
+  var successCount = 0;
+  var errorMessages = [];
 
-  data.forEach(function(item) {
-    if (item['SEL_CHK'] === "1") {
+  var sql =
+      "" +
+      "SELECT " +
+      "    REQ.I_USER_ID AS REQUESTER_ID, " +
+      "    REQ.I_EMAIL AS REQUESTER_EMAIL, " +
+      "    REQ.I_GROUP, " +
+      "    'Requester' AS REQUESTER_ROLE, " +
+      "    APP.I_USER_ID AS APPROVER_ID, " +
+      "    APP.I_EMAIL AS APPROVER_EMAIL, " +
+      "    APP.I_LEVEL AS APPROVER_LEVEL, " +
+      "    CASE APP.I_IS_FINAL " +
+      "        WHEN '1' THEN 'YES' " +
+      "        ELSE 'NO' " +
+      "    END AS IS_FINAL_APPROVER, " +
+      "    'Approver' AS APPROVER_ROLE " +
+      "FROM [USER_AUTHORITY] REQ " +
+      "INNER JOIN [USER_AUTHORITY] APP " +
+      "    ON APP.I_GROUP = REQ.I_GROUP " +
+      "    AND APP.I_KIND = '1002' " +
+      "    AND APP.I_ACTIVE_FLAG = '1' " +
+      "WHERE REQ.I_USER_ID = '" + UserId + "' " +
+      "  AND REQ.I_KIND = '1001' " +
+      "  AND REQ.I_ACTIVE_FLAG = '1' " +
+      "ORDER BY APP.I_LEVEL";
 
-
-      var result = runNewRequest('SP_WF_REQUEST', item['I_INVOICE_NO'], 'test 1');
-      // result.status
-      if (result.status) {        
-        var sql =
-              "" +
-              "SELECT " +
-              "    REQ.I_USER_ID AS REQUESTER_ID, " +
-              "    REQ.I_EMAIL AS REQUESTER_EMAIL, " +
-              "    REQ.I_GROUP, " +
-              "    'Requester' AS REQUESTER_ROLE, " +
-              "    APP.I_USER_ID AS APPROVER_ID, " +
-              "    APP.I_EMAIL AS APPROVER_EMAIL, " +
-              "    APP.I_LEVEL AS APPROVER_LEVEL, " +
-              "    CASE APP.I_IS_FINAL " +
-              "        WHEN '1' THEN 'YES' " +
-              "        ELSE 'NO' " +
-              "    END AS IS_FINAL_APPROVER, " +
-              "    'Approver' AS APPROVER_ROLE " +
-              "FROM [USER_AUTHORITY] REQ " +
-              "INNER JOIN [USER_AUTHORITY] APP " +
-              "    ON APP.I_GROUP = REQ.I_GROUP " +
-              "    AND APP.I_KIND = '1002' " +
-              "    AND APP.I_ACTIVE_FLAG = '1' " +
-              "WHERE REQ.I_USER_ID = '"+UserId+"' " +
-              "  AND REQ.I_KIND = '1001' " +
-              "  AND REQ.I_ACTIVE_FLAG = '1' " +
-              "ORDER BY APP.I_LEVEL";        
-          var userData = TalonDbUtil.select(TALON.getDbConfig(), sql)[0];
-          //TALON.addMsg(userData);
-          
-          var MAIL_SEND_TO = [userData['APPROVER_EMAIL']];
-          var MAIL_SEND_CC = [userData['REQUESTER_EMAIL']];
-
-          //TALON.addMsg(MAIL_SEND_TO);
-          //TALON.addMsg(MAIL_SEND_CC);
-
-          sendEmail(
-            MAIL_SEND_TO,
-            {
-              subject: "Request Approve",
-              body: createTableHTML(selectedItem),
-              contentType: ContentType.TEXT_HTML
-            },
-            {
-              cc: MAIL_SEND_CC,
-              fromName: "TALON System 📧" 
-            }
-          );
-
-        TALON.addMsg('✅ Send Request Successfully');
-      } else {
-        var y = result.message;
-        TALON.addErrorMsg(y);
-      }
+    var userData = TalonDbUtil.select(TALON.getDbConfig(), sql)[0];
+    var department = userData['I_GROUP'];
 
 
+  // Process all items first
+  selectedItem.forEach(function(item) {
+    var result = runNewRequest('SP_WF_SUBMIT_REQUEST', item['I_INVOICE_NO'], department, 'Request for approval');
+    
+    if (result.status) {
+      successCount++;
+    } else {
+      errorMessages.push(item['I_INVOICE_NO'] + ': ' + result.message);
     }
   });
+
+  // Send email only after all items are processed successfully
+  if (successCount > 0) {
+
+    if (userData) {
+      var MAIL_SEND_TO = [userData['APPROVER_EMAIL']];
+      var MAIL_SEND_CC = [userData['REQUESTER_EMAIL']];
+
+      sendEmail(
+        MAIL_SEND_TO,
+        {
+          subject: "Request Approve",
+          body: createTableHTML(selectedItem),
+          contentType: ContentType.TEXT_HTML
+        },
+        {
+          cc: MAIL_SEND_CC,
+          fromName: "TALON System 📧"
+        }
+      );
+
+      TALON.addMsg('✅ Send Request Successfully (' + successCount + ' invoice(s))');
+    } else {
+      TALON.addErrorMsg('⚠️ User authority data not found');
+    }
+  }
+
+  if (errorMessages.length > 0) {
+    errorMessages.forEach(function(msg) {
+      TALON.addErrorMsg(msg);
+    });
+  }
 }
 
-
-function runNewRequest(procName, ref_no, remark) {
+function runNewRequest(procName, ref_no, dept, remark) {
   var params = [];
   params['I_USER_ID'] = UserId;
   params['I_REF_DOC_NO'] = ref_no;
-  params['I_GROUP'] = '1';
-  params['I_PRIORITY'] = 'N';
+  params['I_GROUP'] = dept;
   params['I_REMARK'] = remark;
-  params['O_RESULT'] = ''; // Output parameter
+  params['O_RESULT'] = '';
 
   var outputParams = ['O_RESULT'];
   var result = TalonDbUtil.prepareCall(
@@ -214,6 +223,6 @@ function runNewRequest(procName, ref_no, remark) {
     params,
     outputParams
   );
-  //TALON.addMsg(result);
+  
   return JSON.parse(result[0]);
 }

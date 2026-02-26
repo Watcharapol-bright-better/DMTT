@@ -48,11 +48,18 @@ if (!csCode || !qtPattern) {
       "    ,[MAIN].[I_RM_AMT] " +          // Material amount
       "    ,[MAIN].[I_LOSS_AMT] " +        // Scrap amount
       "    ,[MAIN].[I_FEE_PROCESS] " +     // Press Processing
-      "    ,[MAIN].[I_FEE_CUSTOM] " +      // Package Material
+      "    ,[MAIN].[I_FEE_CUSTOM] " +
       "    ,[MAIN].[I_FEE_PACK] " +        // Package Material
       "    ,[MAIN].[I_FEE_EXPENSE] " +     // Maintenance Expense
       "    ,[MAIN].[I_FEE_DLY] " +         // Delivery Fee
       "    ,[MAIN].[I_FEE_MGM] " +
+      "    ,ROUND( " +
+      "          ISNULL([MAIN].[I_FEE_PROCESS], 0) " +
+      "        + ISNULL([MAIN].[I_FEE_EXPENSE], 0) " +
+      "        + ISNULL([MAIN].[I_FEE_CUSTOM], 0) " +
+      "        + ISNULL([MAIN].[I_FEE_PACK], 0) " +
+      "        + ISNULL([MAIN].[I_FEE_DLY], 0) " +
+      "      , 2) AS [MANAGEMENT_EXPENSE] " +
       "    ,ROUND( " +
       "          ISNULL([MAIN].[I_RM_AMT], 0) " +
       "        + ISNULL([MAIN].[I_LOSS_AMT], 0) " +

@@ -6,7 +6,7 @@ CREATE TABLE [dbo].[USER_AUTHORITY](
 	[I_KIND] [nvarchar](5) NOT NULL,  -- 1001=Requester (ผู้ขออนุมัติ), 1002=Approver (ผู้อนุมัติ)
 	[I_GROUP] [nvarchar](50) NOT NULL, -- กลุ่มแผนก (IT, HR, Sales, etc..)
 	[I_LEVEL] [numeric](2, 0) NULL, -- ระดับการอนุมัติ: 0=Requester, 1=Manager, 2=Director, 3=CEO, ...
-	[I_IS_FINAL] [nvarchar](1) NULL, -- เป็นขั้นสุดท้ายหรือไม่: 1=อนุมัติแล้วจบเลย, 0=ต้องไปขั้นถัดไป
+	[I_IS_FINAL] [nvarchar](1) NULL, -- Final Approver | เป็นขั้นสุดท้ายหรือไม่: 1=อนุมัติแล้วจบเลย, 0=ต้องไปขั้นถัดไป
 	[I_ACTIVE_FLAG] [nvarchar](1) NULL, -- สถานะใช้งาน: 1=ใช้งาน, 0=ปิดการใช้งาน
 	[CREATED_DATE] [datetime] NULL,
 	[CREATED_BY] [nvarchar](10) NULL,
@@ -14,6 +14,7 @@ CREATE TABLE [dbo].[USER_AUTHORITY](
 	[UPDATED_DATE] [datetime] NULL,
 	[UPDATED_BY] [nvarchar](10) NULL,
 	[UPDATED_PRG_NM] [nvarchar](50) NULL,
+    [MODIFY_COUNT] NUMERIC(10,0) NULL,
  CONSTRAINT [PK_USER_AUTHORITY] PRIMARY KEY CLUSTERED 
 (
 	[I_AUTH_ID] ASC
@@ -21,15 +22,14 @@ CREATE TABLE [dbo].[USER_AUTHORITY](
 ) ON [PRIMARY]
 GO
 
-CREATE TABLE [dbo].[WF_H](
+CREATE TABLE [dbo].[WFS_T_H](
 	[I_WF_ID] [nvarchar](20) NOT NULL,
 	[I_REF_DOC_NO] [nvarchar](50) NOT NULL,
 	[I_GROUP] [nvarchar](50) NOT NULL,
-	[I_USER_ID] [nvarchar](50) NOT NULL,
+	[I_USER_ID] [nvarchar](50) NOT NULL, -- User ID ผู้ส่งคำขอ (Requester)
 	[I_CURRENT_LEVEL] [numeric](2, 0) NULL,
 	[I_REQUIRED_LEVEL] [numeric](2, 0) NULL,
-	[I_STATUS] [nvarchar](2) NULL,
-	[I_PRIORITY] [nvarchar](1) NULL,
+	[I_STATUS] [nvarchar](2) NULL, -- 0: Closs, 1: Open
 	[I_REQUEST_DATE] [datetime] NULL,
 	[I_COMPLETED_DATE] [datetime] NULL,
 	[CREATED_DATE] [datetime] NULL,
@@ -38,21 +38,25 @@ CREATE TABLE [dbo].[WF_H](
 	[UPDATED_DATE] [datetime] NULL,
 	[UPDATED_BY] [nvarchar](10) NULL,
 	[UPDATED_PRG_NM] [nvarchar](50) NULL,
- CONSTRAINT [PK_WF_H] PRIMARY KEY CLUSTERED 
+    [MODIFY_COUNT] NUMERIC(10,0) NULL,
+ CONSTRAINT [PK_WFS_T_H] PRIMARY KEY CLUSTERED 
 (
 	[I_WF_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
 
-CREATE TABLE [dbo].[WF_D](
+CREATE TABLE [dbo].[WFS_T_D](
 	[I_WF_ID] [nvarchar](20) NOT NULL,
-	[I_INTERNAL_NO] [nvarchar](20) NOT NULL,
+	[I_WF_INTERNAL_NO] [nvarchar](20) NOT NULL,
 	[I_SEQ_NO] [numeric](3, 0) NOT NULL,
-	[I_USER_ID] [nvarchar](50) NOT NULL,
+	[I_USER_ID] [nvarchar](50) NOT NULL, -- User ID ผู้ส่งคำขอ (Requester)
+    [I_APPROVER_ID] [nvarchar](50) NOT NULL,
 	[I_KIND] [nvarchar](5) NOT NULL,
 	[I_LEVEL] [numeric](2, 0) NULL, 
-	[I_ACTION_DATE] [datetime] NULL,
+    [I_STATUS] [nvarchar](2) NULL, --  0: Pending, 1: Approved, 2: Unapproved, 3: Rejected
+	[I_ACTION_BY] [nvarchar](20) NULL,
+    [I_ACTION_DATE] [datetime] NULL,
 	[I_REMARK] [nvarchar](1000) NULL,
 	[CREATED_DATE] [datetime] NULL,
 	[CREATED_BY] [nvarchar](10) NULL,
@@ -60,10 +64,11 @@ CREATE TABLE [dbo].[WF_D](
 	[UPDATED_DATE] [datetime] NULL,
 	[UPDATED_BY] [nvarchar](10) NULL,
 	[UPDATED_PRG_NM] [nvarchar](50) NULL,
- CONSTRAINT [PK_WF_D] PRIMARY KEY CLUSTERED 
+    [MODIFY_COUNT] NUMERIC(10,0) NULL,
+ CONSTRAINT [PK_WFS_T_D] PRIMARY KEY CLUSTERED 
 (
 	[I_WF_ID] ASC,
-	[I_INTERNAL_NO] ASC
+	[I_WF_INTERNAL_NO] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -111,12 +116,12 @@ FROM (
         UA.I_EMAIL AS Approver_EMAIL,
         UA.I_LEVEL AS Approver_LEVEL,
         UA.I_IS_FINAL,
-        (SELECT TOP 1 I_REMARK FROM WF_D WHERE I_WF_ID = H.I_WF_ID AND I_KIND = '1001' ORDER BY I_SEQ_NO) AS REQUEST_REMARK,
+        (SELECT TOP 1 I_REMARK FROM WFS_T_D WHERE I_WF_ID = H.I_WF_ID AND I_KIND = '1001' ORDER BY I_SEQ_NO) AS REQUEST_REMARK,
         ROW_NUMBER() OVER(
             PARTITION BY H.I_WF_ID, UA.I_USER_ID 
             ORDER BY UA.I_AUTH_ID
         ) AS RN
-    FROM WF_H H
+    FROM WFS_T_H H
     LEFT JOIN USER_AUTHORITY UA 
         ON UA.I_GROUP = H.I_GROUP
         AND UA.I_LEVEL = H.I_CURRENT_LEVEL
@@ -152,11 +157,11 @@ SELECT
     H.I_REQUEST_DATE,
     H.I_COMPLETED_DATE,
     -- ข้อมูลจาก REQUEST
-    (SELECT TOP 1 I_REMARK FROM WF_D WHERE I_WF_ID = H.I_WF_ID AND I_KIND = '1001' ORDER BY I_SEQ_NO) AS REQUEST_REMARK,
+    (SELECT TOP 1 I_REMARK FROM WFS_T_D WHERE I_WF_ID = H.I_WF_ID AND I_KIND = '1001' ORDER BY I_SEQ_NO) AS REQUEST_REMARK,
     -- ข้อมูลการดำเนินการล่าสุด
-    (SELECT TOP 1 I_USER_ID FROM WF_D WHERE I_WF_ID = H.I_WF_ID ORDER BY I_SEQ_NO DESC) AS LAST_ACTION_BY,
-    (SELECT TOP 1 I_REMARK FROM WF_D WHERE I_WF_ID = H.I_WF_ID ORDER BY I_SEQ_NO DESC) AS LAST_REMARK
-FROM WF_H H;
+    (SELECT TOP 1 I_USER_ID FROM WFS_T_D WHERE I_WF_ID = H.I_WF_ID ORDER BY I_SEQ_NO DESC) AS LAST_ACTION_BY,
+    (SELECT TOP 1 I_REMARK FROM WFS_T_D WHERE I_WF_ID = H.I_WF_ID ORDER BY I_SEQ_NO DESC) AS LAST_REMARK
+FROM WFS_T_H H;
 GO
 
 -- 3. VW_WORKFLOW_HISTORY - ประวัติการอนุมัติ
@@ -184,8 +189,8 @@ SELECT
     D.I_LEVEL,
     D.I_ACTION_DATE,
     D.I_REMARK
-FROM WF_H H
-INNER JOIN WF_D D ON H.I_WF_ID = D.I_WF_ID;
+FROM WFS_T_H H
+INNER JOIN WFS_T_D D ON H.I_WF_ID = D.I_WF_ID;
 GO
 
 
@@ -220,7 +225,7 @@ BEGIN
 
         -- Check existing active workflow
         IF EXISTS (
-            SELECT 1 FROM WF_H
+            SELECT 1 FROM WFS_T_H
             WHERE I_REF_DOC_NO = @I_REF_DOC_NO
               AND I_STATUS IN ('0','3')
         )
@@ -251,7 +256,7 @@ BEGIN
         END
 
         -- Insert header
-        INSERT INTO WF_H
+        INSERT INTO WFS_T_H
         (
             I_WF_ID, I_REF_DOC_NO, I_GROUP, I_USER_ID,
             I_CURRENT_LEVEL, I_REQUIRED_LEVEL, I_STATUS, I_PRIORITY,
@@ -265,7 +270,7 @@ BEGIN
         );
 
         -- Insert request detail
-        INSERT INTO WF_D
+        INSERT INTO WFS_T_D
         (
             I_WF_ID, I_INTERNAL_NO, I_SEQ_NO, I_USER_ID,
             I_KIND, I_LEVEL, I_REMARK,
@@ -320,7 +325,7 @@ BEGIN
         SELECT TOP 1
             @I_WF_ID = I_WF_ID,
             @I_Requester_ID = I_USER_ID
-        FROM WF_H
+        FROM WFS_T_H
         WHERE I_REF_DOC_NO = @I_REF_DOC_NO
           AND I_STATUS IN ('0','3')
         ORDER BY I_REQUEST_DATE DESC;
@@ -341,9 +346,9 @@ BEGIN
         END
 
         SELECT @I_SEQ_NO = ISNULL(MAX(I_SEQ_NO),0)+1
-        FROM WF_D WHERE I_WF_ID = @I_WF_ID;
+        FROM WFS_T_D WHERE I_WF_ID = @I_WF_ID;
 
-        INSERT INTO WF_D
+        INSERT INTO WFS_T_D
         (
             I_WF_ID, I_INTERNAL_NO, I_SEQ_NO, I_USER_ID,
             I_KIND, I_REMARK,
@@ -361,7 +366,7 @@ BEGIN
             'SP_WF_CANCEL'
         );
 
-        UPDATE WF_H
+        UPDATE WFS_T_H
         SET I_STATUS = '9',
             I_COMPLETED_DATE = GETDATE(),
             UPDATED_BY = @I_USER_ID,
@@ -388,10 +393,10 @@ GO
 -- 3. SP_WF_APPROVAL_ACTION - อนุมัติ/ปฏิเสธ (I_KIND = '1002', '1003')
 -- อนุมัติ
 -- EXEC SP_WF_APPROVAL_ACTION
---     @I_USER_ID = 'MGR001',
---     @I_REF_DOC_NO = 'QT202602',
---     @I_KIND = '1002',
---     @I_REMARK = 'อนุมัติ';
+    -- @I_USER_ID = 'MGR001',
+    -- @I_REF_DOC_NO = 'QT202602',
+    -- @I_KIND = '1002',
+    -- @I_REMARK = 'อนุมัติ';
 
 -- ปฏิเสธ
 -- EXEC SP_WF_APPROVAL_ACTION
@@ -434,7 +439,7 @@ BEGIN
             @I_CURRENT_LEVEL = I_CURRENT_LEVEL,
             @I_REQUIRED_LEVEL = I_REQUIRED_LEVEL,
             @I_GROUP = I_GROUP
-        FROM WF_H
+        FROM WFS_T_H
         WHERE I_REF_DOC_NO = @I_REF_DOC_NO
           AND I_STATUS IN ('0','3');
 
@@ -462,9 +467,9 @@ BEGIN
         END
 
         SELECT @I_SEQ_NO = ISNULL(MAX(I_SEQ_NO),0)+1
-        FROM WF_D WHERE I_WF_ID=@I_WF_ID;
+        FROM WFS_T_D WHERE I_WF_ID=@I_WF_ID;
 
-        INSERT INTO WF_D
+        INSERT INTO WFS_T_D
         (
             I_WF_ID, I_INTERNAL_NO, I_SEQ_NO,
             I_USER_ID, I_KIND, I_LEVEL, I_REMARK,
@@ -490,7 +495,7 @@ BEGIN
         ELSE
             SET @I_NEW_STATUS = '3';
 
-        UPDATE WF_H
+        UPDATE WFS_T_H
         SET I_CURRENT_LEVEL = CASE 
                                 WHEN @I_NEW_STATUS='3' THEN I_CURRENT_LEVEL+1 
                                 ELSE I_CURRENT_LEVEL 
