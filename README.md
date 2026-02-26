@@ -69,7 +69,7 @@ Fixed conditional expression
 
 ✅ `DMTT_T_PRESS_INVOICE_DOWNLOAD` : Print Invoice (Press)
 
-✅ `DMTT_T_PRESS_SHIPMENT_ORDER_DOWNLOAD` : Print Shipping Order (Press)
+✅ `DMTT_T_PRESS_SHIP_ORDER_DOWNLOAD` : Print Shipping Order (Press) =========
 
 ✅ `DMTT_T_PRESS_PACKAGE_LIST_DOWNLOAD` : Print Packing List (Press)
 
@@ -107,7 +107,7 @@ Fixed conditional expression
 ### [Hunyo Code]
 - `DMTT_G_USER_LVL` : User Level | '0' : Level 0 | '1' : Level 1 | '2' : Level 2
 - `DMTT_G_INVOICE_TYPE` : Invoice Type
-- `DMTT_G_SO_STATUS` : SO Status, I_COMPCLS
+- `DMTT_G_SO_STATUS` : SO Status, I_COMPCLS =======
 - `DMTT_G_USER_ROLES` : Department Group
 - `DMTT_G_GROUP`
 - `DMTT_G_CURRENCY` : Currency Code 
@@ -129,7 +129,6 @@ Fixed conditional expression
 - `DMTT_G_GA_TLN_API`
 
 ### [Search Subform]
-- `DMTT_T_SHP010_CS` : Ship To, I_SHIPTO | Bill To, I_BILLTO
 - `DMTT_S_SO_LIST`: DMTT Sale Order Subform
 - `DMTT_S_CURRENCY` : Currency Subform ^
 - `DMTT_S_INVOICE_TYPE` : Allowed Invoice Type Subform

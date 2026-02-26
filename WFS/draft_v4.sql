@@ -90,7 +90,7 @@ SELECT
     [H].[I_REQUEST_DATE],
     [H].[I_COMPLETED_DATE],
     
-    -- ข้อมูลจาก Detail แถวล่าสุด
+    -- ข้อมูลจาก Detail แถวล่าสุด (เฉพาะ I_KIND = '1002')
     [D].[I_WF_INTERNAL_NO] AS [LATEST_INTERNAL_NO],
     [D].[I_SEQ_NO] AS [LATEST_SEQ_NO],
     [D].[I_APPROVER_ID],
@@ -112,24 +112,33 @@ SELECT
     [UA].[I_EMAIL] AS [APPROVER_EMAIL],
     [UA].[I_IS_FINAL],
     
-    -- ดึง Remark จากคำขอเริ่มต้น
+    -- ดึง Remark จากคำขอล่าสุด (I_KIND = '1001')
     (
         SELECT TOP 1 [I_REMARK] 
         FROM [dbo].[WFS_T_D] 
         WHERE [I_WF_ID] = [H].[I_WF_ID] 
         AND [I_KIND] = '1001' 
-        ORDER BY [I_SEQ_NO]
+        ORDER BY [I_SEQ_NO] DESC  -- เปลี่ยนจาก ASC เป็น DESC
     ) AS [REQUEST_REMARK]
     
 FROM [dbo].[WFS_T_H] [H]
 
--- JOIN กับ WFS_T_D แถวล่าสุด (อิงจาก CREATED_DATE มากสุด)
+-- JOIN กับ WFS_T_D แถวล่าสุดที่เป็น Approval Action (I_KIND = '1002')
 INNER JOIN [dbo].[WFS_T_D] [D] 
     ON [D].[I_WF_ID] = [H].[I_WF_ID]
+    AND [D].[I_KIND] = '1002'  -- เฉพาะ Approval Action
     AND [D].[CREATED_DATE] = (
         SELECT MAX([CREATED_DATE])
         FROM [dbo].[WFS_T_D]
         WHERE [I_WF_ID] = [H].[I_WF_ID]
+        AND [I_KIND] = '1002'  -- เฉพาะ Approval Action
+    )
+    AND [D].[I_SEQ_NO] = (  -- เผื่อมี CREATED_DATE เท่ากัน ให้เอา SEQ_NO ล่าสุด
+        SELECT MAX([I_SEQ_NO])
+        FROM [dbo].[WFS_T_D]
+        WHERE [I_WF_ID] = [H].[I_WF_ID]
+        AND [I_KIND] = '1002'
+        AND [CREATED_DATE] = [D].[CREATED_DATE]
     )
 
 -- JOIN กับ USER_AUTHORITY เพื่อดึงข้อมูล Approver
@@ -139,7 +148,6 @@ LEFT JOIN [dbo].[USER_AUTHORITY] [UA]
     AND [UA].[I_LEVEL] = [D].[I_LEVEL]
     AND [UA].[I_KIND] = '1002'
     AND [UA].[I_ACTIVE_FLAG] = '1'
-
 GO
 
 -- ===================================================================

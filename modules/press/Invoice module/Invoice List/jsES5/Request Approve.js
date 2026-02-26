@@ -166,7 +166,7 @@ if (selectedItem.length === 0) {
 
   // Process all items first
   selectedItem.forEach(function(item) {
-    var result = runNewRequest('SP_WF_SUBMIT_REQUEST', item['I_INVOICE_NO'], department, 'Request for approval');
+    var result = runWorkflowAction('SP_WF_SUBMIT_REQUEST', item['I_INVOICE_NO'], department, 'Request for approval');
     
     if (result.status) {
       successCount++;
@@ -208,7 +208,7 @@ if (selectedItem.length === 0) {
   }
 }
 
-function runNewRequest(procName, ref_no, dept, remark) {
+function runWorkflowAction(procName, ref_no, dept, remark) {
   var params = [];
   params['I_USER_ID'] = UserId;
   params['I_REF_DOC_NO'] = ref_no;

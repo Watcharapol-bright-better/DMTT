@@ -26,24 +26,14 @@ if (!selectedItem) {
   TALON.addErrorMsg('⚠️ No Invoice selected');
 } else {
 
-  var checkStatus = "SELECT [I_APPR_STATUS] FROM [T_PR_INVOICE_H] WHERE [I_INVOICE_NO] = '" +
-    selectedItem['I_INVOICE_NO'] + "'";
-
-  var Status = TalonDbUtil
-    .select(TALON.getDbConfig(), checkStatus)[0]['I_APPR_STATUS'];
-
-  var isApproval = {
-    Unapproved: '0',
-    Approved: '1'
-  };
-
-  if (Status === isApproval.Unapproved) {
+  var Status = selectedItem['WF_CURRENT_EVENT_STATUS'];
+  if (Status === actionType.Approved) {
     TALON.addErrorMsg('⚠️ Invoice already unapproved');
   } else {
 
     data.forEach(function(item) {
       if (item['SEL_CHK'] === "1") {
-        var result = runApprove('SP_WF_APPROVAL_ACTION', item['I_INVOICE_NO'], null);
+        var result = runWorkflowAction('SP_WF_APPROVAL_ACTION', item['I_INVOICE_NO'], null);
         if (result.status) {
           TALON.addMsg('✅ Invoice [' + item['I_INVOICE_NO'] + '] Unapproved Successfully');
         } else {
@@ -57,7 +47,7 @@ if (!selectedItem) {
   }
 }
 
-function runApprove(procName, ref_no, remark) {
+function runWorkflowAction(procName, ref_no, remark) {
   var params = [];
   params['I_USER_ID'] = UserId;
   params['I_REF_DOC_NO'] = ref_no;

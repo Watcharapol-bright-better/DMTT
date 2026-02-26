@@ -35,10 +35,9 @@ if (!selectedItem) {
     data.forEach(function(item) {
       if (item['SEL_CHK'] === "1") {
 
-        var result = runApprove('SP_WF_APPROVAL_ACTION', item['I_INVOICE_NO'], null);
+        var result = runWorkflowAction('SP_WF_APPROVAL_ACTION', item['I_INVOICE_NO'], null);
         if (result.status) {
-
-          TALON.addMsg('✅ Invoice Approved Successfully');
+          TALON.addMsg('✅ Invoice [' + item['I_INVOICE_NO'] + '] Approved Successfully');
         } else {
           var y = result.message;
           TALON.addErrorMsg(y);
@@ -52,7 +51,7 @@ if (!selectedItem) {
 
 
 
-function runApprove(procName, ref_no, remark) {
+function runWorkflowAction(procName, ref_no, remark) {
   var params = [];
   params['I_USER_ID'] = UserId;
   params['I_REF_DOC_NO'] = ref_no;

@@ -4,39 +4,56 @@ var UserId = UserInfo['USER_ID'];
 var ProgramNM = UserInfo['FUNC_ID'];
 var selectedItem = [];
 
+var actorType = {
+  'Requester': '1001',
+  'Approver': '1002'
+}
+
+var actionType = {
+  'Approved': '1',
+  'Unapproved': '2',
+  'Rejected': '3'
+}
+
 data.forEach(function(item) {
   if (item['SEL_CHK'] === "1" && !selectedItem) {
     selectedItem.push(item);
   }
 });
 
+
 if (!selectedItem) {
   TALON.addErrorMsg('⚠️ No Invoice selected');
 } else {
 
-  data.forEach(function(item) {
-    if (item['SEL_CHK'] === "1") {
+  var Status = selectedItem['WF_CURRENT_EVENT_STATUS'];
+  if (Status === actionType.Rejected) {
+    TALON.addErrorMsg('⚠️ Invoice already unapproved');
+  } else {
 
-      var result = runApprove('SP_WF_APPROVAL_ACTION', item['I_INVOICE_NO'], null);
-      if (result.status) {
-        TALON.addMsg('✅ Invoice Rejected Successfully');
-      } else {
-        var y = result.message;
-        TALON.addErrorMsg(y);
+    data.forEach(function(item) {
+      if (item['SEL_CHK'] === "1") {
+        var result = runWorkflowAction('SP_WF_APPROVAL_ACTION', item['I_INVOICE_NO'], null);
+        if (result.status) {
+          TALON.addMsg('✅ Invoice [' + item['I_INVOICE_NO'] + '] Rejected Successfully');
+        } else {
+          var y = result.message;
+          TALON.addErrorMsg(y);
+        }
+
       }
-      
-    }
-  });
+    });
+
+  }
 }
 
 
-
-function runRejecte(procName, ref_no, remark) {
+function runWorkflowAction(procName, ref_no, remark) {
   var params = [];
   params['I_USER_ID'] = UserId;
   params['I_REF_DOC_NO'] = ref_no;
   params['I_KIND'] = actorType['Approver'];
-  params['I_STATUS'] = actionType['Approved'];
+  params['I_STATUS'] = actionType['Rejected'];
   params['I_REMARK'] = remark;
   params['O_RESULT'] = ''; // Output parameter
 
