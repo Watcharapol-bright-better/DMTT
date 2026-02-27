@@ -6,3 +6,6 @@ deploy
 backup
 soffice
 assests
+temp
+python/js/out
+python/sql/out
