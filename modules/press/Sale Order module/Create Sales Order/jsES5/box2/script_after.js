@@ -7,7 +7,7 @@ var now = new java.util.Date();
 var _I_SONO = TALON.getBindValue("I_SONO");
 // TALON.addMsg('2 I_SONO: '+_I_SONO);
 var sql =
-  "SELECT IIF(EXISTS (SELECT 1 FROM [T_PR_SORD] WHERE [I_SONO] = '" +
+  "SELECT IIF(EXISTS (SELECT 1 FROM [T_PR_SORD_H] WHERE [I_SONO] = '" +
   searchData.I_SONO +
   "'), 1, 0) AS [Result]";
 var isReadySO = TalonDbUtil.select(TALON.getDbConfig(), sql)[0]["Result"];
@@ -19,10 +19,6 @@ var isSO = {
   noexists: 0,
 };
 
-if (isReadySO === isSO.noexists) {
-  /*
-  Box2 = {I_SONO=SOP26010063, CREATED_BY=, I_ITEMCODE=000001, CREATED_DATE=null, I_UNTPRI=15025, I_LNNO=1, I_DESC=BLANK BUSBAR, INTERNAL_NO=, I_QTY=1, I_DLY_PLACE=, UPDATED_BY=, UPDATED_PRG_NM=, UPDATED_DATE=null, CREATED_PRG_NM=, MODIFY_COUNT=null, I_AMOUNT=15025.00}
-  */
   var Box2 = TALON.getTargetData();
   if (Box2["I_QTY"] !== null) {
     // =========================
@@ -68,6 +64,13 @@ if (isReadySO === isSO.noexists) {
 
     TalonDbUtil.insertByMap(TALON.getDbConfig(), TABLE_NAME, Box2, detailCol);
   }
+
+/*
+if (isReadySO === isSO.noexists) {
+  //Box2 = {I_SONO=SOP26010063, CREATED_BY=, I_ITEMCODE=000001, CREATED_DATE=null, I_UNTPRI=15025, I_LNNO=1, I_DESC=BLANK BUSBAR, INTERNAL_NO=, I_QTY=1, I_DLY_PLACE=, UPDATED_BY=, UPDATED_PRG_NM=, UPDATED_DATE=null, CREATED_PRG_NM=, MODIFY_COUNT=null, I_AMOUNT=15025.00}
+
+
 } else {
   TALON.addErrorMsg("⚠️ Sales Order already exists.");
 }
+*/
