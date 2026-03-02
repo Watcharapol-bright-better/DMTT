@@ -5,24 +5,13 @@ var ContentType = {
   MULTIPART: "multipart/mixed"
 };
 
-// ===== Invoice Type Mapping =====
-var InvoiceType = {
-  0: "Invoice",
-  1: "Debit Note",
-  2: "Credit Note"
-};
-
 // ===== Approval Status Mapping =====
 var ApprStatus = {
   "0": "Pending",
   "1": "Approved",
-  "2" : "Unapproved",
-  "3" : "Rejected"
+  "2": "Unapproved",
+  "3": "Rejected"
 };
-
-function getInvoiceTypeName(typeCode) {
-  return InvoiceType[typeCode] || "Wait";
-}
 
 function getApprStatus(typeCode) {
   return ApprStatus[typeCode] || "Wait";
@@ -70,48 +59,51 @@ function getApprStatusBadge(statusCode) {
   );
 }
 
-
 // ===== Create HTML Table Function =====
 function createTableHTML(items) {
   var html = '<div style="font-family: Arial, sans-serif;">';
-  html += '<h2 style="color: #333;">Invoice List (Request Approve)</h2>';
+  html += '<h2 style="color: #333;">Quotation List (Request Approve)</h2>';
 
-  html +=
-    '<table style="border-collapse: collapse; width: 100%; margin-top: 20px;">';
+  html += '<table style="border-collapse: collapse; width: 100%; margin-top: 20px;">';
   html += "<thead>";
   html += '<tr style="background-color: #4c5eaf; color: white;">';
   html += '<th style="border: 1px solid #ddd; padding: 12px; text-align: left;">No.</th>';
-  html += '<th style="border: 1px solid #ddd; padding: 12px; text-align: left;">Invoice No</th>';
-  html += '<th style="border: 1px solid #ddd; padding: 12px; text-align: left;">Invoice Type</th>';
-  html += '<th style="border: 1px solid #ddd; padding: 12px; text-align: left;">Ship Order No</th>';
+  html += '<th style="border: 1px solid #ddd; padding: 12px; text-align: left;">Quotation No.</th>';
+  html += '<th style="border: 1px solid #ddd; padding: 12px; text-align: left;">Quotation Month</th>';
+  html += '<th style="border: 1px solid #ddd; padding: 12px; text-align: left;">Customer Code</th>';
   html += '<th style="border: 1px solid #ddd; padding: 12px; text-align: left;">Customer Name</th>';
-  html += '<th style="border: 1px solid #ddd; padding: 12px; text-align: left;">Ship To</th>';
-  html += '<th style="border: 1px solid #ddd; padding: 12px; text-align: left;">Invoice Date</th>';
-  html += '<th style="border: 1px solid #ddd; padding: 12px; text-align: left;">Status</th>';
+  html += '<th style="border: 1px solid #ddd; padding: 12px; text-align: left;">Customer PO Month</th>';
+  html += '<th style="border: 1px solid #ddd; padding: 12px; text-align: left;">Currency</th>';
   html += "</tr>";
   html += "</thead>";
   html += "<tbody>";
 
+  // Filter เอาเฉพาะ Header (LVL = 1)
+  var headers = [];
   for (var i = 0; i < items.length; i++) {
-    var item = items[i];
+    if (items[i].LVL === "1") {
+      headers.push(items[i]);
+    }
+  }
+
+  for (var i = 0; i < headers.length; i++) {
+    var item = headers[i];
     var rowColor = i % 2 === 0 ? "#f9f9f9" : "#ffffff";
 
     html += '<tr style="background-color: ' + rowColor + ';">';
     html += '<td style="border: 1px solid #ddd; padding: 10px;">' + (i + 1) + "</td>";
     html += '<td style="border: 1px solid #ddd; padding: 10px;"><strong>' +
-      (item.I_INVOICE_NO || "") + "</strong></td>";
+      (item.I_QT_NO || "") + "</strong></td>";
     html += '<td style="border: 1px solid #ddd; padding: 10px;">' +
-      getInvoiceTypeName(item.I_TYPE) + "</td>";
+      (DateFmt.formatDate(item.I_QT_MTH.toString()) || "") + "</td>";
     html += '<td style="border: 1px solid #ddd; padding: 10px;">' +
-      (item.I_SHIP_ORDER_NO || "") + "</td>";
+      (item.I_CSCODE || "") + "</td>";
     html += '<td style="border: 1px solid #ddd; padding: 10px;">' +
       (item.I_NAME || "") + "</td>";
     html += '<td style="border: 1px solid #ddd; padding: 10px;">' +
-      (item.I_SHIP_TO || "") + "</td>";
+      (DateFmt.formatDate(item.I_PO_MONTH.toString()) || "") + "</td>";
     html += '<td style="border: 1px solid #ddd; padding: 10px;">' +
-      DateFmt.formatDate(item.I_INVOICE_DATE.toString()) + "</td>";
-    html += '<td style="border: 1px solid #ddd; padding: 10px;">' +
-      getApprStatusBadge(item.I_APPR_STATUS) + "</td>";
+      (item.I_CURRENCY || "") + "</td>";
     html += "</tr>";
   }
 
@@ -119,11 +111,11 @@ function createTableHTML(items) {
   html += "</table>";
 
   html += '<p style="margin-top: 20px; color: #666;">Total Records: <strong>' +
-    items.length + "</strong></p>";
+    headers.length + "</strong></p>";
 
   html +=
     '<div style="margin-top: 30px; text-align: center;">' +
-    '<a href="'+TALON.getBindValue('DOMAIN_TLN')+'/MAIL_REDIRECT_INV.html" ' +
+    '<a href="'+TALON.getBindValue('DOMAIN_TLN')+'/MAIL_REDIRECT_QT.html" ' +
     'style="background-color: #4c5eaf; color: white; padding: 12px 24px; ' +
     'text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">' +
     'Approval' +
@@ -135,6 +127,8 @@ function createTableHTML(items) {
   return html;
 }
 
+
+// ===== Main Execution =====
 var data = TALON.getBlockData_List(2);
 var UserInfo = TALON.getUserInfoMap();
 var UserId = UserInfo['USER_ID'];
@@ -148,7 +142,7 @@ data.forEach(function(item) {
 });
 
 if (selectedItem.length === 0) {
-  TALON.addErrorMsg('⚠️ No Invoice selected');
+  TALON.addErrorMsg('⚠️ No Quotation selected');
 } else {
   var successCount = 0;
   var errorMessages = [];
@@ -178,24 +172,30 @@ if (selectedItem.length === 0) {
       "  AND REQ.I_ACTIVE_FLAG = '1' " +
       "ORDER BY APP.I_LEVEL";
 
-    var userData = TalonDbUtil.select(TALON.getDbConfig(), sql)[0];
-    var department = userData['I_GROUP'];
+  var userData = TalonDbUtil.select(TALON.getDbConfig(), sql)[0];
+  var department = userData['I_GROUP'];
 
-
-  // Process all items first
+  // Group items by QT_NO to get unique quotations
+  var uniqueQTs = {};
   selectedItem.forEach(function(item) {
-    var result = runWorkflowAction('SP_WF_SUBMIT_REQUEST', item['I_INVOICE_NO'], department, 'Request for approval');
+    if (!uniqueQTs[item.I_QT_NO]) {
+      uniqueQTs[item.I_QT_NO] = item;
+    }
+  });
+
+  // Process each unique QT
+  for (var qtNo in uniqueQTs) {
+    var result = runWorkflowAction('SP_WF_SUBMIT_REQUEST', qtNo, department, 'Request for approval');
     
     if (result.status) {
       successCount++;
     } else {
-      errorMessages.push(item['I_INVOICE_NO'] + ': ' + result.message);
+      errorMessages.push(qtNo + ': ' + result.message);
     }
-  });
+  }
 
   // Send email only after all items are processed successfully
   if (successCount > 0) {
-
     if (userData) {
       var MAIL_SEND_TO = [userData['APPROVER_EMAIL']];
       var MAIL_SEND_CC = [userData['REQUESTER_EMAIL']];
@@ -203,7 +203,7 @@ if (selectedItem.length === 0) {
       sendEmail(
         MAIL_SEND_TO,
         {
-          subject: "Request Approve",
+          subject: "Request Approve - Quotation",
           body: createTableHTML(selectedItem),
           contentType: ContentType.TEXT_HTML
         },
@@ -213,7 +213,7 @@ if (selectedItem.length === 0) {
         }
       );
 
-      TALON.addMsg('✅ Send Request Successfully (' + successCount + ' invoice(s))');
+      TALON.addMsg('✅ Send Request Successfully (' + successCount + ' quotation(s))');
     } else {
       TALON.addErrorMsg('⚠️ User authority data not found');
     }

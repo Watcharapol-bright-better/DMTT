@@ -27,7 +27,7 @@ if (!selectedItem) {
 } else {
 
   var Status = selectedItem['WF_CURRENT_EVENT_STATUS'];
-  if (Status === actionType.Approved) {
+  if (Status === actionType.Unapproved) {
     TALON.addErrorMsg('⚠️ Invoice already unapproved');
   } else {
 

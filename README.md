@@ -28,15 +28,15 @@ TALON/APPLICATION/GENERALFREE/GENERALFREE.xhtml?PARAM_FUNC_ID=DMTT_USER_AUTHORIT
 ### [Sale Order Modules]
 ✅ `DMTT_PRESS_QT_DOWNLOAD` : Print Quotation (Press)
 
-✅ `DMTT_T_PRESS_QT` : Create Quotation (Press) **
+⚠️ `DMTT_T_PRESS_QT` : Create Quotation (Press)
 
-✅ `DMTT_T_PRESS_QT_LIST` : Quotation List (Press) **
+⚠️ `DMTT_T_PRESS_QT_LIST` : Quotation List (Press)
 
-✅ `DMTT_T_PRESS_SALES_ORDER` : Create Sales Order (Press) **
+✅ `DMTT_T_PRESS_SALES_ORDER` : Create Sales Order (Press)
 
 ✅ `DMTT_T_PRESS_SALES_ORDER_EDIT` : Sales Order Edit (Press) 
 
-✅ `DMTT_T_PRESS_SALES_ORDER_LIST` : Sales Order List (Press) **
+⚠️ `DMTT_T_PRESS_SALES_ORDER_LIST` : Sales Order List (Press)
 
 ✅ `DMTT_T_PRESS_CONF_DELIIVERY_ORDER` : Confirm Delivery Order (Press)
 
@@ -47,9 +47,9 @@ Fixed conditional expression
 ### [Invoice Modules] 
 ✅ `DMTT_T_PRESS_SHIPMENT_INST` : Create Shipment Instruction (Press) 
 
-✅ `DMTT_T_PRESS_SHIPMENT_INST_DETAIL` : Shipment Instruction Detail (Press) 
+✅ `DMTT_T_PRESS_SHIPMENT_INST_DETAIL` : Shipment Instruction Detail (Press) **
 
-✅ `DMTT_T_PRESS_SHIPMENT_INST_LIST` : Shipment Instruction List (Press) **
+⚠️ `DMTT_T_PRESS_SHIPMENT_INST_LIST` : Shipment Instruction List (Press)
 
 ✅ `DMTT_T_PRESS_ASSIGN_SHIP_JOB` : Assign Shipment Job (Press) 
 
@@ -63,11 +63,11 @@ Fixed conditional expression
 
 ✅ `DMTT_T_PRESS_INVOICE_DETAIL` : Invoice Detail (Press) 
 
-✅ `DMTT_T_PRESS_INVOICE_LIST` : Invoice List (Press)
+⚠️ `DMTT_T_PRESS_INVOICE_LIST` : Invoice List (Press)
 
 ✅ `DMTT_T_PRESS_DELIVERY_ORDER_DOWNLOAD` : Print Delivery Order (Press)
 
-✅ `DMTT_T_PRESS_INVOICE_DOWNLOAD` : Print Invoice (Press) ***
+⚠️ `DMTT_T_PRESS_INVOICE_DOWNLOAD` : Print Invoice (Press)
 
 ✅ `DMTT_T_PRESS_SHIP_ORDER_DOWNLOAD` : Print Shipping Order (Press) =========
 
@@ -120,7 +120,7 @@ Fixed conditional expression
 
 - `DMTT_G_RATE_TYPE` : Exchange Rate Type | '1' : TTB | '2' : TTS | '3' : TTM
 - `DMTT_T_CHK_BOX`
-- `DMTT_G_APPROVE`
+- `DMTT_G_APPROVE` : Approve Status | '0' : Pending | '1' : Approved | '2' : Unapproved | '3' : Rejected
 - `DMTT_G_PR_PATTERN`
 - `DMTT_G_OS_COMFIRM`
 - `DMTT_G_SHIP_INT_STATUS` (I_SHIP_CFM) Shipment Status | '0': Pending, '1': Picking, '2': Completed, '3': Confirmed 

@@ -2,9 +2,11 @@
 
 SELECT *
 FROM (
--- LVL 1 : HEADER 
-SELECT DISTINCT 
-       /**%CHK%**/ '' AS [CHK],
+
+
+-- LVL 1 : Header 
+SELECT  
+       /**%SEL_CHK%**/'' AS [SEL_CHK],
        '1' AS [LVL],
        NULL AS [I_QT_LN],
        [QH].[I_QT_MTH],
@@ -24,17 +26,19 @@ SELECT DISTINCT
        NULL                AS [I_PROD_WGT],
        [QH].[I_CURRENCY],
        NULL AS [I_UNIT_PRICE],
-       [QH].[I_SO_FLG]
+       [QH].[I_SO_FLG],
+       [QH].[CREATED_DATE]
        
 FROM [T_PR_QT_H] AS [QH]
-    LEFT JOIN [T_PR_QT_D] AS [QD] ON [QH].[I_QT_NO] = [QD].[I_QT_NO]
-    LEFT JOIN [MS_CS] AS [MC] ON [MC].[I_CSCODE] = [QH].[I_CSCODE]
+    LEFT JOIN [MS_CS] AS [MC] 
+        ON [MC].[I_CSCODE] = [QH].[I_CSCODE]
+
 
 UNION ALL
 
--- LVL 2 : DETAIL
+-- LVL 2 : Detail
 SELECT
-       /**%CHK%**/ '' AS [CHK],
+       /**%SEL_CHK%**/'' AS [SEL_CHK],
        '2' AS [LVL],
        [QD].[I_QT_LN],
        [QH].[I_QT_MTH],

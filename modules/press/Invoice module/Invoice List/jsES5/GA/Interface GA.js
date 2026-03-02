@@ -255,7 +255,7 @@ function saveARLog(interfaceLogID, sendData, resData) {
 
     TalonDbUtil.insertByMap(
         TALON.getDbConfig(),
-        'IF_API_AR_LOG', // TABLE_NAME
+        'IF_GA_LOG', // TABLE_NAME
         Data,
         detailCol
     );
@@ -285,7 +285,7 @@ function saveARError(interfaceLogID, rowErr) {
     var detailCol = [
         'I_ERROR_LOG_ID',
         'I_INTERFACED_LOG_ID',
-        'I_INVOICE_NO',
+        'I_REF_DOC_NO',
         'I_ROW_NO',
         'I_TARGET_FIELD',
         'I_ERROR_DETAILS',
@@ -298,7 +298,7 @@ function saveARError(interfaceLogID, rowErr) {
     // TALON.addMsg(JSON.stringify(rowErr));
     data['I_ERROR_LOG_ID']       = logErrId;
     data['I_INTERFACED_LOG_ID']  = interfaceLogID;
-    data['I_INVOICE_NO']         = rowErr.ID;
+    data['I_REF_DOC_NO']         = rowErr.ID;
     data['I_ROW_NO']             = rowErr.RowNo;
     data['I_TARGET_FIELD']       = rowErr.ItemName;
     data['I_ERROR_DETAILS']      = rowErr.ErrorDetail;
@@ -307,7 +307,7 @@ function saveARError(interfaceLogID, rowErr) {
 
     TalonDbUtil.insertByMap(
         TALON.getDbConfig(),
-        'IF_API_AR_ERR',
+        'IF_GA_ERR',
         data,
         detailCol
     );
