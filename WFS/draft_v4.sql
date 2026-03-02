@@ -112,12 +112,12 @@ SELECT
     [UA].[I_EMAIL] AS [APPROVER_EMAIL],
     [UA].[I_IS_FINAL],
     
-    -- ดึง Remark จากคำขอล่าสุด (I_KIND = '1001')
+    -- ดึง Remark จาก Requester คำขอล่าสุด (I_KIND = '1001')
     (
         SELECT TOP 1 [I_REMARK] 
         FROM [dbo].[WFS_T_D] 
         WHERE [I_WF_ID] = [H].[I_WF_ID] 
-        AND [I_KIND] = '1001' 
+        AND [I_KIND] = '1001' -- Requester
         ORDER BY [I_SEQ_NO] DESC  -- เปลี่ยนจาก ASC เป็น DESC
     ) AS [REQUEST_REMARK]
     
@@ -137,7 +137,7 @@ INNER JOIN [dbo].[WFS_T_D] [D]
         SELECT MAX([I_SEQ_NO])
         FROM [dbo].[WFS_T_D]
         WHERE [I_WF_ID] = [H].[I_WF_ID]
-        AND [I_KIND] = '1002'
+        AND [I_KIND] = '1002' -- Approver
         AND [CREATED_DATE] = [D].[CREATED_DATE]
     )
 
@@ -146,7 +146,7 @@ LEFT JOIN [dbo].[USER_AUTHORITY] [UA]
     ON [UA].[I_USER_ID] = [D].[I_APPROVER_ID]
     AND [UA].[I_GROUP] = [H].[I_GROUP]
     AND [UA].[I_LEVEL] = [D].[I_LEVEL]
-    AND [UA].[I_KIND] = '1002'
+    AND [UA].[I_KIND] = '1002' -- Approver
     AND [UA].[I_ACTIVE_FLAG] = '1'
 GO
 
@@ -172,7 +172,7 @@ SELECT
         SELECT TOP 1 [I_REMARK] 
         FROM [dbo].[WFS_T_D] 
         WHERE [I_WF_ID] = [H].[I_WF_ID] 
-        AND [I_KIND] = '1001' 
+        AND [I_KIND] = '1001' -- Requester
         ORDER BY [I_SEQ_NO]
     ) AS [REQUEST_REMARK],
     (
@@ -214,8 +214,8 @@ SELECT
     [D].[I_APPROVER_ID],
     [D].[I_KIND],
     CASE [D].[I_KIND]
-        WHEN '1001' THEN 'Request'
-        WHEN '1002' THEN 'Approve'
+        WHEN '1001' THEN 'Requester'
+        WHEN '1002' THEN 'Approver'
     END AS [ACTION_TYPE],
     [D].[I_LEVEL],
     [D].[I_STATUS],
@@ -231,6 +231,7 @@ SELECT
 FROM [dbo].[WFS_T_H] [H]
 LEFT JOIN [dbo].[WFS_T_D] [D] ON [H].[I_WF_ID] = [D].[I_WF_ID]
 GO
+
 
 -- ## Stored Procedures
 -- SP 1: Submit Request (สร้าง Workflow)
@@ -279,7 +280,7 @@ BEGIN
             SELECT TOP 1 @LAST_STATUS = [I_STATUS]
             FROM [dbo].[WFS_T_D]
             WHERE [I_WF_ID] = @I_WF_ID
-            AND [I_KIND] = '1002'
+            AND [I_KIND] = '1002' -- Approver
             ORDER BY [CREATED_DATE] DESC;
 
             -- ถ้าสถานะเป็น Unapproved (2) = อนุญาตให้ Re-submit
@@ -316,7 +317,7 @@ BEGIN
             SELECT @I_REQUIRED_LEVEL = MAX([I_LEVEL])
             FROM [dbo].[USER_AUTHORITY]
             WHERE [I_GROUP] = @I_GROUP
-            AND [I_KIND] = '1002'
+            AND [I_KIND] = '1002' -- Approver
             AND [I_ACTIVE_FLAG] = '1';
 
             IF ISNULL(@I_REQUIRED_LEVEL,0) = 0
@@ -364,7 +365,7 @@ BEGIN
         FROM [dbo].[USER_AUTHORITY]
         WHERE [I_GROUP] = @I_GROUP
         AND [I_LEVEL] = 1
-        AND [I_KIND] = '1002'
+        AND [I_KIND] = '1002' -- Approver
         AND [I_ACTIVE_FLAG] = '1';
 
         IF @I_APPROVER_ID IS NULL
@@ -463,7 +464,7 @@ BEGIN
     BEGIN TRY
         BEGIN TRAN;
 
-        IF @I_KIND <> '1002'
+        IF @I_KIND <> '1002' -- Approver
         BEGIN
             SET @O_RESULT = '{ "status": false, "message": "Invalid action type. Use I_KIND = 1002" }';
             ROLLBACK TRAN;
@@ -501,7 +502,7 @@ BEGIN
         WHERE [I_USER_ID] = @I_USER_ID
         AND [I_GROUP] = @I_GROUP
         AND [I_LEVEL] = @I_CURRENT_LEVEL
-        AND [I_KIND] = '1002'
+        AND [I_KIND] = '1002' -- Approver
         AND [I_ACTIVE_FLAG] = '1';
 
         IF @I_IS_FINAL IS NULL
@@ -515,7 +516,7 @@ BEGIN
         SELECT TOP 1 @LAST_REQUEST_SEQ = [I_SEQ_NO]
         FROM [dbo].[WFS_T_D]
         WHERE [I_WF_ID] = @I_WF_ID
-        AND [I_KIND] = '1001'
+        AND [I_KIND] = '1001' -- Requester
         ORDER BY [I_SEQ_NO] DESC;
 
         -- กรณี Status = 2 (Unapproved/Undo) - ยกเลิกการอนุมัติ
@@ -567,7 +568,7 @@ BEGIN
             RETURN;
         END
 
-        -- กรณี Status = 1 (Approve) หรือ 3 (Reject)
+        -- กรณี Status = 1 (Approved) หรือ 3 (Rejected)
         -- ตรวจสอบว่าเคยทำ action แล้วหรือยัง
         IF EXISTS (
             SELECT 1 
@@ -636,7 +637,7 @@ BEGIN
                 FROM [dbo].[USER_AUTHORITY]
                 WHERE [I_GROUP] = @I_GROUP
                 AND [I_LEVEL] = @I_NEXT_LEVEL
-                AND [I_KIND] = '1002'
+                AND [I_KIND] = '1002' -- Approver
                 AND [I_ACTIVE_FLAG] = '1';
 
                 IF @I_NEXT_APPROVER_ID IS NOT NULL
