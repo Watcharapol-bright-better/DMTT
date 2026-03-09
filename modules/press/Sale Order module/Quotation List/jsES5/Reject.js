@@ -1,3 +1,4 @@
+
 var data = TALON.getBlockData_List(2);
 var UserInfo = TALON.getUserInfoMap();
 var UserId = UserInfo['USER_ID'];
@@ -45,7 +46,6 @@ if (!selectedItem) {
 
       }
     });
-
   }
 }
 

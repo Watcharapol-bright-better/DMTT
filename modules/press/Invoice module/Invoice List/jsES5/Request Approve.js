@@ -118,12 +118,12 @@ function createTableHTML(items) {
   html += "</tbody>";
   html += "</table>";
 
-  html += '<p style="margin-top: 20px; color: #666;">Total Records: <strong>' +
-    items.length + "</strong></p>";
+  html += '<p style="margin-top: 20px; color: #666;">Total Records: <strong>' +items.length + "</strong></p>";
+  var approvalUrl = buildApprovalUrl(items);
 
   html +=
     '<div style="margin-top: 30px; text-align: center;">' +
-    '<a href="'+TALON.getBindValue('DOMAIN_TLN')+'/MAIL_REDIRECT_INV.html" ' +
+    '<a href="' + approvalUrl + '" ' +
     'style="background-color: #4c5eaf; color: white; padding: 12px 24px; ' +
     'text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">' +
     'Approval' +
@@ -134,6 +134,39 @@ function createTableHTML(items) {
 
   return html;
 }
+
+function buildApprovalUrl(items) {
+  var invoiceNumbers = [];
+  for (var i = 0; i < items.length; i++) {
+    if (items[i].I_INVOICE_NO) {
+      invoiceNumbers.push(items[i].I_INVOICE_NO);
+    }
+  }
+  
+  invoiceNumbers.sort();
+  
+  // Base URL
+  var baseUrl = TALON.getBindValue('DOMAIN_TLN') + '/Talon/faces/TALON/APPLICATION/GENERALFREE/GENERALFREE.xhtml';
+  
+  // Parameters
+  var params = [];
+  params.push('PARAM_FUNC_ID=DMTT_T_PRESS_INVOICE_LIST');
+  
+  if (invoiceNumbers.length > 0) {
+    var firstInvoice = invoiceNumbers[0];
+    var lastInvoice = invoiceNumbers[invoiceNumbers.length - 1];
+    
+    params.push('COLUMN_1=I_INVOICE_NO');
+    params.push('FORMULA_1=BETWEEN');
+    params.push('VALUE_1=' + encodeURIComponent(firstInvoice));
+    params.push('VALUE_TO_1=' + encodeURIComponent(lastInvoice));
+  }
+  
+  params.push('INIT_SEARCH=true');
+  
+  return baseUrl + '?' + params.join('&');
+}
+
 
 var data = TALON.getBlockData_List(2);
 var UserInfo = TALON.getUserInfoMap();

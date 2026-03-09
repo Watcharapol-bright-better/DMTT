@@ -116,7 +116,6 @@ if (_I_SHIP_ORDER_NO !== '' || _I_SHIP_ORDER_NO !== null) {
     var internalNo = "";
     for (var i = 0; i < DetailData.length; i++) {
         var Box2 = DetailData[i];
-
         
         internalNo = RunningNo.genId('DMTT_N_IV_IN', 'yyyymmddxxxxx');
         Box2['I_INVOICE_NO']   = runIV;
