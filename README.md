@@ -28,15 +28,15 @@ TALON/APPLICATION/GENERALFREE/GENERALFREE.xhtml?PARAM_FUNC_ID=DMTT_USER_AUTHORIT
 ### [Sale Order Modules]
 ✅ `DMTT_PRESS_QT_DOWNLOAD` : Print Quotation (Press)
 
-⚠️ `DMTT_T_PRESS_QT` : Create Quotation (Press)
+✅ `DMTT_T_PRESS_QT` : Create Quotation (Press)
 
-⚠️ `DMTT_T_PRESS_QT_LIST` : Quotation List (Press)
+✅ `DMTT_T_PRESS_QT_LIST` : Quotation List (Press)
 
 ✅ `DMTT_T_PRESS_SALES_ORDER` : Create Sales Order (Press)
 
 ✅ `DMTT_T_PRESS_SALES_ORDER_EDIT` : Sales Order Edit (Press) 
 
-⚠️ `DMTT_T_PRESS_SALES_ORDER_LIST` : Sales Order List (Press)
+✅ `DMTT_T_PRESS_SALES_ORDER_LIST` : Sales Order List (Press)
 
 ✅ `DMTT_T_PRESS_CONF_DELIIVERY_ORDER` : Confirm Delivery Order (Press)
 
@@ -49,7 +49,7 @@ Fixed conditional expression
 
 ✅ `DMTT_T_PRESS_SHIPMENT_INST_DETAIL` : Shipment Instruction Detail (Press) **
 
-⚠️ `DMTT_T_PRESS_SHIPMENT_INST_LIST` : Shipment Instruction List (Press)
+✅ `DMTT_T_PRESS_SHIPMENT_INST_LIST` : Shipment Instruction List (Press)
 
 ✅ `DMTT_T_PRESS_ASSIGN_SHIP_JOB` : Assign Shipment Job (Press) 
 
@@ -63,11 +63,11 @@ Fixed conditional expression
 
 ✅ `DMTT_T_PRESS_INVOICE_DETAIL` : Invoice Detail (Press) 
 
-⚠️ `DMTT_T_PRESS_INVOICE_LIST` : Invoice List (Press)
+✅ `DMTT_T_PRESS_INVOICE_LIST` : Invoice List (Press)
 
 ✅ `DMTT_T_PRESS_DELIVERY_ORDER_DOWNLOAD` : Print Delivery Order (Press)
 
-⚠️ `DMTT_T_PRESS_INVOICE_DOWNLOAD` : Print Invoice (Press)
+✅ `DMTT_T_PRESS_INVOICE_DOWNLOAD` : Print Invoice (Press)
 
 ✅ `DMTT_T_PRESS_SHIP_ORDER_DOWNLOAD` : Print Shipping Order (Press) =========
 
@@ -83,9 +83,11 @@ Fixed conditional expression
 
 ✅ `DMTT_R_PRESS_SALES` : Sales Report (Press)
 
-✅ `TLN_MST0600` : 汎用コードマスタメンテナンス 
 
-✅ `DMTT_USER_AUTHORITY` : User Authority *
+### [Work Order Modules] 
+
+⚠️ `DMTT_T_WO_PLAN_PR` : Create Work Order Plan (Press)
+
 
 <br/>
 
@@ -107,20 +109,13 @@ Fixed conditional expression
 ### [Hunyo Code]
 - `DMTT_G_USER_LVL` : User Level | '0' : Level 0 | '1' : Level 1 | '2' : Level 2
 - `DMTT_G_INVOICE_TYPE` : Invoice Type
-- `DMTT_G_SO_STATUS` : SO Status, I_COMPCLS =======
+- `DMTT_G_SO_STATUS` : SO Status (I_COMPCLS) | '00' : Open | '01' : Delivered | '02' : Closed | '03' : Cancelled
 - `DMTT_G_USER_ROLES` : Department Group
 - `DMTT_G_GROUP`
 - `DMTT_G_CURRENCY` : Currency Code 
-  - 'THB' : Thai Baht
-  - 'USD' : US Dollar
-  - 'EUR' : Euro
-  - 'JPY' : Japanese Yen
-  - 'CNY' : Chinese Yuan
-  - 'SGD' : Singapore Dollar
-
 - `DMTT_G_RATE_TYPE` : Exchange Rate Type | '1' : TTB | '2' : TTS | '3' : TTM
 - `DMTT_T_CHK_BOX`
-- `DMTT_G_APPROVE` : Approve Status | '0' : Pending | '1' : Approved | '2' : Unapproved | '3' : Rejected
+- `DMTT_G_APPROVE` : Approve Status | '0' : Pending | '1' : Approved | '2' : Unapproved | '3' : Rejected  
 - `DMTT_G_PR_PATTERN`
 - `DMTT_G_OS_COMFIRM`
 - `DMTT_G_SHIP_INT_STATUS` (I_SHIP_CFM) Shipment Status | '0': Pending, '1': Picking, '2': Completed, '3': Confirmed 

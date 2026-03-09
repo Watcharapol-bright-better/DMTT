@@ -1,18 +1,16 @@
 CREATE PROC dbo.SP_CalcFibonacci
     @InputNumber INT,
-    @Result NVARCHAR(1000) OUTPUT
+    @Result NVARCHAR(MAX) OUTPUT
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    -- ===== Validate =====
     IF (@InputNumber < 0)
     BEGIN
         SET @Result = N'{"status": false, "msg": "number must not be negative"}';
         RETURN;
     END
 
-    -- ===== Fibonacci Calculation =====
     DECLARE 
         @i INT = 0,
         @a BIGINT = 0,   -- F(0)
