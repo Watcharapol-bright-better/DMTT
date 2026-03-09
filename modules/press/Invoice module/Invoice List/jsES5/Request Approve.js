@@ -21,57 +21,10 @@ var ApprStatus = {
 };
 
 function getInvoiceTypeName(typeCode) {
-  return InvoiceType[typeCode] || "Wait";
-}
-
-function getApprStatus(typeCode) {
-  return ApprStatus[typeCode] || "Wait";
-}
-
-function getApprStatusBadge(statusCode) {
-  var statusText = getApprStatus(statusCode);
-  var backgroundColor;
-  var textColor;
-
-  switch (statusCode) {
-    case "0": // Pending
-      backgroundColor = "#fff8e1";
-      textColor = "#f57f17";
-      break;
-
-    case "1": // Approved
-      backgroundColor = "#e8f5e9";
-      textColor = "#2e7d32";
-      break;
-
-    case "2": // Unapproved
-      backgroundColor = "#eceff1";
-      textColor = "#455a64";
-      break;
-
-    case "3": // Rejected
-      backgroundColor = "#ffebee";
-      textColor = "#c62828";
-      break;
-
-    default: // Unknown
-      backgroundColor = "#f5f5f5";
-      textColor = "#757575";
-  }
-
-  return (
-    '<span style="background-color:' +
-    backgroundColor +
-    '; color:' +
-    textColor +
-    '; padding:4px 8px; border-radius:4px; font-weight:500; font-size:12px;">' +
-    statusText +
-    "</span>"
-  );
+  return InvoiceType[typeCode] || "unknown";
 }
 
 
-// ===== Create HTML Table Function =====
 function createTableHTML(items) {
   var html = '<div style="font-family: Arial, sans-serif;">';
   html += '<h2 style="color: #333;">Invoice List (Request Approve)</h2>';
@@ -80,14 +33,16 @@ function createTableHTML(items) {
     '<table style="border-collapse: collapse; width: 100%; margin-top: 20px;">';
   html += "<thead>";
   html += '<tr style="background-color: #4c5eaf; color: white;">';
-  html += '<th style="border: 1px solid #ddd; padding: 12px; text-align: left;">No.</th>';
+  
+  html += '<th style="border: 1px solid #ddd; padding: 12px; text-align: center;">No.</th>';
   html += '<th style="border: 1px solid #ddd; padding: 12px; text-align: left;">Invoice No</th>';
-  html += '<th style="border: 1px solid #ddd; padding: 12px; text-align: left;">Invoice Type</th>';
+  
+  html += '<th style="border: 1px solid #ddd; padding: 12px; text-align: center;">Invoice Type</th>';
   html += '<th style="border: 1px solid #ddd; padding: 12px; text-align: left;">Ship Order No</th>';
   html += '<th style="border: 1px solid #ddd; padding: 12px; text-align: left;">Customer Name</th>';
   html += '<th style="border: 1px solid #ddd; padding: 12px; text-align: left;">Ship To</th>';
   html += '<th style="border: 1px solid #ddd; padding: 12px; text-align: left;">Invoice Date</th>';
-  html += '<th style="border: 1px solid #ddd; padding: 12px; text-align: left;">Status</th>';
+  
   html += "</tr>";
   html += "</thead>";
   html += "<tbody>";
@@ -97,11 +52,14 @@ function createTableHTML(items) {
     var rowColor = i % 2 === 0 ? "#f9f9f9" : "#ffffff";
 
     html += '<tr style="background-color: ' + rowColor + ';">';
-    html += '<td style="border: 1px solid #ddd; padding: 10px;">' + (i + 1) + "</td>";
+    html += '<td style="border: 1px solid #ddd; padding: 10px; text-align: center;">' + (i + 1) + "</td>";
+    
     html += '<td style="border: 1px solid #ddd; padding: 10px;"><strong>' +
       (item.I_INVOICE_NO || "") + "</strong></td>";
-    html += '<td style="border: 1px solid #ddd; padding: 10px;">' +
+    
+    html += '<td style="border: 1px solid #ddd; padding: 10px; text-align: center;">' +
       getInvoiceTypeName(item.I_TYPE) + "</td>";
+    
     html += '<td style="border: 1px solid #ddd; padding: 10px;">' +
       (item.I_SHIP_ORDER_NO || "") + "</td>";
     html += '<td style="border: 1px solid #ddd; padding: 10px;">' +
@@ -110,15 +68,16 @@ function createTableHTML(items) {
       (item.I_SHIP_TO || "") + "</td>";
     html += '<td style="border: 1px solid #ddd; padding: 10px;">' +
       DateFmt.formatDate(item.I_INVOICE_DATE.toString()) + "</td>";
-    html += '<td style="border: 1px solid #ddd; padding: 10px;">' +
-      getApprStatusBadge(item.I_APPR_STATUS) + "</td>";
+    
     html += "</tr>";
   }
 
   html += "</tbody>";
   html += "</table>";
 
-  html += '<p style="margin-top: 20px; color: #666;">Total Records: <strong>' +items.length + "</strong></p>";
+  html += '<p style="margin-top: 20px; color: #666;">Total Records: <strong>' + 
+    items.length + "</strong></p>";
+  
   var approvalUrl = buildApprovalUrl(items);
 
   html +=
@@ -135,15 +94,16 @@ function createTableHTML(items) {
   return html;
 }
 
+
 function buildApprovalUrl(items) {
-  var invoiceNumbers = [];
+  var invoiceNo = [];
   for (var i = 0; i < items.length; i++) {
     if (items[i].I_INVOICE_NO) {
-      invoiceNumbers.push(items[i].I_INVOICE_NO);
+      invoiceNo.push(items[i].I_INVOICE_NO);
     }
   }
   
-  invoiceNumbers.sort();
+  invoiceNo.sort();
   
   // Base URL
   var baseUrl = TALON.getBindValue('DOMAIN_TLN') + '/Talon/faces/TALON/APPLICATION/GENERALFREE/GENERALFREE.xhtml';
@@ -152,9 +112,9 @@ function buildApprovalUrl(items) {
   var params = [];
   params.push('PARAM_FUNC_ID=DMTT_T_PRESS_INVOICE_LIST');
   
-  if (invoiceNumbers.length > 0) {
-    var firstInvoice = invoiceNumbers[0];
-    var lastInvoice = invoiceNumbers[invoiceNumbers.length - 1];
+  if (invoiceNo.length > 0) {
+    var firstInvoice = invoiceNo[0];
+    var lastInvoice = invoiceNo[invoiceNo.length - 1];
     
     params.push('COLUMN_1=I_INVOICE_NO');
     params.push('FORMULA_1=BETWEEN');
