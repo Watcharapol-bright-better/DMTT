@@ -6,7 +6,7 @@ function onCloseMassageDialog() {
     console.log(_event.value)
     console.log(errorStatus.value)
 
-// CLOSED_MESSAGE_DIALOG
+   // CLOSED_MESSAGE_DIALOG
     if (errorStatus.value == '0' && _event.value == 'CLOSED_MESSAGE_DIALOG') {
 
         //var btn = getButtonElement('List')
@@ -19,7 +19,7 @@ function onCloseMassageDialog() {
         //console.log(textColor); 
         //console.log(liElement);
         let isCreated = liElement.textContent.includes('Created WO Successfully');
-      console.log(isCreated);
+        console.log(isCreated);
 
         if(isCreated){
      			var nextBtn = getButtonElement('BUTTON_TOP_R:0:_NEXT_BTN');
@@ -27,11 +27,6 @@ function onCloseMassageDialog() {
         }
     }
 }
-
-(function () {
-var SS_KEY = "TLN_GANTT_PARAM";
-var RESULT_BTN_ID = "BUTTON_TOP_R:0:_NEXT_BTN";
-var RESULT_MSG_KEY = "Created WO Successfully: ";
 
 // --- Functions ---
 function toNum(v) {
@@ -141,14 +136,14 @@ function runCalculation() {
 
 // --- Session Handler ---
 function handleSession() {
-  var sessionData = sessionStorage.getItem(SS_KEY);
+  var sessionData = sessionStorage.getItem("TLN_GANTT_PARAM");
   if (!sessionData) return;
   var d = JSON.parse(sessionData);
   var targetQtyIn = document.getElementById("TLN_2_I_WO_QTY_0");
   if (d.targetQty && targetQtyIn) {
     safeUpdate("TLN_2_I_WO_QTY_0", Math.ceil(d.targetQty), true);
     if (toNum(targetQtyIn.value) > 0) {
-      sessionStorage.setItem(SS_KEY, JSON.stringify({targetQty: null}));
+      sessionStorage.setItem("TLN_GANTT_PARAM", JSON.stringify({targetQty: null}));
       runCalculation();
     }
   }
@@ -165,22 +160,35 @@ document.addEventListener('change', function(e) {
   }
 });
 
-// Auto-Next Observer
-if (window.MutationObserver) {
-  new MutationObserver(function () {
-    
-    onCloseMassageDialog();
-    
-    
-  }).observe(document.body, { childList: true, subtree: true });
+function updateBoxHeight() {
+  function removeHeight(id) {
+    const el = document.getElementById(id);
+    if (el) {
+      el.style.removeProperty("height");
+    }
+  }
+
+  // Box Card 0
+  removeHeight("BASE:0:block");
+
+  const baseCard = document.getElementById("BASE:0:CARD");
+  if (baseCard) {
+    baseCard.setAttribute("style", "overflow: auto;");
+  }
+
+  for (let i = 1; i <= 5; i++) {
+    removeHeight(`box${i}`);
+    removeHeight(`BASE:${i}:block`);
+    removeHeight(`tbl_scrollable_body_L_${i}`);
+  }
 }
 
-// Initial Run
-setTimeout(function() {
+
+
+function resizeContents_end() {
   handleSession();
   runCalculation();
-}, 1000);
-
-})();
+  updateBoxHeight();
+}
 
 

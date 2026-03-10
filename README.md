@@ -88,6 +88,14 @@ Fixed conditional expression
 
 ⚠️ `DMTT_T_WO_PLAN_PR` : Create Work Order Plan (Press)
 
+⚠️ `DMTT_T_WO_PR_EDIT` : Edit Work Order (Press)
+
+⚠️ `DMTT_T_WO_PR_CONFIRM` : Confirm Work Order (Press)
+
+⚠️ `DMTT_T_WO_DETAIL_PR` : Work Order Detail (Press)
+
+⚠️ `DMTT_T_WO_PR_LIST` : Work Order List (Press)
+
 
 <br/>
 

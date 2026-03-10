@@ -102,7 +102,7 @@ if (_I_WO == '' && !hasError) {
   HeaderData['I_COMPLETE_FLG'] = '0';
   
   HeaderData['I_PLAN_START'] = DateFmt.formatDateTime(HeaderData['I_PLAN_START'].toString());
-  HeaderData['I_PLAN_FINISHED'] = DateFmt.formatDateTime(HeaderData['I_PLAN_FINISHED'].toString());
+  HeaderData['I_PLAN_FINISHED'] = HeaderData['I_PLAN_FINISHED'];
   HeaderData['I_WODATE'] = DateFmt.formatDateTime(HeaderData['I_WODATE'].toString());
   HeaderData['I_CUSTOMER'] = HeaderData['I_CSCODE'];
   HeaderData['I_ITEMCODE'] = FGDetailData[0]['I_ITEMCODE'];
