@@ -132,6 +132,36 @@ document.addEventListener('change', function(e) {
 });
 
 
+function onCloseMassageDialog() {
+    var btn = getElementByName("BUTTON_TOP_R:0:_NEXT_BTN")
+    var errorStatus = document.getElementById("PROC_STATUS_ERROR");
+    var _event  = document.getElementById("EVENT_STATUS");
+    console.log(_event.value)
+    console.log(errorStatus.value)
+
+   // CLOSED_MESSAGE_DIALOG
+    if (errorStatus.value == '0' && _event.value == 'CLOSED_MESSAGE_DIALOG') {
+
+        //var btn = getButtonElement('List')
+
+        var liElement = document.querySelector("#error_list > ul > li:nth-child(1)");
+
+        var computedStyle = window.getComputedStyle(liElement);
+        var textColor = computedStyle.color;
+
+        //console.log(textColor); 
+        //console.log(liElement);
+        let isCreated = liElement.textContent.includes('Confirm, Update Work Order');
+        console.log(isCreated);
+
+        if(isCreated){
+     			var nextBtn = getButtonElement('BUTTON_TOP_R:0:_NEXT_BTN');
+     			 nextBtn.click();
+        }
+  
+    }
+}
+
 function updateBoxHeight() {
   function removeHeight(id) {
     const el = document.getElementById(id);

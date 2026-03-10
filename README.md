@@ -96,6 +96,8 @@ Fixed conditional expression
 
 ⚠️ `DMTT_T_WO_PR_LIST` : Work Order List (Press)
 
+⚠️ `DMTT_T_WO_PLAN` : Work Order Plan (Press)
+
 
 <br/>
 
