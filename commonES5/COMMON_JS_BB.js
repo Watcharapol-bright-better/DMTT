@@ -36,6 +36,9 @@ function _isBoolean(val) {
  *
  * print(DateFmt.formatDateTime("Thu Dec 25 06:38:09 GMT 2025"));
  * // 2025-12-25 06:38:09
+ * 
+ * print(DateFmt.formatDateTime('19/03/2026 01:50:00'));
+ * // 2026-03-19 01:50:00
  */
 var DateFmt = (function () {
 
@@ -52,9 +55,11 @@ var DateFmt = (function () {
     function _parseDate(dateStr) {
 
         var formats = [
-            "yyyy-MM-dd HH:mm:ss",
-            "yyyy-MM-dd",
-            "EEE MMM dd HH:mm:ss z yyyy"
+          "yyyy-MM-dd HH:mm:ss",
+          "yyyy-MM-dd",
+          "EEE MMM dd HH:mm:ss z yyyy",
+          "dd/MM/yyyy HH:mm:ss",
+          "dd/MM/yyyy"
         ];
 
         for (var i = 0; i < formats.length; i++) {
@@ -91,6 +96,7 @@ var DateFmt = (function () {
 })();
 
 
+print(DateFmt.formatDateTime('19/03/2026 01:50:00'));
 
 
 /**

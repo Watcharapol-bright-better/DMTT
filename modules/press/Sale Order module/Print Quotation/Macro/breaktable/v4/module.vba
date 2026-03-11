@@ -136,4 +136,3 @@ Sub tranferData(fromRow As Long, targetRow As Long)
     wsMain.Cells(targetRow, "W").Value = wsData.Cells(fromRow, "Z").Value
 
 End Sub
-
