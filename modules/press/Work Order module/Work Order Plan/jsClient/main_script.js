@@ -3,7 +3,7 @@ var woWatcherStarted = false;
 function watchWO() {
 
   const wo = document.getElementById("TLN_1_I_WO");
-  const cond = document.getElementsByName("CNDTN_I_WO")[0];
+  //const cond = document.getElementsByName("CNDTN_I_WO")[0];
   const btn = document.getElementById("TLN_1_confirm wo");
 
   if (!wo || !cond || !btn) return;

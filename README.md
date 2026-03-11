@@ -26,11 +26,11 @@ TALON/APPLICATION/GENERALFREE/GENERALFREE.xhtml?PARAM_FUNC_ID=DMTT_USER_AUTHORIT
 
 
 ### [Sale Order Modules]
-✅ `DMTT_PRESS_QT_DOWNLOAD` : Print Quotation (Press)
+⚠️ `DMTT_PRESS_QT_DOWNLOAD` : Print Quotation (Press)
 
-✅ `DMTT_T_PRESS_QT` : Create Quotation (Press)
+⚠️ `DMTT_T_PRESS_QT` : Create Quotation (Press)
 
-✅ `DMTT_T_PRESS_QT_LIST` : Quotation List (Press)
+⚠️ `DMTT_T_PRESS_QT_LIST` : Quotation List (Press)
 
 ✅ `DMTT_T_PRESS_SALES_ORDER` : Create Sales Order (Press)
 
