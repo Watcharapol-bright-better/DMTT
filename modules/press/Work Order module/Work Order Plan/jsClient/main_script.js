@@ -17,7 +17,7 @@ function onCloseMassageDialog() {
 
         //console.log(textColor); 
         //console.log(liElement);
-        let isCreated = liElement.textContent.includes('Redirect to Create Work Order Plan Screen');
+        let isCreated = liElement.textContent.includes('Click close button to Create Work Order Plan Screen');
         console.log(isCreated);
 
         if(isCreated){
@@ -66,55 +66,64 @@ function startWOWatcher() {
 }
 
 
-function formatDateMDY(value) {
+function formatDatePattern(value) {
 
   console.log("before date", value);
-
   if (!value) return "";
 
   value = value.split(" ")[0];
 
-  if (value.includes("/")) {
+  if (!value.includes("/")) return value;
 
-    let p = value.split("/");
-    let a = parseInt(p[0], 10);
-    let b = parseInt(p[1], 10);
-    let year = p[2];
+  const p = value.split("/");
+  if (p.length !== 3) return value;
 
-    let month, day;
+  const month = parseInt(p[0], 10);
+  const day   = parseInt(p[1], 10);
+  const year  = parseInt(p[2], 10);
 
-    if (a > 12) {
-      day = a;
-      month = b;
-    } else {
-      month = a;
-      day = b;
-    }
+  if (isNaN(month) || isNaN(day) || isNaN(year)) return value;
 
-    let d = new Date(year, month - 1, day);
+  const d = new Date(year, month - 1, day);
+  if (isNaN(d.getTime())) return value;
 
-    if (isNaN(d)) return value;
-
-    return d.toLocaleDateString("en-US", {
-      month: "2-digit",
-      day: "2-digit",
-      year: "numeric"
-    });
-  }
-
-  return value;
+  return new Intl.DateTimeFormat(navigator.language, {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric"
+  }).format(d);
 }
+
 
 function setGanttDate(value) {
 
   if (!value) return;
 
-  let p = value.split("/");
+  const p = value.split("/");
   if (p.length !== 3) return;
 
-  let month = parseInt(p[0], 10);
-  let day   = parseInt(p[1], 10);
-  let year  = parseInt(p[2], 10);
+  // หา order ของ locale เช่น ["month","day","year"] หรือ ["day","month","year"]
+  const parts = new Intl.DateTimeFormat(navigator.language, {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric"
+  }).formatToParts(new Date());
+
+  const order = parts
+    .filter(part => part.type !== "literal")
+    .map(part => part.type);
+
+  let day, month, year;
+
+  for (let i = 0; i < order.length; i++) {
+
+    const v = parseInt(p[i], 10);
+    if (isNaN(v)) return;
+
+    if (order[i] === "day") day = v;
+    if (order[i] === "month") month = v;
+    if (order[i] === "year") year = v;
+  }
 
   const yEl = document.getElementById("TLN_2_GANTT_YEAR_SELECT");
   const mEl = document.getElementById("TLN_2_GANTT_MONTH_SELECT");
@@ -123,7 +132,6 @@ function setGanttDate(value) {
   if (yEl) yEl.value = year;
   if (mEl) mEl.value = month;
   if (dEl) dEl.value = day;
-
 }
 
 function setupDate() { 
@@ -158,9 +166,9 @@ function serializData() {
   const el = document.getElementById("CNDTN_STD:0:_TEXT");
   const selectedData = document.getElementById("TLN_1_I_DATE");
 
-  let result = formatDateMDY(el.value);
+  let result = formatDatePattern(el.value);
   el.value = result;
-  selectedData.value = result;
+  //selectedData.value = result;
 
   setGanttDate(result);
 }

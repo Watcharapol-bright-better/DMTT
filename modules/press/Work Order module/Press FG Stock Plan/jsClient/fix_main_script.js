@@ -82,8 +82,7 @@
   function getBasisDate(){
     var inp = document.getElementById(DATE_INPUT_ID);
     if (!inp) return new Date(); 
-    var p = trim(inp.value).split("/");
-    return new Date(parseInt(p[2],10), parseInt(p[1],10)-1, parseInt(p[0],10));
+    return new Date(inp.value);
   }
 
   function parseHeaderDDMMM_toDate(headerText, basisDate){
@@ -100,10 +99,18 @@
     return new Date(yy, mi, dd);
   }
 
-  function formatDDMMYYYY(d){
+  /*function formatDDMMYYYY(d){
     return pad2(d.getDate())+"/"+pad2(d.getMonth()+1)+"/"+d.getFullYear();
-  }
-
+    }*/
+  
+  var formatDate = (date) => {
+        return new Intl.DateTimeFormat(navigator.language, {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric'
+        }).format(date);
+  };
+  
   // ✅ ดึงหัวคอลัมน์ (Date) จากแกน X
   function getHeaderTextByX(td){
     var r = td.getBoundingClientRect();
@@ -134,7 +141,7 @@
 
     // 2. ตรวจสอบว่ามีตัวเลขหรือไม่ (ข้ามช่องว่าง/เลข 0)
     var rawText = trim(td.textContent || td.innerText || "");
-    if (rawText === "" || rawText === "0" || rawText === "0.00") return;
+    if (rawText === "") return;
 
     // หยุดการทำงานของปุ่มเดิมเพื่อทำ Logic เราก่อน
     ev.preventDefault();
@@ -147,7 +154,7 @@
     var pickedObj = parseHeaderDDMMM_toDate(headerText, basis);
     if (!pickedObj) return;
 
-    var pickedDate = formatDDMMYYYY(pickedObj);
+    var pickedDate = formatDate(pickedObj);
     var partId  = findPartIdSmart(td);
     var qtyText = cleanQty(rawText);
 

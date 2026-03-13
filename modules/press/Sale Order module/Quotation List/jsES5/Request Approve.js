@@ -1,11 +1,9 @@
-// ===== Content Type Enum =====
 var ContentType = {
   TEXT_PLAIN: "text/plain; charset=utf-8",
   TEXT_HTML: "text/html; charset=utf-8",
   MULTIPART: "multipart/mixed"
 };
 
-// ===== Approval Status Mapping =====
 var ApprStatus = {
   "0": "Pending",
   "1": "Approved",
@@ -23,27 +21,23 @@ function getApprStatusBadge(statusCode) {
   var textColor;
 
   switch (statusCode) {
-    case "0": // Pending
+    case "0":
       backgroundColor = "#fff8e1";
       textColor = "#f57f17";
       break;
-
-    case "1": // Approved
+    case "1":
       backgroundColor = "#e8f5e9";
       textColor = "#2e7d32";
       break;
-
-    case "2": // Unapproved
+    case "2":
       backgroundColor = "#eceff1";
       textColor = "#455a64";
       break;
-
-    case "3": // Rejected
+    case "3":
       backgroundColor = "#ffebee";
       textColor = "#c62828";
       break;
-
-    default: // Unknown
+    default:
       backgroundColor = "#f5f5f5";
       textColor = "#757575";
   }
@@ -59,7 +53,41 @@ function getApprStatusBadge(statusCode) {
   );
 }
 
-// ===== Create HTML Table Function =====
+function buildApprovalUrl(items) {
+  var qtNo = [];
+  var headers = [];
+  
+  for (var i = 0; i < items.length; i++) {
+    if (items[i].LVL === "1") {
+      headers.push(items[i]);
+      if (items[i].I_QT_NO) {
+        qtNo.push(items[i].I_QT_NO);
+      }
+    }
+  }
+  
+  qtNo.sort();
+  
+  var baseUrl = TALON.getBindValue('DOMAIN_TLN') + '/Talon/faces/TALON/APPLICATION/GENERALFREE/GENERALFREE.xhtml';
+  
+  var params = [];
+  params.push('PARAM_FUNC_ID=DMTT_T_PRESS_QT_LIST');
+  
+  if (qtNo.length > 0) {
+    var firstQt = qtNo[0];
+    var lastQt = qtNo[qtNo.length - 1];
+    
+    params.push('COLUMN_1=I_QT_NO');
+    params.push('FORMULA_1=BETWEEN');
+    params.push('VALUE_1=' + encodeURIComponent(firstQt));
+    params.push('VALUE_TO_1=' + encodeURIComponent(lastQt));
+  }
+  
+  params.push('INIT_SEARCH=true');
+  
+  return baseUrl + '?' + params.join('&');
+}
+
 function createTableHTML(items) {
   var html = '<div style="font-family: Arial, sans-serif;">';
   html += '<h2 style="color: #333;">Quotation List (Request Approve)</h2>';
@@ -70,15 +98,14 @@ function createTableHTML(items) {
   html += '<th style="border: 1px solid #ddd; padding: 12px; text-align: left;">No.</th>';
   html += '<th style="border: 1px solid #ddd; padding: 12px; text-align: left;">Quotation No.</th>';
   html += '<th style="border: 1px solid #ddd; padding: 12px; text-align: left;">Quotation Month</th>';
-  html += '<th style="border: 1px solid #ddd; padding: 12px; text-align: left;">Customer Code</th>';
-  html += '<th style="border: 1px solid #ddd; padding: 12px; text-align: left;">Customer Name</th>';
+  html += '<th style="border: 1px solid #ddd; padding: 12px; text-align: left;">Delivery Month</th>';
   html += '<th style="border: 1px solid #ddd; padding: 12px; text-align: left;">Customer PO Month</th>';
-  html += '<th style="border: 1px solid #ddd; padding: 12px; text-align: left;">Currency</th>';
+  html += '<th style="border: 1px solid #ddd; padding: 12px; text-align: left;">Customer Name</th>';
+  html += '<th style="border: 1px solid #ddd; padding: 12px; text-align: left;">Pattern</th>';
   html += "</tr>";
   html += "</thead>";
   html += "<tbody>";
 
-  // Filter เอาเฉพาะ Header (LVL = 1)
   var headers = [];
   for (var i = 0; i < items.length; i++) {
     if (items[i].LVL === "1") {
@@ -97,13 +124,13 @@ function createTableHTML(items) {
     html += '<td style="border: 1px solid #ddd; padding: 10px;">' +
       (DateFmt.formatDate(item.I_QT_MTH.toString()) || "") + "</td>";
     html += '<td style="border: 1px solid #ddd; padding: 10px;">' +
-      (item.I_CSCODE || "") + "</td>";
-    html += '<td style="border: 1px solid #ddd; padding: 10px;">' +
-      (item.I_NAME || "") + "</td>";
+      (DateFmt.formatDate(item.I_EXG_MONTH.toString()) || "") + "</td>";
     html += '<td style="border: 1px solid #ddd; padding: 10px;">' +
       (DateFmt.formatDate(item.I_PO_MONTH.toString()) || "") + "</td>";
     html += '<td style="border: 1px solid #ddd; padding: 10px;">' +
-      (item.I_CURRENCY || "") + "</td>";
+      (item.I_NAME || "") + "</td>";
+    html += '<td style="border: 1px solid #ddd; padding: 10px;">' +
+      (item.I_TYPE == '0' ? '3 Months' : item.I_TYPE == '1' ? '4 Months' : '') + "</td>";
     html += "</tr>";
   }
 
@@ -113,9 +140,11 @@ function createTableHTML(items) {
   html += '<p style="margin-top: 20px; color: #666;">Total Records: <strong>' +
     headers.length + "</strong></p>";
 
+  var approvalUrl = buildApprovalUrl(items);
+
   html +=
     '<div style="margin-top: 30px; text-align: center;">' +
-    '<a href="'+TALON.getBindValue('DOMAIN_TLN')+'/MAIL_REDIRECT_QT.html" ' +
+    '<a href="' + approvalUrl + '" ' +
     'style="background-color: #4c5eaf; color: white; padding: 12px 24px; ' +
     'text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">' +
     'Approval' +
@@ -127,8 +156,6 @@ function createTableHTML(items) {
   return html;
 }
 
-
-// ===== Main Execution =====
 var data = TALON.getBlockData_List(2);
 var UserInfo = TALON.getUserInfoMap();
 var UserId = UserInfo['USER_ID'];
@@ -175,7 +202,6 @@ if (selectedItem.length === 0) {
   var userData = TalonDbUtil.select(TALON.getDbConfig(), sql)[0];
   var department = userData['I_GROUP'];
 
-  // Group items by QT_NO to get unique quotations
   var uniqueQTs = {};
   selectedItem.forEach(function(item) {
     if (!uniqueQTs[item.I_QT_NO]) {
@@ -183,7 +209,6 @@ if (selectedItem.length === 0) {
     }
   });
 
-  // Process each unique QT
   for (var qtNo in uniqueQTs) {
     var result = runWorkflowAction('SP_WF_SUBMIT_REQUEST', qtNo, department, 'Request for approval');
     
@@ -194,7 +219,6 @@ if (selectedItem.length === 0) {
     }
   }
 
-  // Send email only after all items are processed successfully
   if (successCount > 0) {
     if (userData) {
       var MAIL_SEND_TO = [userData['APPROVER_EMAIL']];

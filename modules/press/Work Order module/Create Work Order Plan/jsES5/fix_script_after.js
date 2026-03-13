@@ -23,6 +23,9 @@ if (selectedItem.length > 1) {
 
   for (var i = 0; i < selectedItem.length; i++) {
     var priority = parseInt(selectedItem[i]['I_PRIORITY'], 10);
+    var coil = selectedItem[i]['I_COILNO'];
+    
+    var userData = TalonDbUtil.select(TALON.getDbConfig(), sql)[0];
 
     if (!priority || priority <= 0) {
       TALON.addErrorMsg("⚠️ Priority must be greater than 0");
@@ -44,8 +47,8 @@ var planFinished = new Date(HeaderData['I_PLAN_FINISHED']);
 
 //var planFinished = new Date(DateFmt.formatDateTime(HeaderData['I_PLAN_FINISHED']));
 
-TALON.addMsg("planStart = " + planStart);
-TALON.addMsg("planFinished = " + planFinished);
+//TALON.addMsg("planStart = " + planStart);
+//TALON.addMsg("planFinished = " + planFinished);
 
 
 // เช็คว่า I_PLAN_START ต้องมาก่อน I_PLAN_FINISHED
@@ -102,7 +105,7 @@ if (_I_WO == '' && !hasError) {
   HeaderData['I_COMPLETE_FLG'] = '0';
   
   HeaderData['I_PLAN_START'] = DateFmt.formatDateTime(HeaderData['I_PLAN_START'].toString());
-  HeaderData['I_PLAN_FINISHED'] = HeaderData['I_PLAN_FINISHED'];
+  HeaderData['I_PLAN_FINISHED'] =new Date(DateFmt.formatDateTime(HeaderData['I_PLAN_FINISHED'].toString()));
   HeaderData['I_WODATE'] = DateFmt.formatDateTime(HeaderData['I_WODATE'].toString());
   HeaderData['I_CUSTOMER'] = HeaderData['I_CSCODE'];
   HeaderData['I_ITEMCODE'] = FGDetailData[0]['I_ITEMCODE'];
@@ -279,26 +282,26 @@ if (_I_WO == '' && !hasError) {
       prRow['UPDATED_PRG_NM'] = ProgramNM;
       prRow['MODIFY_COUNT'] = 0;
   
-      TalonDbUtil.insertByMap(
-        TALON.getDbConfig(),
-        'T_PR_WOPRCS',
-        prRow,
-        prcsCol
-      );
+      // TalonDbUtil.insertByMap(
+      //   TALON.getDbConfig(),
+      //   'T_PR_WOPRCS',
+      //   prRow,
+      //   prcsCol
+      // );
   
     });
   
   }  
   
   
-  var result = runSP('SP_DMTT_L_PR_WO', woNo);
-  if (result.status) {
-    TALON.addMsg("✅ Created WO Successfully: " + woNo);
-    TALON.setSearchConditionData("I_WO", woNo, "");
-  } else { 
-    TALON.addErrorMsg(result.msg);
-    TALON.setIsSuccess(false);
-  }
+  // var result = runSP('SP_DMTT_L_PR_WO', woNo);
+  // if (result.status) {
+  //   TALON.addMsg("✅ Created WO Successfully: " + woNo);
+  //   TALON.setSearchConditionData("I_WO", woNo, "");
+  // } else { 
+  //   TALON.addErrorMsg(result.msg);
+  //   TALON.setIsSuccess(false);
+  // }
 }
 
 
