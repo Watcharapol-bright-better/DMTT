@@ -181,4 +181,3 @@ python python/main.py sql2js "C:\Users\bb25004\items\dev\TALON\DMTT\python\sql\s
 ```powershell
 
 ```
-

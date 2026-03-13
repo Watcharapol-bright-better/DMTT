@@ -76,6 +76,8 @@ function runCalculation() {
     var prodFac = toNum(document.getElementById("TLN_2_I_PROD_RATE_0").value);
     var targetQtyIn = document.getElementById("TLN_2_I_WO_QTY_0");
     var targetQty = toNum(targetQtyIn.value);
+    
+    let store = sessionStorage.getItem("TLN_GANTT_PARAM");
 
     var pickCount = 0;
     var sumWeightKg = 0;
